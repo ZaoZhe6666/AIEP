@@ -1,0 +1,93 @@
+{% extends "index.html" %}
+{% block mainbody %}
+{% load static %}
+<div class="card card-default">
+	<div class="card-header card-header-border-bottom">
+		<h2>提交任务</h2>
+	</div>
+	<div class="card-body">
+		<form>
+			<div class="form-group">
+				<label for="">项目名称：</label>
+				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="submit_proname">
+			</div>
+			<div class="row">
+				<div>
+					镜像：
+					<select class="custom-select" name="jingxiang">
+						<option selected>Please select an image..</option>
+						<option value="1">One</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+					</select>
+				</div>
+				<div>
+					GPU类型：
+					<select class="custom-select" name="gpu_type">
+						<option selected>请选择</option>
+						<option value="1">gtx1080ti</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>项目简介：</label>
+				<textarea class="form-control" placeholder="请输入对项目的简单描述" rows="5" name="describe"></textarea>
+			</div>
+			<div class="form-group">
+				<label for="">retryCount：</label>
+				<input type="text" class="form-control" placeholder="Job retry count,job will automatically restart when it failed" name="retryCount">
+			</div>
+			<div class="form-group">
+				<label for="exampleFormControlSelect12">选择数据集</label>
+				<select class="form-control" name="dataset">
+					<option>cifar-20</option>
+					<option>cifar-100</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="exampleFormControlSelect12">评测指标</label>
+				<select class="form-control" name="evaluate">
+					<option>套餐1</option>
+					<option>套餐2</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="exampleFormControlFile1">上传模型文件</label>
+				<input type="file" class="form-control-file" name="submit_model">
+			</div>
+			<div class="form-footer pt-4 pt-5 mt-4 border-top">
+				<button type="submit" class="btn btn-primary btn-default" id="submit_btn">Submit</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script src="{% static 'plugins/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap.bundle.min.js' %}"></script>
+<script>
+$("#submit_btn").click(function(){
+	// var model = $("#submit_model").val();
+	var mdata=new FormData();
+	mdata.append("name", $('[name="submit_proname"]').val());
+	mdata.append("jingxiang", $('[name="jingxiang"]').val());
+	mdata.append("gpu_type", $('[name="gpu_type"]').val());
+	mdata.append("describe", $('[name="describe"]').val());
+	mdata.append("retryCount", $('[name="retryCount"]').val());
+	mdata.append("dataset", $('[name="dataset"]').val());
+	mdata.append("evaluate", $('[name="evaluate"]').val());
+	$.ajax({
+		url: '/management/submit_check/',
+		method: 'POST',
+        processData: false,
+        contentType: false,
+        data: mdata,
+        success: function(){
+        },
+        error: function () {
+        	console.log("it is wrong");
+        }
+	})
+});
+</script>
+{% endblock %}
