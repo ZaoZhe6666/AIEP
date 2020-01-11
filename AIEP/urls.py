@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib import staticfiles
 from django.contrib import admin
 from django.conf.urls import url, include
 from algorithm import views as algo_view
@@ -23,6 +25,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 	url(r'^management/', include('management.urls')),
 ]
-
+urlpatterns += staticfiles_urlpatterns()
 
 handler404 = manage_view.page_not_found

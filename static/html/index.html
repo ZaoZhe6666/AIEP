@@ -10,7 +10,7 @@
     <link href="https://cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css" rel="stylesheet" />
 
     <!-- INDEX CSS -->
-    <link id="sleek-css" rel="stylesheet" href="{% static 'css/index.css' %}"/>
+    <link id="index-css" rel="stylesheet" href="{% static 'css/index.css' %}"/>
     <script src="{% static 'plugins/nprogress.js' %}"></script>
   </head>
 
@@ -54,7 +54,7 @@
                       data-parent="#sidebar-menu">
                       <div class="sub-menu">
                             <li  class="active" >
-                              <a class="sidenav-item-link" href="submit">
+                              <a class="sidenav-item-link" href="/management/submit/">
                                 <span class="nav-text">提交任务</span>
                               </a>
                             </li>
@@ -174,20 +174,8 @@
                     </a>
                     <ul  class="collapse"  id="charts"
                       data-parent="#sidebar-menu">
-                      <div class="sub-menu">
-                        
-                        
-                          
-                            <li >
-                              <a class="sidenav-item-link" href="chartjs.html">
-                                <span class="nav-text">文件中心应该有什么？</span>
-                                
-                              </a>
-                            </li>
-                          
-                        
-
-                        
+                      <div class="sub-menu" id="result_menu">
+                            
                       </div>
                     </ul>
                   </li>
@@ -388,7 +376,26 @@
 <script src="{% static 'plugins/index.js' %}"></script>
 <script src="{% static 'plugins/bootstrap.bundle.min.js' %}"></script>
 
-
+<script>
+    $.ajax({
+        url: '/management/ajax/load_menu/',
+        data:{
+        },
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+            var content = "";
+            $.each(data, function(i, item){
+                content += "<li ><a class='sidenav-item-link' href='/management/queryAllResult/";
+                content += item;
+                content += "'><span class='nav-text'>";
+                content += item;
+                content += "</span></a></li>";
+            });
+            document.getElementById("result_menu").innerHTML = content;
+        }
+    });
+</script>
 
 
   </body>
