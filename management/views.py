@@ -9,7 +9,7 @@ import subprocess
 def welcome(request):
 	return render_to_response('welcome.html')
 
-def page_not_found(request):
+def page_not_found(request, exception):
 	return render_to_response('404.html')
 
 def submit(request):
@@ -23,6 +23,18 @@ def submit_check(request):
 		return render(request, 'index.html')
 	elif request.method == 'POST':
 		print("后端收到如下信息：",request.POST)
+		now = int(time.time())
+		time_array = time.localtime(now)
+		time_part = time.strftime("%Y_%m_%d-%H%M%S", time_array)
+		upload_file = request.FILES.get('submit_model')
+		os.mkdir(BASE_DIR + "/static/upload/" + time_part)
+		if upload_file != None:
+			filename = time_part + '.' + upload_file.name.split('.')[-1]
+			filepath = os.path.join(BASE_DIR + "/static/upload/uploadfile/", filename)
+			f = open(filepath, 'wb')
+			for i in upload_file.chunks():
+				f.write(i)
+			f.close()
 		# print(request.POST.get("submit_proname"))
 		# print(request.POST.get("jingxiang"))
 		# print(request.POST.get("gpu_type"))
@@ -46,7 +58,8 @@ def submit_check(request):
 		# 	print("retry: ", pro_retry)
 		# 	print("evalu: ", pro_evalu)
 		# 	# print("model: ", pro_model)
-		output = subprocess.getoutput("python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --defense_model zhaoze_model")
+		# output = subprocess.getoutput("python D:/LABOR/temp/testimport.py --defense_model zhaoze_model")
+		output = subprocess.getoutput("python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
 		print(output)
 		# except Exception as e:
 		# 	print(e)
@@ -96,5 +109,7 @@ def ajax_load_menu(request):
 	file_list = []
 	if request.method == 'GET':
 		for home, dirs, files in os.walk(BASE_DIR + "/static/upload"):
+			dirs.remove("uploadfile")
+			dirs.remove("default")
 			return JsonResponse(dirs, safe=False);
 	return HttpResponse("Error")

@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -10,8 +9,8 @@
     <link href="https://cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css" rel="stylesheet" />
 
     <!-- INDEX CSS -->
-    <link id="index-css" rel="stylesheet" href="{% static 'css/index.css' %}"/>
-    <script src="{% static 'plugins/nprogress.js' %}"></script>
+    <link id="index-css" rel="stylesheet" href="/static/css/index.css"/>
+    <script src="/static/plugins/nprogress.js"></script>
   </head>
 
 
@@ -21,7 +20,7 @@
           <div id="sidebar" class="sidebar sidebar-with-footer">
             <!-- Aplication Brand -->
             <div class="app-brand">
-              <a href="/index.html">
+              <a>
                 <svg
                   class="brand-icon"
                   xmlns="http://www.w3.org/2000/svg"
@@ -322,13 +321,13 @@
                   <!-- User Account -->
                   <li class="dropdown user-menu">
                     <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                      <img src="{% static 'img/not_login_user.jpg' %}" class="user-image" alt="User Image" />
+                      <img src="/static/img/not_login_user.jpg" class="user-image" alt="User Image" />
                       <span class="d-none d-lg-inline-block">未登录</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <!-- User image -->
                       <li class="dropdown-header">
-                        <img src="{% static 'img/not_login_user.jpg' %}" class="img-circle" alt="User Image" />
+                        <img src="/static/img/not_login_user.jpg" class="img-circle" alt="User Image" />
                         <div class="d-inline-block">
                           点击登录 <small class="pt-1">未登录</small>
                         </div>
@@ -370,11 +369,11 @@
     </div>
 
     
-<script src="{% static 'plugins/jquery.min.js' %}"></script>
-<script src="{% static 'plugins/jquery.slimscroll.min.js' %}"></script>
-<script src="{% static 'plugins/jquery-jvectormap-2.0.3.min.js' %}"></script>
-<script src="{% static 'plugins/index.js' %}"></script>
-<script src="{% static 'plugins/bootstrap.bundle.min.js' %}"></script>
+<script src="/static/plugins/jquery.min.js"></script>
+<script src="/static/plugins/jquery.slimscroll.min.js"></script>
+<script src="/static/plugins/jquery-jvectormap-2.0.3.min.js"></script>
+<script src="/static/plugins/index.js"></script>
+<script src="/static/plugins/bootstrap.bundle.min.js"></script>
 
 <script>
     $.ajax({

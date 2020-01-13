@@ -6,7 +6,7 @@
 		<h2>提交任务</h2>
 	</div>
 	<div class="card-body">
-		<form action="/management/submit_check/"" method="POST">
+		<form action="/management/submit_check/"" method="POST" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="">项目名称：</label>
 				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="submit_proname">

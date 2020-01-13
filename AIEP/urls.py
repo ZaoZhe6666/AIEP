@@ -22,9 +22,10 @@ from management import views as manage_view
 from privileges import views as priv_view
 
 urlpatterns = [
+	url(r'^$', manage_view.welcome),
     url(r'^admin/', admin.site.urls),
 	url(r'^management/', include('management.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()
 
-handler404 = manage_view.page_not_found
+handler404 = 'management.views.page_not_found'
