@@ -22,9 +22,12 @@ from management import views as manage_view
 from privileges import views as priv_view
 
 urlpatterns = [
-	url(r'^$', manage_view.welcome),
+    url(r'^$', manage_view.welcome),
     url(r'^admin/', admin.site.urls),
-	url(r'^management/', include('management.urls')),
+    url(r'^management/', include('management.urls')),
+    url(r'captcha', include('captcha.urls')),
+    url(r'^register/', priv_view.register),
+    url(r'^login/', priv_view.login),
 ]
 urlpatterns += staticfiles_urlpatterns()
 

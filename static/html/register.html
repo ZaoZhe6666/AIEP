@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>register_page</title>
+</head>
+<body>
+<form action="/register/" method="POST">
+    {% if message %}
+    <div>{{ message }}</div>
+    {% endif %}
+
+    {% csrf_token %}
+    <h2 >欢迎注册</h2>
+    <div>
+        {{ register_form.username.label }}
+        {{ register_form.username }}
+    </div>
+    <div>
+        {{ register_form.password1.label }}
+        {{ register_form.password1 }}
+    </div>
+    <div>
+        {{ register_form.password2.label }}
+        {{ register_form.password2 }}
+    </div>
+    <div>
+        {{ register_form.email.label }}
+        {{ register_form.email }}
+    </div>
+
+    <div>
+        {{ register_form.captcha.errors }}
+        {{ register_form.captcha.label_tag }}
+        {{ register_form.captcha }}
+    </div>
+
+    <button type="reset">重置</button>
+    <button type="submit">提交</button>
+
+</form>
+</body>
+</html>

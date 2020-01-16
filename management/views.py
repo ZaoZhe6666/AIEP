@@ -22,7 +22,7 @@ def submit_check(request):
 	if request.method == 'GET':
 		return render(request, 'index.html')
 	elif request.method == 'POST':
-		print("后端收到如下信息：",request.POST)
+		print("后端收到如下信息：", request.POST)
 		now = int(time.time())
 		time_array = time.localtime(now)
 		time_part = time.strftime("%Y_%m_%d-%H%M%S", time_array)
@@ -65,6 +65,7 @@ def submit_check(request):
 		# 	print(e)
 	return render(request, 'waiting.html')
 
+
 def showline(request):
 	currency = {"labels": ["clean", "adver", "corru", "something", "else"],
 	 "datasets": [89.8, 27.6, 57.6, 45.8, 99.8]}
@@ -79,6 +80,7 @@ def showline(request):
 			'data': json.dumps(dic),
 		})
 
+
 def isImage(filename):
 	filename = filename.lower()
 	if "png" in filename or "jpg" in filename:
@@ -86,6 +88,7 @@ def isImage(filename):
 	if "jpeg" in filename or "gif" in filename:
 		return True
 	return False
+
 
 def show_result(request, name):
 	pic = {"DIR": "/static/upload/" + name,
@@ -104,6 +107,7 @@ def show_result(request, name):
 	return render(request, 'show_result.html', {
 			'data': json.dumps(dic),
 		})
+
 
 def ajax_load_menu(request):
 	file_list = []
