@@ -21,16 +21,16 @@ def register(request):
                 message = "两次输入的密码不同"
                 return render(request, 'register.html', locals())
             else:
-                same_name_user = models.User.objects.filter(username=username)
+                same_name_user = models.Profile.objects.filter(username=username)
                 if same_name_user:
                     message = '用户已存在，请重新选择用户名!'
                     return render(request, 'register.html', locals())
-                same_email_user = models.User.objects.filter(email=email)
+                same_email_user = models.Profile.objects.filter(email=email)
                 if same_email_user:
                     message = '该邮箱地址已被注册，请使用别的邮箱!'
                     return render(request, 'register.html', locals())
             """满足以上条件，创建新用户"""
-            new_user = models.User.objects.create(
+            new_user = models.Profile.objects.create(
                 username=username,
                 password=make_password(password1, None, 'pbkdf2_sha256'),
                 email=email,
@@ -51,7 +51,7 @@ def login(request):
         if login_form.is_valid():
             username = login_form.cleaned_data['username']
             password = login_form.cleaned_data['password']
-            same_name_user = models.User.objects.filter(username=username)
+            same_name_user = models.Profile.objects.filter(username=username)
             if not same_name_user:
                 message = "用户不存在或密码错误"
                 return render(request, 'login.html', locals())
@@ -61,7 +61,13 @@ def login(request):
             request.session['is_login'] = True
             request.session['user_id'] = same_name_user[0].id
             request.session['user_name'] = same_name_user[0].username
-            return render(request, 'index.html')
+            return render(request, 'welcome.html')
         return render(request, 'login.html', locals())
     login_form = forms.UserForm()
     return render(request, 'login.html', locals())
+
+
+def logout(request):
+    if request.session.get('is_login', None):
+        request.session.flush()
+    return render(request, 'index.html')

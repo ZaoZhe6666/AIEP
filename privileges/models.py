@@ -6,7 +6,7 @@ from django.db import models
 # Create your models here.
 
 
-class User(models.Model):
+class Profile(models.Model):
     """ 用户表"""
     gender: Tuple[Tuple[str, str], Tuple[str, str]] = (
         ('male', '男'),

@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'captcha', include('captcha.urls')),
     url(r'^register/', priv_view.register),
     url(r'^login/', priv_view.login),
+    url(r'^logout/', priv_view.logout)
 ]
 urlpatterns += staticfiles_urlpatterns()
 
