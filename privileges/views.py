@@ -1,73 +1,121 @@
-from django.shortcuts import render
-from django.contrib.auth.hashers import make_password, check_password
-from . import models
+from django.shortcuts import render, HttpResponse, get_object_or_404
+from .forms import RegistrationForm, LoginForm, ProfileForm, PwdChangeForm
+from .models import UserProfile
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+from django.contrib import auth
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+
+
 # Create your views here.
 
-from . import forms
+@login_required
+def profile(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    return render(request, 'profile.html', {'user': user})
+
+
+@login_required
+def profile_update(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    user_profile = get_object_or_404(UserProfile, user=user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+
+        if form.is_valid():
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.save()
+
+            user_profile.org = form.cleaned_data['org']
+            user_profile.telephone = form.cleaned_data['telephone']
+            user_profile.save()
+
+            return HttpResponseRedirect(reverse('privileges:profile', args=[user.id]))
+    else:
+        default_data = {'first_name': user.first_name, 'last_name': user.last_name,
+                        'org': user_profile.org, 'telephone': user_profile.telephone, }
+        form = ProfileForm(default_data)
+
+    return render(request, 'profile_update.html', {'form': form, 'user': user})
 
 
 def register(request):
-    if request.session.get('is_login', None):
-        return render(request, 'index.html')
-    if request.method == "POST":
-        register_form = forms.RegisterForm(data=request.POST)
-        message = "所有字段都必须填写"
-        if register_form.is_valid():
-            username = register_form.cleaned_data['username']
-            password1 = register_form.cleaned_data['password1']
-            password2 = register_form.cleaned_data['password2']
-            email = register_form.cleaned_data['email']
-            if password1 != password2:
-                message = "两次输入的密码不同"
-                return render(request, 'register.html', locals())
-            else:
-                same_name_user = models.Profile.objects.filter(username=username)
-                if same_name_user:
-                    message = '用户已存在，请重新选择用户名!'
-                    return render(request, 'register.html', locals())
-                same_email_user = models.Profile.objects.filter(email=email)
-                if same_email_user:
-                    message = '该邮箱地址已被注册，请使用别的邮箱!'
-                    return render(request, 'register.html', locals())
-            """满足以上条件，创建新用户"""
-            new_user = models.Profile.objects.create(
-                username=username,
-                password=make_password(password1, None, 'pbkdf2_sha256'),
-                email=email,
-            )
-            return render(request, 'welcome.html')
-        else:
-            message = "不符合要求，请检查"
-    register_form = forms.RegisterForm()
-    return render(request, 'register.html', locals())
+    if request.method == 'POST':
+
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password2']
+
+            # 使用内置User自带create_user方法创建用户，不需要使用save()
+            user = User.objects.create_user(username=username, password=password, email=email)
+
+            # 如果直接使用objects.create()方法后不需要使用save()
+            user_profile = UserProfile(user=user)
+            user_profile.save()
+
+            return HttpResponseRedirect("/privileges/login/")
+    else:
+        form = RegistrationForm()
+    return render(request, 'registration.html', {'form': form})
 
 
 def login(request):
-    if request.session.get('is_login', None):
-        return render(request, 'index.html')
-    if request.method == "POST":
-        login_form = forms.UserForm(request.POST)
-        message = "所有字段都必须填写"
-        if login_form.is_valid():
-            username = login_form.cleaned_data['username']
-            password = login_form.cleaned_data['password']
-            same_name_user = models.Profile.objects.filter(username=username)
-            if not same_name_user:
-                message = "用户不存在或密码错误"
-                return render(request, 'login.html', locals())
-            if not check_password(password, same_name_user[0].password):
-                message = "用户不存在或密码错误"
-                return render(request, 'login.html', locals())
-            request.session['is_login'] = True
-            request.session['user_id'] = same_name_user[0].id
-            request.session['user_name'] = same_name_user[0].username
-            return render(request, 'welcome.html')
-        return render(request, 'login.html', locals())
-    login_form = forms.UserForm()
-    return render(request, 'login.html', locals())
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = auth.authenticate(username=username, password=password)
+
+            if user is not None and user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect(reverse('privileges:profile', args=[user.id]))
+            else:
+                # 登录失败
+                return render(request, 'login.html',
+                              {'form': form, 'message': 'Wrong password Please Try again'})
+    else:
+        form = LoginForm()
+
+    return render(request, 'login.html', {'form': form})
 
 
+@login_required
 def logout(request):
-    if request.session.get('is_login', None):
-        request.session.flush()
-    return render(request, 'index.html')
+    auth.logout(request)
+    return HttpResponseRedirect("/privileges/login/")
+
+
+@login_required
+def pwd_change(request, pk):
+    user = get_object_or_404(User, pk=pk)
+
+    if request.method == "POST":
+        form = PwdChangeForm(request.POST)
+
+        if form.is_valid():
+            password = form.cleaned_data['old_password']
+            username = user.username
+
+            user = auth.authenticate(username=username, password=password)
+
+            if user is not None and user.is_active:
+                new_password = form.cleaned_data['password2']
+                user.set_password(new_password)
+                user.save()
+                return HttpResponseRedirect('/privileges/login/')
+
+            else:
+                return render(request, 'pwd_change.html', {'form': form,
+                                                           'user': user,
+                                                           'message': 'Old password is wrong Try again'})
+    else:
+        form = PwdChangeForm()
+
+    return render(request, 'pwd_change.html', {'form': form, 'user': user})
