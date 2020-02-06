@@ -3,15 +3,16 @@
 {% load static %}
 <!DOCTYPE html>
 <head>
-	<script src="{% static 'plugins/jquery.min.js' %}"></script>
-	<script src="{% static 'plugins/canvas.js' %}"></script>
-	<script src="{% static 'plugins/Chart.min.js' %}"></script>
-	<script src="{% static 'plugins/jssor.slider-21.1.6.mini.js' %}"></script>
+	<link rel="stylesheet" href="/static/css/BeerSlider.css">
+	<script src="/static/plugins/canvas.js"></script>
+	<script src="/static/plugins/Chart.min.js"></script>
+	<script src="/static/plugins/jssor.slider-21.1.6.mini.js"></script>
+	<script src="/static/plugins/BeerSlider.js"></script>
 </head>
 <body>
-	<div class="row no-gutters">
-		<div class="col-xl-4" id="div_currency">
-			<div data-scroll-height="642">
+	<div class="row">
+		<div id="div_currency" class="col-12 col-lg-6">
+			<div class="card card-default">
 				<div class="card-header pt-5 flex-column align-items-start">
 					<h4 class="text-dark mb-4">准确率</h4>
 					<div class="mb-3">
@@ -23,44 +24,84 @@
 				</div>
 			</div>
 		</div>
-<!-- 	</div>
-	<div class="row no-gutters"> -->
-		<div class="col-xl-8" id="div_edge_dis">
-	        <div class="border-right">
-	        	<h4 class="text-dark mb-4">决策边界距离</h4>
-	            <ul class="nav nav-tabs nav-style-border justify-content-between justify-content-xl-start border-bottom" role="tablist" id="edge_dis_menu">
-	            </ul>
-	            <div class="card-body">
-	                <div class="tab-content" id="myTabContent">
-	                    <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="home-tab">
-	                        <canvas id="edge_dis"></canvas>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-	<div id="jssor_1" style="position: relative; margin: 0 auto; top: 20px; left: 0px; width: 960px; height: 480px; overflow: hidden; visibility: hidden; background-color: #FFFFFF;">
-		<div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 240px; width: 720px; height: 480px; overflow: hidden;" id="pic_data">
-		</div>
-		<!-- Thumbnail Navigator -->
-		<div data-u="thumbnavigator" class="jssort01-99-66" style="position:absolute;left:0px;top:0px;width:240px;height:480px;" data-autocenter="2">
-			<!-- Thumbnail Item Skin Begin -->
-			<div data-u="slides" style="cursor: default;">
-				<div data-u="prototype" class="p">
-					<div class="w">
-						<div data-u="thumbnailtemplate" class="t"></div>
+		<div class="col-12 col-lg-6" id="div_edge_dis">
+			<div class="card card-default">
+		        <div class="border-right">
+		        	<div class="card-header justify-content-center">
+						<h2 class="text-center">决策边界距离</h2>
 					</div>
-					<div class="c"></div>
+		            <ul class="nav nav-tabs nav-style-border justify-content-between justify-content-xl-start border-bottom" role="tablist" id="edge_dis_menu">
+		            </ul>
+		            <div class="card-body">
+		                <div class="tab-content" id="myTabContent">
+		                    <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="home-tab">
+		                        <canvas id="edge_dis"></canvas>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
+	    <div class="col-xl-8" id="div_sensitivity">
+			<div class="card card-default">
+		        <div class="border-right">
+		        	<div class="card-header justify-content-center">
+						<h2 class="text-center">Sensitivity</h2>
+					</div>
+		            <ul class="nav nav-tabs nav-style-border justify-content-between justify-content-xl-start border-bottom" role="tablist" id="sensitivity_menu">
+		            </ul>
+		            <div class="card-body">
+		                <div class="tab-content" id="myTabContent">
+		                    <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="home-tab">
+		                        <canvas id="sensitivity"></canvas>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
+		<div class="col-12" id="pic_scroll">
+			<div class="card card-default pb-5">
+				<div id="jssor_1" style="position: relative; margin: 0 auto; top: 20px; left: 0px; width: 960px; height: 480px; overflow: hidden; visibility: hidden; background-color: #FFFFFF;">
+					<div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 240px; width: 720px; height: 480px; overflow: hidden;" id="pic_data">
+					</div>
+					<!-- Thumbnail Navigator -->
+					<div data-u="thumbnavigator" class="jssort01-99-66" style="position:absolute;left:0px;top:0px;width:240px;height:480px;" data-autocenter="2">
+						<!-- Thumbnail Item Skin Begin -->
+						<div data-u="slides" style="cursor: default;">
+							<div data-u="prototype" class="p">
+								<div class="w">
+									<div data-u="thumbnailtemplate" class="t"></div>
+								</div>
+								<div class="c"></div>
+							</div>
+						</div>
+						<!-- Thumbnail Item Skin End -->
+					</div>
+					<!-- Arrow Navigator -->
+					<span data-u="arrowleft" class="jssora05l" style="top:0px;left:248px;width:40px;height:40px;" data-autocenter="2"></span>
+					<span data-u="arrowright" class="jssora05r" style="top:0px;right:8px;width:40px;height:40px;" data-autocenter="2"></span>
 				</div>
 			</div>
-			<!-- Thumbnail Item Skin End -->
 		</div>
-		<!-- Arrow Navigator -->
-		<span data-u="arrowleft" class="jssora05l" style="top:0px;left:248px;width:40px;height:40px;" data-autocenter="2"></span>
-		<span data-u="arrowright" class="jssora05r" style="top:0px;right:8px;width:40px;height:40px;" data-autocenter="2"></span>
+		<div class="col-12" id="div_res_in_pair">
+			<div class="card card-default">
+				<div class="card-header pt-5 flex-column align-items-start">
+					<h4 class="text-dark mb-4">攻击结果对比</h4>
+					<div class="mb-3">
+						<p class="my-2">移动浮条查看攻击结果</p>
+					</div>
+				</div>
+				<div class="card-body">
+					<div class="m" id="res_in_pair">
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
+
+
 <script type="text/javascript">
 	var dataFromDjango = {{ data|safe }}
 	var canvas_currency = document.getElementById("currency");
@@ -75,6 +116,7 @@
 	if (canvas_edge_dis != null && dataFromDjango["judge_edge_dis"] != null) {
 		$("#edge_dis_menu").append(line_append(dataFromDjango["judge_edge_dis"]["data"]));
 		var ctx = document.getElementById("edge_dis").getContext("2d");
+		// var config = line_canvas(dataFromDjango["judge_edge_dis"]);
 		var config = line_canvas(dataFromDjango["judge_edge_dis"]);
 		var myLine = new Chart(ctx, config);
 
@@ -99,12 +141,57 @@
 	else{
 		$("#div_edge_dis").hide();
 	}
-	var pic_show_append = pic_read(dataFromDjango["pic"]);
-	if(pic_show_append != ""){
-		$("#pic_data").append(pic_show_append);
+
+	var canvas_sensitivity = document.getElementById("sensitivity");
+	if (canvas_sensitivity != null && dataFromDjango["sensitivity"] != null) {
+		$("#sensitivity_menu").append(line_name_append(dataFromDjango["sensitivity"]["name"]));
+		console.log(dataFromDjango["sensitivity"]["name"]);
+		var ctx = document.getElementById("sensitivity").getContext("2d");
+		var config = sensitivity_canvas(dataFromDjango["sensitivity"], dataFromDjango["sensitivity"]["label"][0]);
+		var sensitivityLine = new Chart(ctx, config);
+
+		var items = document.querySelectorAll("#div_sensitivity .nav-tabs .nav-item");
+		items.forEach(function(item, index){
+			item.addEventListener("click", function() {
+				var tmpindex = 0;
+				for(var key in dataFromDjango["sensitivity"]["name"]){
+					if(tmpindex < index){
+						tmpindex += 1;
+						continue;
+					}
+					config.data.datasets[0].data = dataFromDjango["sensitivity"]["data"]["Vanilla"][index];
+					config.data.datasets[1].data = dataFromDjango["sensitivity"]["data"]["PAT"][index];
+					config.data.labels = dataFromDjango["sensitivity"]["label"][index]
+					break;
+				}
+				sensitivityLine.update();
+			});
+		});
 	}
 	else{
-		$("#jssor_1").hide();
+		$("#div_sensitivity").hide();
+	}
+
+	// var pic_show_append = pic_read(dataFromDjango["pic"]);
+	// if(pic_show_append != ""){
+	// 	$("#pic_data").append(pic_show_append);
+	// }
+	// else{
+		$("#pic_scroll").hide();
+	// }
+
+	var res_in_pair = document.getElementById("res_in_pair");
+	if (res_in_pair != null && dataFromDjango["result_in_pair"] != null) {
+		var text = "";
+		var PAIR_PATH = dataFromDjango["pic"]["DIR"] + "AttackResult/"
+		for(var i = 0; i < dataFromDjango["result_in_pair"]["origin"].length; i++){
+			text += pic_in_pair("pair_" + i, PAIR_PATH + dataFromDjango["result_in_pair"]["origin"][i], PAIR_PATH + dataFromDjango["result_in_pair"]["attack"][i]);
+		}
+		console.log(text);
+		$("#res_in_pair").append(text);
+		for(var i = 0; i < dataFromDjango["result_in_pair"]["origin"].length; i++){
+			new BeerSlider(document.getElementById('pair_' + i));
+		}
 	}
 </script>
 

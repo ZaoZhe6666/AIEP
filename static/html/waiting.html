@@ -1,4 +1,51 @@
 {% extends "index.html" %}
 {% block mainbody %}
-<h3>提交信息正在处理中</h3>
+<div class="card-header card-header-border-bottom">
+	<h2 id="working_status">正在执行:</h2>
+</div>
+<div class="card-body" id="percent_table">
+</div>
+<script>
+    $.ajax({
+        url: '/management/ajax/load_percent_style/',
+        data:{
+        },
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+            var content = "";
+            $.each(data, function(i, item){
+                content += "<div class='progress mb-3'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: 0%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100' id='percent_"
+                content += i;
+                content += "'>";
+                content += item;
+                content += "</div></div>";
+            });
+            document.getElementById("percent_table").innerHTML = content;
+        }
+    });
+</script>
+<script>
+	var get_percent = setInterval(function(){
+		var status_url = "/management/waiting/show_status";
+		$.getJSON(status_url, function(res){
+			var finish = true;
+			for(var i = 0; i < res.length; i++){
+				console.log(res);
+				if(res[i] > 100){
+					res[i] = 100;
+				}
+				else{
+					finish = false;
+				}
+				$("#percent_" + i).width(res[i] + '%');
+			}
+			if(finish){
+				document.getElementById("working_status").innerHTML = "评估已完成";
+				clearInterval(get_percent);
+				return;
+			}
+		})
+	}, 1000);
+</script>
 {% endblock %}

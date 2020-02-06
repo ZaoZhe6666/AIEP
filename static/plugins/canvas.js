@@ -203,3 +203,123 @@ function pic_read(data){
 	}
 	return ret;
 }
+
+function sensitivity_canvas(data, label){
+	var config = {
+      // The type of chart we want to create
+      type: "line",
+      // The data for our dataset
+      data: {
+        labels: label,
+        datasets: [
+          {
+            label: "Vanilla",
+            backgroundColor: "transparent",
+            borderColor: "rgb(82, 136, 255)",
+            data: data["data"]["Vanilla"][0],
+            lineTension: 0,
+            pointRadius: 5,
+            pointBackgroundColor: "rgba(255,255,255,1)",
+            pointHoverBackgroundColor: "rgba(255,255,255,1)",
+            pointBorderWidth: 2,
+            pointHoverRadius: 7,
+            pointHoverBorderWidth: 1
+          },
+          {
+            label: "PAT",
+            backgroundColor: "transparent",
+            borderColor: "rgb(255, 199, 15)",
+            data: data["data"]["PAT"][0],
+            lineTension: 0,
+            borderDash: [10, 5],
+            borderWidth: 1,
+            pointRadius: 5,
+            pointBackgroundColor: "rgba(255,255,255,1)",
+            pointHoverBackgroundColor: "rgba(255,255,255,1)",
+            pointBorderWidth: 2,
+            pointHoverRadius: 7,
+            pointHoverBorderWidth: 1
+          }
+        ]
+      },
+      // Configuration options go here
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                display: false,
+              },
+              ticks: {
+                fontColor: "#8a909d", // this here
+              },
+            }
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                fontColor: "#8a909d",
+                fontFamily: "Roboto, sans-serif",
+                display: true,
+                color: "#eee",
+                zeroLineColor: "#eee"
+              },
+              ticks: {
+                // callback: function(tick, index, array) {
+                //   return (index % 2) ? "" : tick;
+                // }
+                stepSize: 50,
+                fontColor: "#8a909d",
+                fontFamily: "Roboto, sans-serif"
+              }
+            }
+          ]
+        },
+        tooltips: {
+          mode: "index",
+          intersect: false,
+          titleFontColor: "#888",
+          bodyFontColor: "#555",
+          titleFontSize: 12,
+          bodyFontSize: 15,
+          backgroundColor: "rgba(256,256,256,0.95)",
+          displayColors: true,
+          xPadding: 10,
+          yPadding: 7,
+          borderColor: "rgba(220, 220, 220, 0.9)",
+          borderWidth: 2,
+          caretSize: 6,
+          caretPadding: 5
+        }
+      }
+    };
+    return config;
+}
+
+function line_name_append(data){
+	var html = ""
+	for (var key in data){
+		html += "<li class='nav-item'><a class='nav-link pb-md-0' data-toggle='tab' href='#"
+		html += "' role='tab' aria-controls='' aria-selected='false'><h4 class='type-name'>"
+		html += data[key]
+		html += "</h4></a></li>"
+	}
+	return html
+}
+
+function pic_in_pair(id, ori_path, attack_path){
+	var html = "";
+	html += "<div id='"
+	html += id
+	html += "' class='beer-slider' data-beer-label='before'><img src='"
+	html += ori_path
+	html += "' alt=''><div class='beer-reveal' data-beer-label='after'><img src='"
+	html += attack_path
+	html += "' alt=''></div></div>"
+	return html;
+}

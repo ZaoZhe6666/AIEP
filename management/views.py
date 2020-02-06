@@ -4,8 +4,11 @@ import json, time, re
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from AIEP.settings import BASE_DIR
 import os
+import random
 import subprocess
 
+status_num = []
+status_name = []
 def welcome(request):
 	return render_to_response('welcome.html')
 
@@ -58,11 +61,11 @@ def submit_check(request):
 		# 	print("retry: ", pro_retry)
 		# 	print("evalu: ", pro_evalu)
 		# 	# print("model: ", pro_model)
-		# output = subprocess.getoutput("python D:/LABOR/temp/testimport.py --defense_model zhaoze_model")
-		output = subprocess.getoutput("python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
-		print(output)
+		# output = subprocess.Popen("python D:/LABOR/temp/testimport.py --defense_model zhaoze_model")
+		p = subprocess.Popen("python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
 		# except Exception as e:
 		# 	print(e)
+		set_status(['ACC', 'DFS', 'Test Name 333'])
 	return render(request, 'waiting.html')
 
 def showline(request):
@@ -88,7 +91,7 @@ def isImage(filename):
 	return False
 
 def show_result(request, name):
-	pic = {"DIR": "/static/upload/" + name,
+	pic = {"DIR": "/static/upload/" + name + "/",
 			"name": []}
 	dic = {}
 	path = BASE_DIR + "/static/upload/" + name + "/"
@@ -111,5 +114,21 @@ def ajax_load_menu(request):
 		for home, dirs, files in os.walk(BASE_DIR + "/static/upload"):
 			dirs.remove("uploadfile")
 			dirs.remove("default")
-			return JsonResponse(dirs, safe=False);
+			return JsonResponse(dirs, safe = False)
 	return HttpResponse("Error")
+
+def show_status(request):
+	global status_num
+	for i in range(len(status_num)):
+		status_num[i] += random.randint(1,20)
+	return JsonResponse(status_num, safe = False)
+
+def set_status(status):
+	global status_num
+	global status_name
+	status_name = status
+	status_num = [0] * len(status)
+
+def ajax_load_per_style(request):
+	global status_name
+	return JsonResponse(status_name, safe = False)
