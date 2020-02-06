@@ -16,15 +16,18 @@ Including another URLconf
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import staticfiles
 from django.contrib import admin
-from django.conf.urls import url, include
+from django.conf.urls import url
+from django.urls import path, include
 from algorithm import views as algo_view
 from management import views as manage_view
 from privileges import views as priv_view
 
 urlpatterns = [
-	url(r'^$', manage_view.welcome),
+    url(r'^$', manage_view.welcome),
     url(r'^admin/', admin.site.urls),
-	url(r'^management/', include('management.urls')),
+    url(r'^management/', include('management.urls')),
+    url(r'captcha', include('captcha.urls')),
+    path('privileges/', include('privileges.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()
 

@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'privileges',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +65,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'notifications_tags': 'notifications.templatetags.notifications_tags',
+            }
         },
     },
 ]
