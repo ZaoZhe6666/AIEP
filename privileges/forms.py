@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 import re
+from captcha.fields import CaptchaField
 
 
 def email_check(email):
@@ -9,11 +10,15 @@ def email_check(email):
 
 
 class RegistrationForm(forms.Form):
-    username = forms.CharField(label='Username', max_length=50)
-    email = forms.EmailField(label='Email')
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput)
-
+    username = forms.CharField(label='username', max_length=50, widget=forms.TextInput(attrs={
+       'class': "form-control input-lg", 'placeholder': 'Username'}))
+    email = forms.EmailField(label='email', widget=forms.EmailInput(attrs={
+       'class': "form-control input-lg", 'placeholder': 'Email'}))
+    password1 = forms.CharField(label='password1', widget=forms.PasswordInput(attrs={
+       'class': "form-control input-lg", 'placeholder': 'Password'}))
+    password2 = forms.CharField(label='password2', widget=forms.PasswordInput(attrs={
+       'class': "form-control input-lg", 'placeholder': 'Password Confirmation'}))
+    # captcha = CaptchaField(label='验证码', error_messages={"invalid": "验证码错误"})
     # user clean methods to define custom validation rules
 
     def clean_username(self):
@@ -59,9 +64,11 @@ class RegistrationForm(forms.Form):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(label='Username', max_length=50)
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-
+    username = forms.CharField(label='username', max_length=50, widget=forms.TextInput(attrs={
+       'class': "form-control input-lg", 'placeholder': 'Username'}))
+    password = forms.CharField(label='password', widget=forms.PasswordInput(attrs={
+       'class': "form-control input-lg", 'placeholder': 'Password'}))
+    # captcha = CaptchaField(label='验证码', error_messages={"invalid": "验证码错误"})
     # use clean methods to define custom validation rules
 
     def clean_username(self):
@@ -94,7 +101,7 @@ class PwdChangeForm(forms.Form):
     # use clean methods to define custom validation rules
 
     def clean_password1(self):
-        password1 = self.cleaned_data.get('password1')
+        password1 = self.cleaned_data.get('Password')
 
         if len(password1) < 6:
             raise forms.ValidationError("your password is too short")
@@ -104,8 +111,8 @@ class PwdChangeForm(forms.Form):
         return password1
 
     def clean_password2(self):
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
+        password1 = self.cleaned_data.get('Password')
+        password2 = self.cleaned_data.get('Password confirmation')
 
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Password mismatch Please enter again")

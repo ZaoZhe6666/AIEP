@@ -5,6 +5,8 @@ from .models import UserProfile
 
 admin.site.unregister(User)
 # Register your models here.
+
+
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
 

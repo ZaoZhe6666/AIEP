@@ -44,7 +44,6 @@ def profile_update(request, pk):
 
 def register(request):
     if request.method == 'POST':
-
         form = RegistrationForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -53,11 +52,9 @@ def register(request):
 
             # 使用内置User自带create_user方法创建用户，不需要使用save()
             user = User.objects.create_user(username=username, password=password, email=email)
-
             # 如果直接使用objects.create()方法后不需要使用save()
-            user_profile = UserProfile(user=user)
+            user_profile = UserProfile.objects.create(user=user)
             user_profile.save()
-
             return HttpResponseRedirect("/privileges/login/")
     else:
         form = RegistrationForm()
@@ -75,6 +72,11 @@ def login(request):
 
             if user is not None and user.is_active:
                 auth.login(request, user)
+                """
+                使用该方法后，会在服务器端的session中生成_auth_user_id和_auth_user_backend两个键值，
+                并发到客户端作为cookie，前端页面可通过{% if request.user.is_authenticated %}
+                判断是否登录，来实现登录状态的保持功能。
+                """
                 return HttpResponseRedirect(reverse('privileges:profile', args=[user.id]))
             else:
                 # 登录失败
