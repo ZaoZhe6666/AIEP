@@ -132,3 +132,12 @@ def set_status(status):
 def ajax_load_per_style(request):
 	global status_name
 	return JsonResponse(status_name, safe = False)
+
+def ajax_load_task(request):
+	file_list = []
+	if request.method == 'GET':
+		dic = {"Image": ["Car Recog", "Pet Recog"],
+			"Content": ["Eval Content", "Vedio"],
+			"Attack": ["Customization", "Noisy"]}
+		return JsonResponse(dic, safe = False)
+	return HttpResponse("Error")

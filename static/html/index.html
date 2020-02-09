@@ -80,90 +80,9 @@
                     </a>
                     <ul  class="collapse"  id="ui-elements"
                       data-parent="#sidebar-menu">
-                      <div class="sub-menu">
+                      <div class="sub-menu" id="task_menu">
                         
-                        
-                        <li  class="has-sub" >
-                          <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#components"
-                            aria-expanded="false" aria-controls="components">
-                            <span class="nav-text">XXX任务</span> <b class="caret"></b>
-                          </a>
-                          <ul  class="collapse"  id="components">
-                            <div class="sub-menu">
                               
-                              <li >
-                                <a href="XXX_1.html">XXX-1</a>
-                              </li>
-                              
-                              <li >
-                                <a href="XXX_2.html">XXX-2</a>
-                              </li>
-                              
-                              <li >
-                                <a href="XXX_3.html">XXX-3</a>
-                              </li>                              
-                            </div>
-                          </ul>
-                        </li>
-                        
-
-                        
-                        
-                        <li  class="has-sub" >
-                          <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#icons"
-                            aria-expanded="false" aria-controls="icons">
-                            <span class="nav-text">YYY任务</span> <b class="caret"></b>
-                          </a>
-                          <ul  class="collapse"  id="icons">
-                            <div class="sub-menu">
-                              
-                              <li >
-                                <a href="YYY_1.html">YYY-1</a>
-                              </li>
-                              
-                              <li >
-                                <a href="YYY_2.html">YYY-2</a>
-                              </li>
-                              
-                            </div>
-                          </ul>
-                        </li>
-                        
-
-                        
-                        
-                        <li  class="has-sub" >
-                          <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#forms"
-                            aria-expanded="false" aria-controls="forms">
-                            <span class="nav-text">ZZZ任务</span> <b class="caret"></b>
-                          </a>
-                          <ul  class="collapse"  id="forms">
-                            <div class="sub-menu">
-                              
-                              <li >
-                                <a href="ZZZ_1.html">ZZZ-1</a>
-                              </li>
-                              
-                              <li >
-                                <a href="ZZZ_2.html">ZZZ-2</a>
-                              </li>
-                              
-                              <li >
-                                <a href="ZZZ_3.html">ZZZ-3</a>
-                              </li>
-                              
-                              <li >
-                                <a href="ZZZ_4.html">ZZZ-4</a>
-                              </li>
-                              
-                              <li >
-                                <a href="ZZZ_5.html">ZZZ-5</a>
-                              </li>
-                              
-                            </div>
-                          </ul>
-                        </li>
-                        
                       </div>
                     </ul>
                   </li>
@@ -391,6 +310,31 @@
                 content += "</span></a></li>";
             });
             document.getElementById("result_menu").innerHTML = content;
+        }
+    });
+
+    $.ajax({
+        url: '/management/ajax/load_task/',
+        data:{
+        },
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+            var content = "";
+            $.each(data, function(i, item){
+                content += "<li  class='has-sub' ><a class='sidenav-item-link' href='javascript:void(0)' data-toggle='collapse' data-target='#"
+                content += i + "' aria-expanded='false' aria-controls='"
+                content += i + "'><span class='nav-text'>";
+                content += i;
+                content += "</span> <b class='caret'></b></a><ul  class='collapse' id='"
+                content += i + "'><div class='sub-menu'>";
+                for(var x = 0; x < item.length; x++){
+                  content += "<li ><a href='/management/task/" + item[x] + "'>";
+                  content += item[x] + "</a></li>"
+                }
+                content += "</div></ul></li>";
+            });
+            document.getElementById("task_menu").innerHTML = content;
         }
     });
 </script>
