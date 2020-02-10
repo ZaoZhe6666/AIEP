@@ -245,42 +245,50 @@
                     </ul>
                   </li>
                   <!-- User Account -->
-                  <li class="dropdown user-menu">
-                    <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                      <img src="/static/img/not_login_user.jpg" class="user-image" alt="User Image" />
-                      <span class="d-none d-lg-inline-block">未登录</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                      <!-- User image -->
-                      <li class="dropdown-header">
-                        <img src="/static/img/not_login_user.jpg" class="img-circle" alt="User Image" />
-                        <div class="d-inline-block">
-                          点击登录 <small class="pt-1">未登录</small>
-                        </div>
-                      </li>
+                  {% if not request.user.is_authenticated %}
+                    <div class="d-inline-block">
+                      <a href="{% url 'privileges:register' %}">点击注册</a>
+                      <a href="{% url 'privileges:login' %}">点击登录</a>
+                      <small class="pt-1">未登录</small>
+                    </div>
+                  {% else %}
+                    <li class="dropdown user-menu">
+                      <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                        <img src="/static/img/not_login_user.jpg" class="user-image" alt="User Image" />
+                        <span class="d-none d-lg-inline-block">{{request.user.username}}</span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-right">
+                        <!-- User image -->
+                        <li class="dropdown-header">
+                          <img src="/static/img/not_login_user.jpg" class="img-circle" alt="User Image" />
+                          <div class="d-inline-block">
+                            {{request.user.username}} <small class="pt-1">{{request.user.email}}</small>
+                          </div>
+                        </li>
 
-                      <li>
-                        <a href="profile.html">
-                          <i class="mdi mdi-account"></i> My Profile
-                        </a>
-                      </li>
-                      <li>
-                        <a href="email-inbox.html">
-                          <i class="mdi mdi-email"></i> Message
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#"> <i class="mdi mdi-diamond-stone"></i> Projects </a>
-                      </li>
-                      <li>
-                        <a href="#"> <i class="mdi mdi-settings"></i> Account Setting </a>
-                      </li>
+                        <li>
+                          <a href="#">
+                            <i class="mdi mdi-account"></i> My Profile
+                          </a>
+                        </li>
+                        <li>
+                          <a href="email-inbox.html">
+                            <i class="mdi mdi-email"></i> Message
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#"> <i class="mdi mdi-diamond-stone"></i> Projects </a>
+                        </li>
+                        <li>
+                          <a href="#"> <i class="mdi mdi-settings"></i> Account Setting </a>
+                        </li>
 
-                      <li class="dropdown-footer">
-                        <a href="signin.html"> <i class="mdi mdi-logout"></i> Log Out </a>
-                      </li>
-                    </ul>
-                  </li>
+                        <li class="dropdown-footer">
+                          <a href="{% url 'privileges:logout' %}"> <i class="mdi mdi-logout"></i> Log Out </a>
+                        </li>
+                      </ul>
+                    </li>
+                  {% endif %}
                 </ul>
               </div>
             </nav>

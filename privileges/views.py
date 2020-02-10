@@ -64,6 +64,7 @@ def register(request):
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
+        print("in post")
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -81,8 +82,9 @@ def login(request):
             else:
                 # 登录失败
                 return render(request, 'login.html',
-                              {'form': form, 'message': 'Wrong password Please Try again'})
+                              {'form': form, 'message': 'Account does not exist or Wrong password, Please Try again'})
     else:
+        print("no post")
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})

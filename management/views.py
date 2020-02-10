@@ -16,7 +16,7 @@ def page_not_found(request, exception):
 	return render_to_response('404.html')
 
 def submit(request):
-	return render_to_response('submit.html')
+	return render(request, 'submit.html')
 
 def waiting(request):
 	return render_to_response('waiting.html')

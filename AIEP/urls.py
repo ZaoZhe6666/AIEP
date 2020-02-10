@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^management/', include('management.urls')),
     url(r'captcha', include('captcha.urls')),
-    path('privileges/', include('privileges.urls')),
+    path('privileges/', include('privileges.urls', namespace='privileges')),
 ]
 urlpatterns += staticfiles_urlpatterns()
 
