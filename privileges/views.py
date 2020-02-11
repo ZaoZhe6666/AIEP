@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
-from .forms import RegistrationForm, LoginForm, ProfileForm, PwdChangeForm
+from .forms import RegistrationForm, LoginForm, PwdChangeForm
 from .models import UserProfile
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
@@ -11,35 +11,40 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 @login_required
-def profile(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    return render(request, 'profile.html', {'user': user})
-
-
-@login_required
-def profile_update(request, pk):
-    user = get_object_or_404(User, pk=pk)
+def profile(request):
+    user = get_object_or_404(User, pk=request.user.id)
     user_profile = get_object_or_404(UserProfile, user=user)
-
-    if request.method == 'POST':
-        form = ProfileForm(request.POST)
-
-        if form.is_valid():
-            user.first_name = form.cleaned_data['first_name']
-            user.last_name = form.cleaned_data['last_name']
-            user.save()
-
-            user_profile.org = form.cleaned_data['org']
-            user_profile.telephone = form.cleaned_data['telephone']
-            user_profile.save()
-
-            return HttpResponseRedirect(reverse('privileges:profile', args=[user.id]))
+    if request.method == 'POST' and 'profile_change' in request.POST:
+        user_profile.org = request.POST.get('org')
+        user_profile.telephone = request.POST.get('telephone')
+        user_profile.save()
+        return render(request, 'profile.html', {
+            'telephone': user_profile.telephone,
+            'org': user_profile.org})
+    elif request.method == 'POST' and 'password_change' in request.POST:
+        old_password = request.POST.get('old_password')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        username = user.username
+        user = auth.authenticate(username=username, password=old_password)
+        if user is not None and user.is_active:
+            if password1 == password2 and 6 < len(password1) < 18:
+                user.set_password(password1)
+                user.save()
+                print("change")
+                return HttpResponseRedirect('/privileges/login/')
+            else:
+                return render(request, 'profile.html', {
+                    'user_profile': user_profile,
+                    'user': user,
+                    'message': '两次密码不一致或密码长度小于6'})
+        else:
+            return render(request, 'profile.html', {
+                'user_profile': user_profile,
+                'user': user,
+                'message': 'Old password is wrong Try again'})
     else:
-        default_data = {'first_name': user.first_name, 'last_name': user.last_name,
-                        'org': user_profile.org, 'telephone': user_profile.telephone, }
-        form = ProfileForm(default_data)
-
-    return render(request, 'profile_update.html', {'form': form, 'user': user})
+        return render(request, 'profile.html', {'telephone': user_profile.telephone, 'org': user_profile.org})
 
 
 def register(request):
@@ -54,7 +59,6 @@ def register(request):
             user = User.objects.create_user(username=username, password=password, email=email)
             # 如果直接使用objects.create()方法后不需要使用save()
             user_profile = UserProfile.objects.create(user=user)
-            user_profile.save()
             return HttpResponseRedirect("/privileges/login/")
     else:
         form = RegistrationForm()
@@ -64,7 +68,6 @@ def register(request):
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
-        print("in post")
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -78,13 +81,12 @@ def login(request):
                 并发到客户端作为cookie，前端页面可通过{% if request.user.is_authenticated %}
                 判断是否登录，来实现登录状态的保持功能。
                 """
-                return HttpResponseRedirect(reverse('privileges:profile', args=[user.id]))
+                return HttpResponseRedirect(reverse('privileges:profile'))
             else:
                 # 登录失败
                 return render(request, 'login.html',
                               {'form': form, 'message': 'Account does not exist or Wrong password, Please Try again'})
     else:
-        print("no post")
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
@@ -95,31 +97,3 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/privileges/login/")
 
-
-@login_required
-def pwd_change(request, pk):
-    user = get_object_or_404(User, pk=pk)
-
-    if request.method == "POST":
-        form = PwdChangeForm(request.POST)
-
-        if form.is_valid():
-            password = form.cleaned_data['old_password']
-            username = user.username
-
-            user = auth.authenticate(username=username, password=password)
-
-            if user is not None and user.is_active:
-                new_password = form.cleaned_data['password2']
-                user.set_password(new_password)
-                user.save()
-                return HttpResponseRedirect('/privileges/login/')
-
-            else:
-                return render(request, 'pwd_change.html', {'form': form,
-                                                           'user': user,
-                                                           'message': 'Old password is wrong Try again'})
-    else:
-        form = PwdChangeForm()
-
-    return render(request, 'pwd_change.html', {'form': form, 'user': user})

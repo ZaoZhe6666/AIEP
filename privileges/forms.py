@@ -85,18 +85,25 @@ class LoginForm(forms.Form):
         return username
 
 
-class ProfileForm(forms.Form):
-    first_name = forms.CharField(label='First Name', max_length=50, required=False)
-    last_name = forms.CharField(label='Last Name', max_length=50, required=False)
-    org = forms.CharField(label='Organization', max_length=50, required=False)
-    telephone = forms.CharField(label='Telephone', max_length=50, required=False)
-
-
 class PwdChangeForm(forms.Form):
-    old_password = forms.CharField(label='Old Password', widget=forms.PasswordInput)
-
-    password1 = forms.CharField(label='New Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput)
+    old_password = forms.CharField(
+        label='Old Password',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': "输入账号的原登录密码"
+        }))
+    password1 = forms.CharField(
+        label='New Password',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': "输入账号的原登录密码"
+        }))
+    password2 = forms.CharField(
+        label='Password Confirmation',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': "输入账号的原登录密码"
+        }))
 
     # use clean methods to define custom validation rules
 
