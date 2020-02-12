@@ -97,3 +97,10 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/privileges/login/")
 
+
+def helpPage(request):
+    return render(request, 'help.html', )
+
+
+def introduction(request):
+    return render(request, 'introduction.html')

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}
+   <!-- Custom styles -->
+    <link rel="stylesheet" href="{% static '/CSS/help.css' %}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700|Roboto" rel="stylesheet">
+    <!-- Ionic icons -->
+    <link href="https://unpkg.com/ionicons@4.2.0/dist/css/ionicons.min.css" rel="stylesheet">
+
+
+  <!-- GOOGLE FONTS -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500" rel="stylesheet">
+  <link href="https://cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+<section id="faq">
+    <div class="container">
+        <div class="heading-wrapper">
+            <h2>Frequently asked questions</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non mi massa. Morbi maximus tempus
+                sapien sed lacinia.</p>
+        </div>
+        <div id="accordion" class="topmargin-lg">
+            <div class="card">
+                <div class="card-headerw" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="True" aria-controls="collapseOne">
+                            <i class="icon ion-md-add-circle"></i>
+                            Secondary
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion" style="">
+                    <div class="card-body">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non mi massa. Morbi maximus
+                        tempus sapien sed lacinia. Ut feugiat libero non sollicitudin pharetra. Integer scelerisque
+                        sapien non felis porta, ac maximus neque malesuada.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-headerw" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <i class="icon ion-md-add-circle"></i> Can I upgrade my plan?
+                        </button>
+                    </h5>
+                </div>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion" style="">
+                    <div class="card-body">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non mi massa. Morbi maximus
+                        tempus sapien sed lacinia. Ut feugiat libero non sollicitudin pharetra. Integer scelerisque
+                        sapien non felis porta, ac maximus neque malesuada.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-headerw" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            <i class="icon ion-md-add-circle"></i> Can I cancel my plan at anytime?
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non mi massa. Morbi maximus
+                        tempus sapien sed lacinia. Ut feugiat libero non sollicitudin pharetra. Integer scelerisque
+                        sapien non felis porta, ac maximus neque malesuada.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
