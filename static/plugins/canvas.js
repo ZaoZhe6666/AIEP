@@ -177,33 +177,6 @@ function getFileType(filePath){
 	else return "";
 }
 
-function pic_read(data){
-	var ret = "";
-	var DIR = data['DIR'];
-	for(var i in data["name"]){
-		var picname = data["name"][i];
-		var type = getFileType(DIR + "/" + picname);
-		if(type != "png" && type != "jpg"){
-			continue;
-		}
-		if(ret == ""){
-			ret += "<div data-p='150.00'><img data-u='image' src='";
-			ret += DIR + "/" + picname;
-			ret += "' />img data-u='thumb' src='";
-			ret += DIR + "/" + picname;
-			ret += "' /></div>"
-		}
-		else{
-			ret += "<div data-p='150.00' style='display: none;'><img data-u='image' src='";
-			ret += DIR + "/" + picname;
-			ret += "' />img data-u='thumb' src='";
-			ret += DIR + "/" + picname;
-			ret += "' /></div>"
-		}
-	}
-	return ret;
-}
-
 function sensitivity_canvas(data, label){
 	var config = {
       // The type of chart we want to create
@@ -312,14 +285,39 @@ function line_name_append(data){
 	return html
 }
 
-function pic_in_pair(id, ori_path, attack_path){
+function pic_read(data){
+  var ret = "";
+  var DIR = data['DIR'];
+  for(var i in data["name"]){
+    var picname = data["name"][i];
+    var type = getFileType(DIR + "/" + picname);
+    if(type != "png" && type != "jpg"){
+      continue;
+    }
+    if(ret == ""){
+      ret += "<div><img data-u='image' src='";
+      ret += DIR + "/" + picname;
+      ret += "'></div>"
+    }
+    else{
+      ret += "<div style='display: none;'><img data-u='image' src='";
+      ret += DIR + "/" + picname;
+      ret += "'></div>"
+    }
+  }
+  return ret;
+}
+
+function pic_in_pair(id, ori_path, attack_path, style){
 	var html = "";
-	html += "<div id='"
+	html += "<div data-p='150.00' "
+  html += style;
+  html += " id='"
 	html += id
-	html += "' class='beer-slider' data-beer-label='before'><img src='"
+	html += "' class='beer-slider' data-beer-label='before'><img data-u='image' src='"
 	html += ori_path
-	html += "' alt=''><div class='beer-reveal' data-beer-label='after'><img src='"
+	html += "'><div class='beer-reveal' data-beer-label='after'><img data-u='image' src='"
 	html += attack_path
-	html += "' alt=''></div></div>"
+	html += "' style='width: 720px; height: 480px;'></div></div>"
 	return html;
 }

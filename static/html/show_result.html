@@ -62,6 +62,12 @@
 	    </div>
 		<div class="col-12" id="pic_scroll">
 			<div class="card card-default pb-5">
+				<div class="card-header pt-5 flex-column align-items-start">
+					<h4 class="text-dark mb-4">攻击结果对比</h4>
+					<div class="mb-3">
+						<p class="my-2">点击图片移动浮条，查看攻击结果对比</p>
+					</div>
+				</div>
 				<div id="jssor_1" style="position: relative; margin: 0 auto; top: 20px; left: 0px; width: 960px; height: 480px; overflow: hidden; visibility: hidden; background-color: #FFFFFF;">
 					<div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 240px; width: 720px; height: 480px; overflow: hidden;" id="pic_data">
 					</div>
@@ -177,7 +183,7 @@
 	// 	$("#pic_data").append(pic_show_append);
 	// }
 	// else{
-		$("#pic_scroll").hide();
+	// 	$("#pic_scroll").hide();
 	// }
 
 	var res_in_pair = document.getElementById("res_in_pair");
@@ -185,10 +191,14 @@
 		var text = "";
 		var PAIR_PATH = dataFromDjango["pic"]["DIR"] + "AttackResult/"
 		for(var i = 0; i < dataFromDjango["result_in_pair"]["origin"].length; i++){
-			text += pic_in_pair("pair_" + i, PAIR_PATH + dataFromDjango["result_in_pair"]["origin"][i], PAIR_PATH + dataFromDjango["result_in_pair"]["attack"][i]);
+			var style = ""
+			if(i != 0){
+				style = "style='display: none;'";
+			}
+			text += pic_in_pair("pair_" + i, PAIR_PATH + dataFromDjango["result_in_pair"]["origin"][i], PAIR_PATH + dataFromDjango["result_in_pair"]["attack"][i], style);
 		}
-		console.log(text);
-		$("#res_in_pair").append(text);
+		$("#pic_data").append(text);
+		// $("#res_in_pair").append(text);
 		for(var i = 0; i < dataFromDjango["result_in_pair"]["origin"].length; i++){
 			new BeerSlider(document.getElementById('pair_' + i));
 		}
@@ -216,7 +226,7 @@
 		];
 
 		var jssor_1_options = {
-		  $AutoPlay: true,
+		  $AutoPlay: false,
 		  $SlideshowOptions: {
 			$Class: $JssorSlideshowRunner$,
 			$Transitions: jssor_1_SlideshowTransitions,
