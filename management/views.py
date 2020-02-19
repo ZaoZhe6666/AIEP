@@ -1,11 +1,17 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.db import models
 import json, time, re
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from AIEP.settings import BASE_DIR
 import os
 import random
+from django.contrib.auth.models import User
+from .forms import TaskSubmitForm, RunSubmitForm
+from .models import TaskSubmit, TaskColumn, ShowImgAfterUpload, runSubmit
 import subprocess
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+import time
 
 status_num = []
 status_name = []
@@ -15,8 +21,22 @@ def welcome(request):
 def page_not_found(request, exception):
 	return render_to_response('404.html')
 
+@login_required(login_url='/privileges/login')
 def submit(request):
-	return render(request, 'submit.html')
+	if request.method == 'POST':
+		run_submit_form = RunSubmitForm(request.POST, request.FILES)
+		if run_submit_form.is_valid():
+			new_run = run_submit_form.save(commit=False)
+			new_run.author = User.objects.get(id=request.user.id)
+			new_run.save()
+			return redirect("management:run_record")
+		else:
+			return HttpResponse("任务提交表单填写有误，请重新填写。")
+
+	else:
+		run_submit_form = RunSubmitForm()
+	context = {'run_submit_form': run_submit_form, }
+	return render(request, 'submit.html', context)
 
 def waiting(request):
 	return render_to_response('waiting.html')
@@ -25,13 +45,19 @@ def submit_check(request):
 	if request.method == 'GET':
 		return render(request, 'index.html')
 	elif request.method == 'POST':
+
+		'''print("我就不信没点东西")
 		print("后端收到如下信息：",request.POST)
 		now = int(time.time())
 		time_array = time.localtime(now)
 		time_part = time.strftime("%Y_%m_%d-%H%M%S", time_array)
 		upload_file = request.FILES.get('submit_model')
+		print(upload_file)
 		os.mkdir(BASE_DIR + "/static/upload/" + time_part)
+		print("目前还有点东西")
 		if upload_file != None:
+			print("有点东西")
+			print(upload_file.name)
 			filename = time_part + '.' + upload_file.name.split('.')[-1]
 			filepath = os.path.join(BASE_DIR + "/static/upload/uploadfile/", filename)
 			f = open(filepath, 'wb')
@@ -64,7 +90,7 @@ def submit_check(request):
 		# output = subprocess.Popen("python D:/LABOR/temp/testimport.py --defense_model zhaoze_model")
 		p = subprocess.Popen("python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
 		# except Exception as e:
-		# 	print(e)
+		# 	print(e)'''
 		set_status(['ACC', 'DFS', 'Test Name 333'])
 	return render(request, 'waiting.html')
 
@@ -134,10 +160,71 @@ def ajax_load_per_style(request):
 	return JsonResponse(status_name, safe = False)
 
 def ajax_load_task(request):
-	file_list = []
+
 	if request.method == 'GET':
-		dic = {"Image": ["Car Recog", "Pet Recog"],
-			"Content": ["Eval Content", "Vedio"],
-			"Attack": ["Customization", "Noisy"]}
+		dic = {}
+		categoryList = TaskSubmit.objects.values_list("category", flat=True)
+		for Tcategory in categoryList:
+			tem_Task = list(TaskSubmit.objects.filter(category=Tcategory).values_list("title", flat=True))
+			dic[Tcategory] = tem_Task
+		#dic = {"Image": ["Car Recog", "Pet Recog"],
+			#"Content": ["Eval Content", "Vedio"],
+			#"Attack": ["Customization", "Noisy"]}
 		return JsonResponse(dic, safe = False)
 	return HttpResponse("Error")
+
+@login_required(login_url='/privileges/login/')
+def task_submit(request):
+	# 判断用户是否提交数据
+	print("I am in task_submit!")
+	if request.method == "POST":
+		# 将提交的数据赋值到表单实例中
+		task_submit_form = TaskSubmitForm(request.POST, request.FILES)
+		# 判断提交的数据是否满足模型的要求
+		if task_submit_form.is_valid():
+			# 保存数据，但暂时不提交到数据库中
+			new_task = task_submit_form.save(commit=False)
+			# 指定登录的用户为作者
+			new_task.author = User.objects.get(id=request.user.id)
+			#if request.POST['column'] != 'none':
+				# 保存文章栏目
+				#new_task.column = TaskColumn.objects.get(id=request.POST['column'])
+
+			# 将新文章保存到数据库中
+			new_task.save()
+			return redirect("management:task_list")
+		# 如果数据不合法，返回错误信息
+		else:
+			return HttpResponse("表单内容有误，请重新填写。")
+	# 如果用户请求获取数据
+	else:
+		# 创建表单类实例
+		task_submit_form = TaskSubmitForm()
+		# 文章栏目
+		#columns = TaskColumn.objects.all()
+		# 赋值上下文
+		imgs = ShowImgAfterUpload.objects.all()
+		context = {'task_submit_form': task_submit_form, "imgs" : imgs}#, 'columns': columns
+		# 返回模板
+		return render(request, 'TaskSubmit.html', context)
+
+def task_detail(request, name):
+	task = get_object_or_404(TaskSubmit, title=name)
+	return render(request, 'taskDetail.html', {'task': task})
+
+def task_list(request):
+    task_list = TaskSubmit.objects.all()
+    paginator = Paginator(task_list, 6)
+    page = request.GET.get('page')
+    tasks = paginator.get_page(page)
+    context = {'tasks': tasks,}
+    return render(request, 'taskList.html', context)
+
+def run_record(request):
+	run_list = runSubmit.objects.filter(author=request.user.id)
+	paginator = Paginator(run_list, 6)
+	page = request.GET.get('page')
+	runs = paginator.get_page(page)
+	context = {'runs': runs,}
+	return render(request, 'runRecord.html', context)
+

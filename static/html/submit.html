@@ -5,16 +5,27 @@
 	<div class="card-header card-header-border-bottom">
 		<h2>提交任务</h2>
 	</div>
+
 	<div class="card-body">
-		<form action="/management/submit_check/" method="POST" enctype="multipart/form-data">
+		<form action="/management/submit/" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<table>
+			{% for field in form %}
+				<tr>
+					<td>{{ field.label_tag }}</td>
+					<td>{{ field }}</td>
+					<td>{{ field.errors }}</td>
+				</tr>
+			{% endfor %}
+			</table>
 			<div class="form-group">
 				<label for="">项目名称：</label>
-				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="submit_proname">
+				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="title">
 			</div>
 			<div class="row">
 				<div>
 					镜像：
-					<select class="custom-select" name="jingxiang">
+					<select class="custom-select" name="img">
 						<option value="1">One</option>
 						<option value="2">Two</option>
 						<option value="3">Three</option>
@@ -22,7 +33,7 @@
 				</div>
 				<div>
 					GPU类型：
-					<select class="custom-select" name="gpu_type">
+					<select class="custom-select" name="gpu">
 						<option value="1">gtx1080ti</option>
 						<option value="2">Two</option>
 						<option value="3">Three</option>
@@ -31,7 +42,7 @@
 			</div>
 			<div class="form-group">
 				<label>项目简介：</label>
-				<textarea class="form-control" placeholder="请输入对项目的简单描述" rows="5" name="describe"></textarea>
+				<textarea class="form-control" placeholder="请输入对项目的简单描述" rows="5" name="description"></textarea>
 			</div>
 			<div class="form-group">
 				<label for="">retryCount：</label>
@@ -46,19 +57,21 @@
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">评测指标</label>
-				<select class="form-control" name="evaluate">
+				<select class="form-control" name="ind">
 					<option>套餐1</option>
 					<option>套餐2</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlFile1">上传模型文件</label>
-				<input type="file" class="form-control-file" name="submit_model">
+				<input type="file" class="form-control-file" name="model">
 			</div>
 			<div class="form-footer pt-4 pt-5 mt-4 border-top">
 				<button type="submit" class="btn btn-primary btn-default" name="submit_btn" onclick="submit_query()">Submit</button>
+				<!--button type="submit" class="btn btn-primary">完成</button-->
 			</div>
 		</form>
+
 	</div>
 </div>
 <script>

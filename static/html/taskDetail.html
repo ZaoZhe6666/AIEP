@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}<h1 class="my-con1">详细页面</h1>{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static '/css/login.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <!-- 标题及作者 -->
+        <h1 class="col-12 mt-4 mb-4">{{ task.title }}</h1>
+        <h6 class="col-12 mt-4 mb-4"> 发起人：{{ task.author }}</h6>
+        <!-- 文章正文 -->
+        <div class="col-12">
+            <p>{{ task.description }}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}
+    <link rel="stylesheet" href="{% static '/css/login.css' %}">
+{% endblock %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+<!-- 定义放置文章标题的div容器 -->
+<div class="container">
+
+    <!-- 列表循环 -->
+    <div class="row mt-2">
+        {% for task in tasks %}
+            <!-- 文章内容 -->
+
+            <!-- 标题图 -->
+            {% if task.img %}
+                <div class="col-3">
+                    <img src="{{ task.img.url }}"
+                         alt="task"
+                         style="max-width:100%; border-radius: 20px"
+                    >
+                </div>
+            {% endif %}
+
+            <div class="col">
+                <!-- 标题 -->
+                <h4>
+                    <b>
+                        <a href="{% url 'management:task_detail' task.title %}"
+                           style="color: black;"
+                        >
+                            {{ task.title }}
+                        </a>
+                    </b>
+                </h4>
+                <!-- 摘要 -->
+                <div>
+                    <p style="color: gray;">
+                        {{ task.description|slice:'100' }}...
+                    </p>
+                </div>
+                <!-- 注脚 -->
+                <p>
+                    <!-- 附加信息 -->
+
+                    <span>
+                        <i class="fas fa-clock" style="color: pink;"></i>
+                        <!--
+                        {{ article.created|date:'Y-m-d' }}
+                        -->
+                        {{ task.created }}
+                    </span>
+                </p>
+            </div>
+            <hr style="width: 100%;"/>
+        {% endfor %}
+    </div>
+
+    <!-- 页码导航 -->
+    <div class="pagination row">
+        <div class="m-auto">
+            <span class="step-links">
+                <!-- 如果不是第一页，则显示上翻按钮 -->
+                {% if tasks.has_previous %}
+                    <a href="?page=1" class="btn btn-success">
+                        &laquo; 1
+                    </a>
+                    <span>...</span>
+                    <a href="?page={{ tasks.previous_page_number }}"
+                       class="btn btn-secondary"
+                    >
+                        {{ tasks.previous_page_number }}
+                    </a>
+                {% endif %}
+
+                <!-- 当前页面 -->
+                <span class="current btn btn-danger btn-lg">
+                    {{ tasks.number }}
+                </span>
+
+                <!-- 如果不是最末页，则显示下翻按钮 -->
+                {% if tasks.has_next %}
+                    <a href="?page={{ tasks.next_page_number }}"
+                       class="btn btn-secondary"
+                    >
+                        {{ tasks.next_page_number }}
+                    </a>
+                    <span>...</span>
+                    <a href="?page={{ tasks.paginator.num_pages }}"
+                       class="btn btn-success"
+                    >
+                        {{ tasks.paginator.num_pages }} &raquo;
+                    </a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
