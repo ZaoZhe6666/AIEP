@@ -26,23 +26,9 @@
                             <div class="contact-info pt-4">
                                 <h5 class="text-dark mb-1">Contact Information</h5>
                                 <p class="text-dark font-weight-medium pt-4 mb-2">Email address</p>
-                                <p>Albrecht.straub@gmail.com</p>
+                                <p>{{request.user.email}}</p>
                                 <p class="text-dark font-weight-medium pt-4 mb-2">Phone Number</p>
-                                <p>+99 9539 2641 31</p>
-                                <p class="text-dark font-weight-medium pt-4 mb-2">Birthday</p>
-                                <p>Nov 15, 1990</p>
-                                <p class="text-dark font-weight-medium pt-4 mb-2">Social Profile</p>
-                                <p class="pb-3 social-button">
-                                    <a href="#" class="mb-1 btn btn-outline btn-twitter rounded-circle"><i class="mdi mdi-twitter"></i>
-                                    </a>
-                                    <a href="#" class="mb-1 btn btn-outline btn-linkedin rounded-circle">
-                                        <i class="mdi mdi-linkedin"></i>
-                                    </a>
-                                    <a href="#" class="mb-1 btn btn-outline btn-facebook rounded-circle">
-                                        <i class="mdi mdi-facebook"></i>
-                                    </a>
-                                    <a href="#" class="mb-1 btn btn-outline btn-skype rounded-circle"><i class="mdi mdi-skype"></i></a>
-                                </p>
+                                <p>{{telephone}}</p>
                             </div>
                         </div>
                     </div>
@@ -53,32 +39,60 @@
                                     <a class="nav-link active show" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
+                                    <a class="nav-link" id="changePassword-tab" data-toggle="tab" href="#changePassword" role="tab" aria-controls="cpw" aria-selected="false">Change Password</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="changePassword-tab" data-toggle="tab" href="#changePassword" role="tab" aria-controls="cpw" aria-selected="false">Change Password</a>
+                                    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
                                 </li>
                             </ul>
                             <div class="tab-content px-3 px-xl-5" id="myTabContent">
-
                                 <div class="tab-pane fade active show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Username</p>
-                                    <p>{{ request.user.username }}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Email address</p>
-                                    <p>{{ request.user.email }}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">user's first name</p>
-                                    <p>{{ request.user.first_name | default:"nothing"}}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">user's last name</p>
-                                    <p>{{ request.user.last_name | default:"nothing"}}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Organization</p>
-                                    <p>{{ request.user.profile.org | default:"nothing"}}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Telephone</p>
-                                    <p>{{ request.user.profile.telephone | default:"nothing"}}</p>
-                                    <a class="btn btn-primary btn-pill btn-lg my-4" href="#">Edit</a>
+                                    <div class="card-body">
+                                        <form method="post" action="#!" class="site-form">
+                                            <div class="form-group">
+                                                <label for="username">用户名</label>
+                                                <input type="text" class="form-control" name="username" id="username" value="{{request.user.username}}" disabled="disabled">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">邮箱</label>
+                                                <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" value="{{request.user.email}}" disabled="disabled">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="username">公司</label>
+                                                <input type="text" class="form-control" name="org" id="org" value="{{org}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="username">联系方式</label>
+                                                <input type="text" class="form-control" name="telephone" id="telephone" value="{{telephone}}">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary" name="profile_change">保存</button>
+                                        </form>
+                                    </div>
                                 </div>
 
+                                <div class="tab-pane fade" id="changePassword" role="tabpanel" aria-labelledby="changePassword-tab">
+                                    <div class="col-lg-12">
+                                        {{message}}
+                                        <div class="card-body">
+                                            <form method="post" action="#!" class="site-form">
+                                                <div class="form-group">
+                                                    <label for="username">旧密码</label>
+                                                    <input type="password" class="form-control" name="old_password" id="old_password" required="required" placeholder="请填写旧密码">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="username">新密码</label>
+                                                    <input type="password" class="form-control" name="password1" id="password1" required="required" placeholder="请输入6-18位的密码">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="username">确认新密码</label>
+                                                    <input type="password" class="form-control" name="password2" id="password2" required="required" placeholder="请再次输入密码">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary" name="password_change">修改密码</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">...</div>
-                                <div class="tab-pane fade" id="changePassword" role="tabpanel" aria-labelledby="changePassword-tab">...</div>
                             </div>
                         </div>
                     </div>
@@ -86,46 +100,8 @@
             </div>
         </div>
     </div>
-    <div class="content-wrapper">
-        <div class="content">
-					<div class="card card-default">
-						<div class="card-header card-header-border-bottom">
-							<h2>Title</h2>
-						</div>
 
-						<div class="card-body">
-							<div class="row">
-								<div class="col-12">
-									<p class="mb-5">Now you can add more elements.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-        </div>
-    </div>
-    <div class="body">
-        <h2 class="title-style">Account Info</h2>
-        <ul class="b1">
-        <li>Username: {{ user.username }}</li>
-        <li>Email: {{ user.email }}</li>
-        </ul>
 
-        <h2 class="title-style">My Profile</h2>
-        <ul class="b1">
-            <li>First Name: {{ user.first_name }}</li>
-            <li>Last Name: {{ user.last_name }}</li>
-            <li>Organization: {{ user.profile.org }}</li>
-            <li>Telephone: {{ user.profile.telephone }}</li>
-        </ul>
-
-        <h2 class="title-style">
-            {% if user.is_authenticated %}
-                <a href="{% url 'privileges:profile_update' user.id %}" class="m1">Edit</a>
-                <a href="{% url 'privileges:pwd_change' user.id %}" class="m2">ChangePassword</a>
-                <a href="{% url 'privileges:logout'%}" class="m3">logout</a>
-            {% endif %}
-        </h2>
-    </div>
 
 
 

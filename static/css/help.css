@@ -1,0 +1,45 @@
+
+/*/////////////////////////////////////////
+Frequently asked questions
+////////////////////////////////////////*/
+
+#faq {
+    background-color: #ffffff;
+}
+
+.card-header:first-child, .card {
+    border-radius: 0px;
+}
+
+.card-headerw {
+    background-color: #ffffff;
+    border: 0px;
+    padding: 5px 0;
+}
+
+.card-header i {
+    color: #2d8eff;
+    font-size: 26px;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.card {
+
+    background-color: #ffffff;
+    border: 0px;
+}
+
+.card-body {
+    padding: 5px 10px 20px 10px;
+}
+
+.btn-link {
+    color: #282c47;
+}
+
+.btn-link:hover {
+    color: #282c47;
+    opacity: .95;
+    text-decoration: none;
+}
