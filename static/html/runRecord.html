@@ -5,254 +5,156 @@
 {% endblock %}
 
 		  {% block content %}
-          <div class="card content-list">
-            <div class="card-header">
-              <h3 class="card-title">提交记录</h3>
-				<div class="card-tools">
-				  <!--button type="button" class="btn btn-tool" data-widget="collapse">
-					<i class="fas fa-minus"></i>
-				  </button>
-				  <button type="button" class="btn btn-tool" data-widget="maximize">
-				  <i class="fas fa-expand"></i>
-                  </button>
-				  <button type="button" class="btn btn-tool" data-widget="remove">
-					<i class="fas fa-times"></i>
-				  </button-->
-				</div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body table-responsive">
-              <table id="datatables-lists" class="table table-bordered table-hover">
-                <thead>
-                <tr>
-				  <th>Job</th>
-				  <th>User</th>
-				  <th>Virtual Cluster</th>
-				  <th>Start Time</th>
-				  <th>Duration</th>
-				  <th>Retries</th>
-				  <th>
-					  Resubmit
-					  <a href="#" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="客户端使用方法见：个人信息 - 编辑">
-						<i class="far fa-question-circle"></i>
-					  </a>
-				  </th>
-                </tr>
-                </thead>
-                <tbody>
-				{% for host in hosts %}
-                <tr>
-				  <td>{{ host.hostname }}</td>
-				  <td>{{ host.ip }}</td>
-				  <td>
-				  {% if host.get_protocol_display == 'ssh' %}
-					<span class="badge badge-success">{{ host.get_protocol_display }}</span>
-				  {% elif host.get_protocol_display == 'sftp' %}
-					<span class="badge badge-info">{{ host.get_protocol_display }}</span>
-				  {% elif host.get_protocol_display == 'telnet' %}
-					<span class="badge badge-primary">{{ host.get_protocol_display }}</span>
-				  {% else %}
-				    <span class="badge badge-secondary">{{ host.get_protocol_display }}</span>
-				  {% endif %}
-				  </td>
-				  <td>{{ host.port }}</td>
-				  <td>{{ host.release }}</td>
-				  {% if host.remote_user %}
-				  <td>{{ host.remote_user.username }}</td>
-				  {% else %}
-				  <td></td>
-				  {% endif %}
-				  <td>
-					{% if host.get_protocol_display == 'ssh' %}
-							{% if host.remote_user and host.enabled %}
-								<form method="post" action="{% url 'webssh:terminal' %}" target="_blank" style="display:inline;">
-									{% csrf_token %}
-									<input type="text" name="hostid" value="{{ host.id }}" hidden>
-									<button type="submit" class="btn btn-sm btn-success mb-1"><i class="fas fa-terminal"></i> web终端</button>
-								</form>
-							{% else %}
-								<button class="btn btn-sm btn-success disabled mb-1"><i class="fas fa-terminal"></i> web终端</button>
-							{% endif %}
-					{% elif host.get_protocol_display == 'telnet' %}
-							{% if host.remote_user and host.enabled %}
-								<form method="post" action="{% url 'webtelnet:terminal' %}" target="_blank" style="display:inline;">
-									{% csrf_token %}
-									<input type="text" name="hostid" value="{{ host.id }}" hidden>
-									<button type="submit" class="btn btn-sm btn-success mb-1"><i class="fas fa-terminal"></i> web终端</button>
-								</form>
-							{% else %}
-								<button class="btn btn-sm btn-success disabled mb-1"><i class="fas fa-terminal"></i> web终端</button>
-							{% endif %}
-					{% elif host.get_protocol_display == 'rdp' or host.get_protocol_display == 'vnc' %}
-							{% if host.remote_user and host.enabled %}
-								<form method="post" action="{% url 'webguacamole:terminal' %}" target="_blank" style="display:inline;">
-									{% csrf_token %}
-									<input type="text" name="hostid" value="{{ host.id }}" hidden>
-									<button type="submit" class="btn btn-sm btn-success mb-1"><i class="fas fa-desktop"></i> web桌面</button>
-								</form>
-							{% else %}
-								<button class="btn btn-sm btn-success disabled mb-1"><i class="fas fa-desktop"></i> web桌面</button>
-							{% endif %}
-					{% endif %}
+			<div class="container">
+          	<div class="row mt-5">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="float-right">
+                      <form>
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Search">
+                          <div class="input-group-btn">
+                            <button class="btn btn-secondary"><i class="ion ion-search"></i></button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <h4>提交记录</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <tr>
+                          <th class="text-center">Run Name</th>
+                          <th class="text-center">Flow</th>
+                          <th class="text-center">Task</th>
+                          <th class="text-center">Submit Time</th>
+                          <th class="text-center">Status</th>
+                          <th class="text-center">Action</th>
+                        </tr>
+                      {% for run in runs %}
+                        <tr>
+                          <td class="text-center">{{ run.title }}</td>
+                          <td class="text-center">
+                            {{  run.flow }}
+                          </td>
+                          <td class="text-center">
+                            {{run.author}}
+                          </td>
+                          <td class="text-center">{{ run.created }}</td>
+                          <td class="text-center"><div class="badge badge-success">Completed</div></td>
+                          <td class="text-center"><a href="#" class="btn btn-action btn-secondary">Detail</a></td>
+                        </tr>
+                      {% endfor %}
+                        <!--tr>
+                          <td>
+                            <div class="custom-checkbox custom-control">
+                              <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-2">
+                              <label for="checkbox-2" class="custom-control-label"></label>
+                            </div>
+                          </td>
+                          <td>Redesign homepage</td>
+                          <td class="align-middle">
+                            <div class="progress" style="height: 4px;" data-toggle="tooltip" title="0%">
+                              <div class="progress-bar" style="width: 0;"></div>
+                            </div>
+                          </td>
+                          <td>
+                            <img alt="image" src="../dist/img/avatar/avatar-1.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Nur Alpiana">
+                            <img alt="image" src="../dist/img/avatar/avatar-3.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Hariono Yusup">
+                            <img alt="image" src="../dist/img/avatar/avatar-4.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Bagus Dwi Cahya">
+                          </td>
+                          <td>2018-04-10</td>
+                          <td><div class="badge badge-info">Todo</div></td>
+                          <td><a href="#" class="btn btn-action btn-secondary">Detail</a></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="custom-checkbox custom-control">
+                              <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-3">
+                              <label for="checkbox-3" class="custom-control-label"></label>
+                            </div>
+                          </td>
+                          <td>Backup database</td>
+                          <td class="align-middle">
+                            <div class="progress" style="height: 4px;" data-toggle="tooltip" title="70%">
+                              <div class="progress-bar bg-warning" style="width: 70%;"></div>
+                            </div>
+                          </td>
+                          <td>
+                            <img alt="image" src="../dist/img/avatar/avatar-1.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Rizal Fakhri">
+                            <img alt="image" src="../dist/img/avatar/avatar-2.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Hasan Basri">
+                          </td>
+                          <td>2018-01-29</td>
+                          <td><div class="badge badge-warning">In Progress</div></td>
+                          <td><a href="#" class="btn btn-action btn-secondary">Detail</a></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="custom-checkbox custom-control">
+                              <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-4">
+                              <label for="checkbox-4" class="custom-control-label"></label>
+                            </div>
+                          </td>
+                          <td>Input data</td>
+                          <td class="align-middle">
+                            <div class="progress" style="height: 4px;" data-toggle="tooltip" title="100%">
+                              <div class="progress-bar bg-success" style="width: 100%;"></div>
+                            </div>
+                          </td>
+                          <td>
 
-					&nbsp;&nbsp;
-
-					{% if host.get_protocol_display == 'ssh' %}
-						{% if host.remote_user and host.enabled %}
-							<form method="post" target="_blank" onsubmit="clishell(this);return false;" style="display:inline;">
-								<input type="text" name="hostid" value="{{ host.id }}" hidden>
-								<button type="submit" class="btn btn-sm btn-primary mb-1"><i class="fas fa-network-wired"></i> 客户端ssh</button>
-							</form>
-
-							&nbsp;&nbsp;
-							<form method="post" target="_blank" onsubmit="clisftpshell(this);return false;" style="display:inline;">
-								<input type="text" name="hostid" value="{{ host.id }}" hidden>
-								<button type="submit" class="btn btn-sm btn-info mb-1"><i class="fas fa-network-wired"></i> 客户端sftp</button>
-							</form>
-						{% else %}
-							<button class="btn btn-sm btn-primary disabled mb-1"><i class="fas fa-network-wired"></i> 客户端ssh</button>
-
-							&nbsp;&nbsp;
-							<button class="btn btn-sm btn-info disabled mb-1"><i class="fas fa-network-wired"></i> 客户端sftp</button>
+                          </td>
+                          <td>2018-01-16</td>
+                          <td><div class="badge badge-success">Completed</div></td>
+                          <td><a href="#" class="btn btn-action btn-secondary">Detail</a></td>
+                        </tr-->
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			</div>
+				<!-- 页码导航 -->
+			<div class="pagination row">
+				<div class="m-auto">
+					<span class="step-links">
+						<!-- 如果不是第一页，则显示上翻按钮 -->
+						{% if runs.has_previous %}
+							<a href="?page=1" class="btn btn-success">
+								&laquo; 1
+							</a>
+							<span>...</span>
+							<a href="?page={{ runs.previous_page_number }}"
+							   class="btn btn-secondary"
+							>
+								{{ run.previous_page_number }}
+							</a>
 						{% endif %}
-					{% endif %}
-				  </td>
-                </tr>
-				{% endfor %}
-                </tbody>
-                <tfoot>
-                <tr>
-				  <th>名称</th>
-				  <th>IP</th>
-				  <th>协议</th>
-				  <th>端口</th>
-				  <th>系统</th>
-				  <th>用户</th>
-				  <th>
-					  操作
-					  <a href="#" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="客户端使用方法见：个人信息 - 编辑">
-						<i class="far fa-question-circle"></i>
-					  </a>
-				  </th>
-                </tr>
-                </tfoot>
-              </table>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
+
+						<!-- 当前页面 -->
+						<span class="current btn btn-danger btn-lg">
+							{{ runs.number }}
+						</span>
+
+						<!-- 如果不是最末页，则显示下翻按钮 -->
+						{% if runs.has_next %}
+							<a href="?page={{ runs.next_page_number }}"
+							   class="btn btn-secondary"
+							>
+								{{ runs.next_page_number }}
+							</a>
+							<span>...</span>
+							<a href="?page={{ runs.paginator.num_pages }}"
+							   class="btn btn-success"
+							>
+								{{ runs.paginator.num_pages }} &raquo;
+							</a>
+						{% endif %}
+					</span>
+				</div>
+    		</div>
+			</div>
 		  {% endblock content %}
 
-{% block js %}
-<!-- DataTables -->
-<script src="{% static 'adminlte/plugins/jquery.dataTables.js' %}"></script>
-<script src="{% static 'adminlte/plugins/dataTables.bootstrap4.js' %}"></script>
-<script>
-$("#datatables-lists").DataTable({
-	language: {
-		"sProcessing": "处理中...",
-		"sLengthMenu": "显示 _MENU_ 项结果",
-		"sZeroRecords": "没有匹配结果",
-		"sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-		"sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-		"sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-		"sInfoPostFix": "",
-		"sSearch": "搜索:",
-		"sUrl": "",
-		"sEmptyTable": "无数据",
-		"sLoadingRecords": "载入中...",
-		"sInfoThousands": ",",
-		"oPaginate": {
-			"sFirst": "首页",
-			"sPrevious": "上页",
-			"sNext": "下页",
-			"sLast": "末页"
-		},
-		"oAria": {
-			"sSortAscending": ": 以升序排列此列",
-			"sSortDescending": ": 以降序排列此列"
-		}
-	},
-	destroy: true,	// 允许重建
-	bProcessing:true,  // 表格数据过多处理时显示: sProcessing
-	lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "全部"]],
-	columnDefs : [ { targets : 6, "orderable" : false } ],
-	order: [],
-	 //scrollY: 480,	// 滚动条
-	 //scrollCollapse: true,
-	 //jQueryUI: true,
-	 stateSave: true,	// 保存最后一次分页信息、排序信息，当页面刷新，或者重新进入这个页面，恢复上次的状态。
-	 stateDuration: 86400,	// 本地储存(0~更大)还是session储存(-1)
-});
-</script>
-
-
-<script>
-	function clishell(event){	// 创建clishell
-		toastr.options.closeButton = true;
-		toastr.options.showMethod = 'slideDown';
-		toastr.options.hideMethod = 'fadeOut';
-		toastr.options.closeMethod = 'fadeOut';
-		toastr.options.timeOut = 3000;
-		toastr.options.extendedTimeOut = 0;
-		toastr.options.progressBar = true;
-		toastr.options.positionClass = 'toast-top-right';
-		var thisObj = $(event);	//js对象转jquery对象
-		var hostid = $(thisObj.find("input[name='hostid']")[0]).val();
-		csrfmiddlewaretoken = '{{ request.COOKIES.csrftoken }}';
-		var url = "{% url 'webssh:terminal_cli' %}";
-		$.ajax({
-			url: url,
-			type: 'POST',
-			timeout: 3000,
-			async: false,
-			data: {
-				'csrfmiddlewaretoken': csrfmiddlewaretoken,
-				"hostid": hostid,
-			},
-			error: function(){
-				toastr.error('创建ssh客户端终端错误！');
-			},
-			success: function(ssh_url){
-				window.location.href=ssh_url;
-			}
-		});
-	};
-
-	function clisftpshell(event){	// 创建clisftpshell
-		toastr.options.closeButton = true;
-		toastr.options.showMethod = 'slideDown';
-		toastr.options.hideMethod = 'fadeOut';
-		toastr.options.closeMethod = 'fadeOut';
-		toastr.options.timeOut = 3000;
-		toastr.options.extendedTimeOut = 0;
-		toastr.options.progressBar = true;
-		toastr.options.positionClass = 'toast-top-right';
-		var thisObj = $(event);	//js对象转jquery对象
-		var hostid = $(thisObj.find("input[name='hostid']")[0]).val();
-		csrfmiddlewaretoken = '{{ request.COOKIES.csrftoken }}';
-		var url = "{% url 'webssh:terminal_cli_sftp' %}";
-		$.ajax({
-			url: url,
-			type: 'POST',
-			timeout: 3000,
-			async: false,
-			data: {
-				'csrfmiddlewaretoken': csrfmiddlewaretoken,
-				"hostid": hostid,
-			},
-			error: function(){
-				toastr.error('创建sftp客户端终端错误！');
-			},
-			success: function(sftp_url){
-				window.location.href=sftp_url;
-			}
-		});
-	};
-
-	$(document).ready(function(){
-		$('[data-toggle="popover"]').popover();
-	});
-
-</script>
-{% endblock js %}

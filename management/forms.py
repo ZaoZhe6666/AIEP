@@ -10,4 +10,4 @@ class TaskSubmitForm(forms.ModelForm):
 class RunSubmitForm(forms.ModelForm):
     class Meta:
         model = runSubmit
-        fields = ('img', 'gpu', 'ind', 'dataset', 'retrycount','title', 'description', 'model') #
+        fields = ('title', 'description', 'model', 'img', 'gpu', 'ind', 'dataset', 'retrycount')
