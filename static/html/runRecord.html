@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}
+    <link rel="stylesheet" href="{% static '/css/login.css' %}">
+{% endblock %}
+
+		  {% block content %}
+			<div class="container">
+          	<div class="row mt-5">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="float-right">
+                      <form>
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Search">
+                          <div class="input-group-btn">
+                            <button class="btn btn-secondary"><i class="ion ion-search"></i></button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <h4>提交记录</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <tr>
+                          <th class="text-center">Run Name</th>
+                          <th class="text-center">Flow</th>
+                          <th class="text-center">Task</th>
+                          <th class="text-center">Submit Time</th>
+                          <th class="text-center">Status</th>
+                          <th class="text-center">Action</th>
+                        </tr>
+                      {% for run in runs %}
+                        <tr>
+                          <td class="text-center">{{ run.title }}</td>
+                          <td class="text-center">
+                            {{  run.flow }}
+                          </td>
+                          <td class="text-center">
+                            {{run.author}}
+                          </td>
+                          <td class="text-center">{{ run.created }}</td>
+                          <td class="text-center"><div class="badge badge-success">Completed</div></td>
+                          <td class="text-center"><a href="#" class="btn btn-action btn-secondary">Detail</a></td>
+                        </tr>
+                      {% endfor %}
+                        <!--tr>
+                          <td>
+                            <div class="custom-checkbox custom-control">
+                              <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-2">
+                              <label for="checkbox-2" class="custom-control-label"></label>
+                            </div>
+                          </td>
+                          <td>Redesign homepage</td>
+                          <td class="align-middle">
+                            <div class="progress" style="height: 4px;" data-toggle="tooltip" title="0%">
+                              <div class="progress-bar" style="width: 0;"></div>
+                            </div>
+                          </td>
+                          <td>
+                            <img alt="image" src="../dist/img/avatar/avatar-1.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Nur Alpiana">
+                            <img alt="image" src="../dist/img/avatar/avatar-3.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Hariono Yusup">
+                            <img alt="image" src="../dist/img/avatar/avatar-4.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Bagus Dwi Cahya">
+                          </td>
+                          <td>2018-04-10</td>
+                          <td><div class="badge badge-info">Todo</div></td>
+                          <td><a href="#" class="btn btn-action btn-secondary">Detail</a></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="custom-checkbox custom-control">
+                              <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-3">
+                              <label for="checkbox-3" class="custom-control-label"></label>
+                            </div>
+                          </td>
+                          <td>Backup database</td>
+                          <td class="align-middle">
+                            <div class="progress" style="height: 4px;" data-toggle="tooltip" title="70%">
+                              <div class="progress-bar bg-warning" style="width: 70%;"></div>
+                            </div>
+                          </td>
+                          <td>
+                            <img alt="image" src="../dist/img/avatar/avatar-1.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Rizal Fakhri">
+                            <img alt="image" src="../dist/img/avatar/avatar-2.jpeg" class="rounded-circle" width="35" data-toggle="title" title="Hasan Basri">
+                          </td>
+                          <td>2018-01-29</td>
+                          <td><div class="badge badge-warning">In Progress</div></td>
+                          <td><a href="#" class="btn btn-action btn-secondary">Detail</a></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="custom-checkbox custom-control">
+                              <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-4">
+                              <label for="checkbox-4" class="custom-control-label"></label>
+                            </div>
+                          </td>
+                          <td>Input data</td>
+                          <td class="align-middle">
+                            <div class="progress" style="height: 4px;" data-toggle="tooltip" title="100%">
+                              <div class="progress-bar bg-success" style="width: 100%;"></div>
+                            </div>
+                          </td>
+                          <td>
+
+                          </td>
+                          <td>2018-01-16</td>
+                          <td><div class="badge badge-success">Completed</div></td>
+                          <td><a href="#" class="btn btn-action btn-secondary">Detail</a></td>
+                        </tr-->
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			</div>
+				<!-- 页码导航 -->
+			<div class="pagination row">
+				<div class="m-auto">
+					<span class="step-links">
+						<!-- 如果不是第一页，则显示上翻按钮 -->
+						{% if runs.has_previous %}
+							<a href="?page=1" class="btn btn-success">
+								&laquo; 1
+							</a>
+							<span>...</span>
+							<a href="?page={{ runs.previous_page_number }}"
+							   class="btn btn-secondary"
+							>
+								{{ run.previous_page_number }}
+							</a>
+						{% endif %}
+
+						<!-- 当前页面 -->
+						<span class="current btn btn-danger btn-lg">
+							{{ runs.number }}
+						</span>
+
+						<!-- 如果不是最末页，则显示下翻按钮 -->
+						{% if runs.has_next %}
+							<a href="?page={{ runs.next_page_number }}"
+							   class="btn btn-secondary"
+							>
+								{{ runs.next_page_number }}
+							</a>
+							<span>...</span>
+							<a href="?page={{ runs.paginator.num_pages }}"
+							   class="btn btn-success"
+							>
+								{{ runs.paginator.num_pages }} &raquo;
+							</a>
+						{% endif %}
+					</span>
+				</div>
+    		</div>
+			</div>
+		  {% endblock content %}
+

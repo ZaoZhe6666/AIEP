@@ -10,14 +10,32 @@
     <!-- GOOGLE FONTS -->
     <link href="https://cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css" rel="stylesheet" />
 
+    <!--link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/demo.css"-->
+    <!--link rel="stylesheet" href="/static/css/style.css"-->
+    <link rel="stylesheet" href="/static/css/ionicons.min.css">
+    <link rel="stylesheet" href="/static/css/fontawesome-all.min.css">
     <!-- INDEX CSS -->
     <script src="/static/plugins/nprogress.js"></script>
     <script src="/static/plugins/jquery.min.js"></script>
     <script src="/static/plugins/jquery.slimscroll.min.js"></script>
     <script src="/static/plugins/jquery-jvectormap-2.0.3.min.js"></script>
     <script src="/static/plugins/index.js"></script>
-    <script src="/static/plugins/bootstrap.bundle.min.js"></script>    
+    <script src="/static/plugins/bootstrap.bundle.min.js"></script>
+
+    <!--script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.js"></script>
+    <script src="/static/js/tooltip.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/scripts.js"></script>
+    <script src="/static/js/custom.js"></script>
+    <script src="/static/js/demo.js"></script-->
+    <script src="/static/js/jquery.nicescroll.min.js"></script>
+    <script src="/static/js/scroll-up-bar.min.js"></script>
+    <script src="/static/js/sa-functions.js"></script>
+
     <link id="index-css" rel="stylesheet" href="/static/css/index.css"/>
+
   </head>
 
 
@@ -50,7 +68,7 @@
             <!-- begin sidebar scrollbar -->
             <div class="sidebar-scrollbar">
               <ul class="nav sidebar-inner" id="sidebar-menu">
-                  <li  class="has-sub active expand" >
+                  <!--li  class="has-sub active expand" >
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#dashboard"
                       aria-expanded="false" aria-controls="dashboard">
                       <i class="mdi mdi-view-dashboard-outline"></i>
@@ -66,31 +84,71 @@
                             </li>
                       </div>
                     </ul>
-                  </li>
-                
+                  </li-->
 
-                
+                  <li >
+                    <a class="sidenav-item-link" href="/management/submit/">
+                      <i class="mdi mdi-view-dashboard-outline"></i>
+                      <span class="nav-text">提交任务</span>
+                    </a>
+                  </li>
+
+                  <!--li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#taskList"
+                      aria-expanded="false" aria-controls="taskList">
+                      <i class="mdi mdi-cube-send"></i>
+                      <span class="nav-text">提交记录</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="taskList"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                            <li>
+                              <a class="sidenav-item-link" href="/management/taskList/">
+                                <span class="nav-text">任务列表</span>
+                              </a>
+                            </li>
+                      </div>
+                    </ul>
+                  </li-->
+
+
+                  <li >
+                    <a class="sidenav-item-link" href="/management/task/Record">
+                      <i class="mdi mdi-cube-send"></i>
+                      <span class="nav-text">提交记录</span>
+                    </a>
+                  </li>
 
                 
                   <li  class="has-sub" >
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#ui-elements"
                       aria-expanded="false" aria-controls="ui-elements">
                       <i class="mdi mdi-folder-multiple-outline"></i>
-                      <span class="nav-text">任务列表</span> <b class="caret"></b>
+                      <span class="nav-text">公开任务</span> <b class="caret"></b>
                     </a>
                     <ul  class="collapse"  id="ui-elements"
                       data-parent="#sidebar-menu">
                       <div class="sub-menu" id="task_menu">
-                        
-                              
+                        <li >
+                          <a class="sidenav-item-link" href="/management/task/Submit">
+                            <span class="nav-text">发布任务</span>
+                          </a>
+                        </li>
+
+                        <li >
+                          <a class="sidenav-item-link" href="/management/task/List">
+                            <span class="nav-text">任务列表</span>
+                          </a>
+                        </li>
+
                       </div>
                     </ul>
                   </li>
-                
 
-                
 
-                
+
+
+
                   <li  class="has-sub" >
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#charts"
                       aria-expanded="false" aria-controls="charts">
@@ -100,15 +158,15 @@
                     <ul  class="collapse"  id="charts"
                       data-parent="#sidebar-menu">
                       <div class="sub-menu" id="result_menu">
-                            
+
                       </div>
                     </ul>
                   </li>
-                
 
-                
 
-                
+
+
+
                   <li  class="has-sub" >
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#pages"
                       aria-expanded="false" aria-controls="pages">
@@ -131,11 +189,11 @@
                       </div>
                     </ul>
                   </li>
-                
 
-                
 
-                
+
+
+
                   <li  class="has-sub" >
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#documentation"
                       aria-expanded="false" aria-controls="documentation">
@@ -151,21 +209,21 @@
                             <li >
                               <a class="sidenav-item-link" href="{% url 'privileges:introduction' %}">
                                 <span class="nav-text">平台简介</span>
-                                
+
                               </a>
                             </li>
                             <li >
-                              <a class="sidenav-item-link" href="setup.html">
+                              <a class="sidenav-item-link" href="{% url 'privileges:setup' %}">
                                 <span class="nav-text">平台配置</span>
                               </a>
                             </li>
                             <li >
-                              <a class="sidenav-item-link" href="{% url 'privileges:helpPage' %}">
+                              <a class="sidenav-item-link" href="{% url 'privileges:help' %}">
                                 <span class="nav-text">常见问题</span>
                               </a>
                             </li>
                             <li >
-                              <a class="sidenav-item-link" href="rtl.html">
+                              <a class="sidenav-item-link" href="{% url 'privileges:contactUs' %}">
                                 <span class="nav-text">联系我们</span>
                               </a>
                             </li>
@@ -177,7 +235,7 @@
           </div>
         </aside>
 
-      
+
 
       <div class="page-wrapper">
                   <!-- Header -->
@@ -321,30 +379,36 @@
         }
     });
 
-    $.ajax({
-        url: '/management/ajax/load_task/',
-        data:{
-        },
-        type: 'GET',
-        dataType: 'json',
-        success: function(data){
-            var content = "";
-            $.each(data, function(i, item){
-                content += "<li  class='has-sub' ><a class='sidenav-item-link' href='javascript:void(0)' data-toggle='collapse' data-target='#"
-                content += i + "' aria-expanded='false' aria-controls='"
-                content += i + "'><span class='nav-text'>";
-                content += i;
-                content += "</span> <b class='caret'></b></a><ul  class='collapse' id='"
-                content += i + "'><div class='sub-menu'>";
-                for(var x = 0; x < item.length; x++){
-                  content += "<li ><a href='/management/task/" + item[x] + "'>";
-                  content += item[x] + "</a></li>"
-                }
-                content += "</div></ul></li>";
-            });
-            document.getElementById("task_menu").innerHTML = content;
-        }
-    });
+    //$.ajax({
+        //url: '/management/ajax/load_task/',
+        //data:{
+        //},
+        //type: 'GET',
+        //dataType: 'json',
+        //success: function(data){
+            //var content = "";
+            //content += "<li ><a href='/management/task/Submit/'> 发布任务 </a></li>";
+            //content += "<li  class='has-sub' > <a class='sidenav-item-link' href='javascript:void(0)' data-toggle='collapse'"
+            //content += "data-target='#upload-tasks' aria-expanded='false' aria-controls='upload-tasks'>"
+            //content += "<span class='nav-text'>已有任务</span> <b class='caret'></b></a> <ul  class='collapse'  id='upload-tasks'>"
+            //content += "<div class='sub-menu'>"
+            //$.each(data, function(i, item){
+                //content += "<li  class='has-sub' ><a class='sidenav-item-link' href='javascript:void(0)' data-toggle='collapse' data-target='#"
+                //content += i + "' aria-expanded='false' aria-controls='"
+                //content += i + "'><span class='nav-text'>";
+                //content += i;
+                //content += "</span> <b class='caret'></b></a><ul  class='collapse' id='"
+                //content += i + "'><div class='sub-menu'>";
+                //for(var x = 0; x < item.length; x++){
+                  //content += "<li ><a href='/management/task/" + item[x] + "'>";
+                  //content += item[x] + "</a></li>"
+                //}
+                //content += "</div></ul></li>";
+            //});
+            //content += "</div></ul></li>";
+            //document.getElementById("task_menu").innerHTML = content;
+        //}
+    //});
 </script>
 
 

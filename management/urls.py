@@ -1,6 +1,10 @@
 from django.urls import path
+from django.conf import settings
 from django.conf.urls import url
+from django.conf.urls.static import static
 from . import views
+
+app_name = 'management'
 
 urlpatterns = [
     path('', views.welcome, name='welcome'),
@@ -13,6 +17,12 @@ urlpatterns = [
     url(r'^queryAllResult/([0-9]{4}_[0-9]{2}_[0-9]{2})/$', views.show_result, name='showline'),
     url(r'^queryAllResult/([0-9]{4}_[0-9]{2}_[0-9]{2}-[0-9]{6})/$', views.show_result, name='showline'),
     path('ajax/load_menu/', views.ajax_load_menu, name='ajax_load_menu'),
-    path('ajax/load_task/', views.ajax_load_task, name='ajax_load_task'),
+    #path('ajax/load_task/', views.ajax_load_task, name='ajax_load_task'),
     path('ajax/load_percent_style/', views.ajax_load_per_style, name='ajax_load_per_style'),
+    path('task/Submit/', views.task_submit, name='task_submit'),
+    path('task/List/', views.task_list, name='task_list'),
+    path('task/Record/', views.run_record, name='run_record'),
+    path('task/detail/<str:name>/', views.task_detail, name='task_detail'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

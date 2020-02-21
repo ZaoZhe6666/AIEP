@@ -98,9 +98,17 @@ def logout(request):
     return HttpResponseRedirect("/privileges/login/")
 
 
-def helpPage(request):
+def help(request):
     return render(request, 'help.html', )
 
 
 def introduction(request):
     return render(request, 'introduction.html')
+
+
+def setup(request):
+    return render(request, 'setup.html')
+
+
+def contactUs(request):
+    return render(request, 'contactUs.html')
