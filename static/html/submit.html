@@ -46,10 +46,28 @@
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">评测指标</label>
-				<select class="form-control" name="evaluate">
-					<option>套餐1</option>
-					<option>套餐2</option>
-				</select>
+<!-- 				<select class="form-control" name="evaluate">
+					<option>准确度</option>
+					<option>决策边界距离</option>
+					<option>敏感度</option>
+					<option>attention map</option>
+				</select> -->
+				<label class="control outlined control-checkbox">准确度
+					<input type="checkbox" />
+					<div class="control-indicator"></div>
+				</label>
+				<label class="control outlined control-checkbox">决策边界距离
+					<input type="checkbox" />
+					<div class="control-indicator"></div>
+				</label>
+				<label class="control outlined control-checkbox">敏感度
+					<input type="checkbox" />
+					<div class="control-indicator"></div>
+				</label>
+				<label class="control outlined control-checkbox">图像对比结果
+					<input type="checkbox" />
+					<div class="control-indicator"></div>
+				</label>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlFile1">上传模型文件</label>

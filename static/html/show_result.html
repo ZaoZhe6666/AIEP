@@ -90,20 +90,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-12" id="div_res_in_pair">
-			<div class="card card-default">
-				<div class="card-header pt-5 flex-column align-items-start">
-					<h4 class="text-dark mb-4">攻击结果对比</h4>
-					<div class="mb-3">
-						<p class="my-2">移动浮条查看攻击结果</p>
-					</div>
-				</div>
-				<div class="card-body">
-					<div class="m" id="res_in_pair">
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 </body>
 
@@ -151,7 +137,6 @@
 	var canvas_sensitivity = document.getElementById("sensitivity");
 	if (canvas_sensitivity != null && dataFromDjango["sensitivity"] != null) {
 		$("#sensitivity_menu").append(line_name_append(dataFromDjango["sensitivity"]["name"]));
-		console.log(dataFromDjango["sensitivity"]["name"]);
 		var ctx = document.getElementById("sensitivity").getContext("2d");
 		var config = sensitivity_canvas(dataFromDjango["sensitivity"], dataFromDjango["sensitivity"]["label"][0]);
 		var sensitivityLine = new Chart(ctx, config);
@@ -186,7 +171,7 @@
 	// 	$("#pic_scroll").hide();
 	// }
 
-	var res_in_pair = document.getElementById("res_in_pair");
+	var res_in_pair = document.getElementById("pic_data");
 	if (res_in_pair != null && dataFromDjango["result_in_pair"] != null) {
 		var text = "";
 		var PAIR_PATH = dataFromDjango["pic"]["DIR"] + "AttackResult/"
