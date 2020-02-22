@@ -7,8 +7,8 @@
 "judge_edge_dis": 
 	{"label": ["checkpoint1", "checkpoint2", "checkpoint3", "checkpoint4"], 
 		"data":{
-			"2a":[[10.1, 12.5, 20.3, 28.9]], 
-			"2b":[[5.3, 7.9, 12.8, 21.4]]
+			"Vanilla":[[10.1, 12.5, 20.3, 28.9]], 
+			"PAT":[[5.3, 7.9, 12.8, 21.4]]
 			}
 	},
 "sensitivity":
@@ -33,7 +33,8 @@
 	},
 "result_in_pair":
 	{
-		"origin": ["Origin_1.png", "Origin_2.jpg"],
-		"attack": ["Attack_1.png", "Attack_2.jpg"]
+		"origin": ["benign_1.png", "benign_2.png", "benign_3.png", "benign_4.png", "benign_5.png", "benign_6.png", "benign_7.png", "benign_8.png", "benign_9.png", "benign_10.png", "benign_11.png", "benign_12.png", "benign_13.png", "benign_14.png", "benign_15.png", "benign_16.png", "benign_17.png", "benign_18.png", "benign_19.png", "benign_20.png"],
+		
+		"attack": ["adv_1.png", "adv_2.png", "adv_3.png", "adv_4.png", "adv_5.png", "adv_6.png", "adv_7.png", "adv_8.png", "adv_9.png", "adv_10.png", "adv_11.png", "adv_12.png", "adv_13.png", "adv_14.png", "adv_15.png", "adv_16.png", "adv_17.png", "adv_18.png", "adv_19.png", "adv_20.png"]
 	}
 }

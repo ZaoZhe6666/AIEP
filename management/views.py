@@ -97,7 +97,7 @@ def submit_check(request):
             "python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
         # except Exception as e:
         # 	print(e)
-        set_status(['ACC', 'DFS', 'Test Name 333'])
+        set_status(['Accuracy', 'Decision Boundary', 'Sensitivity'])
     return render(request, 'waiting.html')
 
 def showline(request):
