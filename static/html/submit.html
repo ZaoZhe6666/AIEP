@@ -7,7 +7,7 @@
 	</div>
 
 	<div class="card-body">
-		<form action="/management/submit/" method="post" enctype="multipart/form-data">
+		<form action="." method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<table>
 			{% for field in form %}
@@ -20,51 +20,51 @@
 			</table>
 			<div class="form-group">
 				<label for="">项目名称：</label>
-				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="title">
+				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="title". id="'title">
 			</div>
 			<div class="row">
 				<div>
 					镜像：
 					<select class="custom-select" name="img">
-						<option value="1">One</option>
-						<option value="2">Two</option>
-						<option value="3">Three</option>
+						<option value="One">One</option>
+						<option value="Two">Two</option>
+						<option value="Three">Three</option>
 					</select>
 				</div>
 				<div>
 					GPU类型：
 					<select class="custom-select" name="gpu">
-						<option value="1">gtx1080ti</option>
-						<option value="2">Two</option>
-						<option value="3">Three</option>
+						<option value="gtx1080ti">gtx1080ti</option>
+						<option value="Two">Two</option>
+						<option value="Three">Three</option>
 					</select>
 				</div>
 			</div>
 			<div class="form-group">
 				<label>项目简介：</label>
-				<textarea class="form-control" placeholder="请输入对项目的简单描述" rows="5" name="description"></textarea>
+				<textarea class="form-control" placeholder="请输入对项目的简单描述" rows="5" name="description", id="description"></textarea>
 			</div>
 			<div class="form-group">
 				<label for="">retryCount：</label>
-				<input type="text" class="form-control" placeholder="Job retry count,job will automatically restart when it failed" name="retryCount">
+				<input type="text" class="form-control" placeholder="Job retry count,job will automatically restart when it failed" name="retrycount", id="retrycount">
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">选择数据集</label>
 				<select class="form-control" name="dataset">
-					<option>cifar-20</option>
-					<option>cifar-100</option>
+					<option value="cifar-20">cifar-20</option>
+					<option value="cifar-100">cifar-100</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">评测指标</label>
 				<select class="form-control" name="ind">
-					<option>套餐1</option>
-					<option>套餐2</option>
+					<option value="套餐一">套餐1</option>
+					<option value="套餐二">套餐2</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlFile1">上传模型文件</label>
-				<input type="file" class="form-control-file" name="model">
+				<input type="file" class="form-control-file" name="model", placeholder="The name of your file should have the same name of your model">
 			</div>
 			<div class="form-footer pt-4 pt-5 mt-4 border-top">
 				<button type="submit" class="btn btn-primary btn-default" name="submit_btn" onclick="submit_query()">Submit</button>

@@ -11,9 +11,10 @@
                 <div class="card">
                   <div class="card-header">
                     <div class="float-right">
-                      <form>
+                      <form class="form-inline">
                         <div class="input-group">
-                          <input type="text" class="form-control" placeholder="Search">
+                            <label class="sr-only">content</label>
+                          <input type="text" class="form-control" name="search" placeholder="Search" required>
                           <div class="input-group-btn">
                             <button class="btn btn-secondary"><i class="ion ion-search"></i></button>
                           </div>
@@ -22,13 +23,22 @@
                     </div>
                     <h4>提交记录</h4>
                   </div>
+                    {% if search %}
+                        {% if runs %}
+                            <h4><span style="color: blue">"{{ search }}"</span>的搜索结果如下：</h4>
+                            <hr>
+                        {% else %}
+                            <h4>暂无<span style="color: blue">"{{ search }}"</span>有关的提交记录。</h4>
+                            <hr>
+                        {% endif %}
+                    {% endif %}
                   <div class="card-body">
                     <div class="table-responsive">
                       <table class="table table-striped">
                         <tr>
                           <th class="text-center">Run Name</th>
-                          <th class="text-center">Flow</th>
-                          <th class="text-center">Task</th>
+                          <th class="text-center">Model</th>
+                          <th class="text-center">Dataset</th>
                           <th class="text-center">Submit Time</th>
                           <th class="text-center">Status</th>
                           <th class="text-center">Action</th>
@@ -37,10 +47,10 @@
                         <tr>
                           <td class="text-center">{{ run.title }}</td>
                           <td class="text-center">
-                            {{  run.flow }}
+                            {{  run.modelname }}
                           </td>
                           <td class="text-center">
-                            {{run.author}}
+                            {{ run.dataset }}
                           </td>
                           <td class="text-center">{{ run.created }}</td>
                           <td class="text-center"><div class="badge badge-success">Completed</div></td>
@@ -122,11 +132,11 @@
 					<span class="step-links">
 						<!-- 如果不是第一页，则显示上翻按钮 -->
 						{% if runs.has_previous %}
-							<a href="?page=1" class="btn btn-success">
+							<a href="?page=1&search={{ search }}" class="btn btn-success">
 								&laquo; 1
 							</a>
 							<span>...</span>
-							<a href="?page={{ runs.previous_page_number }}"
+							<a href="?page={{ runs.previous_page_number }}&search={{ search }}"
 							   class="btn btn-secondary"
 							>
 								{{ run.previous_page_number }}
@@ -140,13 +150,13 @@
 
 						<!-- 如果不是最末页，则显示下翻按钮 -->
 						{% if runs.has_next %}
-							<a href="?page={{ runs.next_page_number }}"
+							<a href="?page={{ runs.next_page_number }}&search={{ search }}"
 							   class="btn btn-secondary"
 							>
 								{{ runs.next_page_number }}
 							</a>
 							<span>...</span>
-							<a href="?page={{ runs.paginator.num_pages }}"
+							<a href="?page={{ runs.paginator.num_pages }}&search={{ search }}"
 							   class="btn btn-success"
 							>
 								{{ runs.paginator.num_pages }} &raquo;

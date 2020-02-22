@@ -12,6 +12,7 @@ import subprocess
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 import time
+from django.db.models import Q
 
 status_num = []
 status_name = []
@@ -27,21 +28,24 @@ def page_not_found(request, exception):
 
 @login_required(login_url='/privileges/login')
 def submit(request):
+    if request.method == 'POST':
+        run_submit_form = RunSubmitForm(request.POST)
+        if run_submit_form.is_valid():
+            new_run = run_submit_form.save(commit=False)
+            new_run.author = User.objects.get(id=request.user.id)
+            new_run.modelname = request.FILES.get("model", None).name.split('.')[0][0:20]
+            new_run.save()
+            return redirect("management:run_record")
+        else:
+            ErrorDict = run_submit_form.errors
+            Error_Str = json.dumps(ErrorDict)
+            Error_Dict = json.loads(Error_Str)
+            return HttpResponse(Error_Dict.values())
+    else:
+        run_submit_form = RunSubmitForm()
+        context = {'run_submit_form': run_submit_form}
+        return render(request, 'submit.html', context)
 
-	if request.method == 'POST':
-		run_submit_form = RunSubmitForm(request.POST, request.FILES)
-		if run_submit_form.is_valid():
-			new_run = run_submit_form.save(commit=False)
-			new_run.author = User.objects.get(id=request.user.id)
-			new_run.save()
-			return redirect("management:run_record")
-		else:
-			return HttpResponse("任务提交表单填写有误，请重新填写。")
-
-	else:
-		run_submit_form = RunSubmitForm()
-	context = {'run_submit_form': run_submit_form, }
-	return render(request, 'submit.html', context)
 
 
 def waiting(request):
@@ -215,12 +219,19 @@ def task_list(request):
     context = {'tasks': tasks,}
     return render(request, 'taskList.html', context)
 
+@login_required(login_url='/privileges/login/')
 def run_record(request):
-	run_list = runSubmit.objects.filter(author=request.user.id)
-	paginator = Paginator(run_list, 6)
-	page = request.GET.get('page')
-	runs = paginator.get_page(page)
-	context = {'runs': runs,}
-	return render(request, 'runRecord.html', context)
+    search = request.GET.get('search')
+    user_run_list = runSubmit.objects.filter(author=request.user.id)
+    if search:
+        run_list = user_run_list.filter(Q(title__icontains=search) | Q(description__icontains=search)).order_by('-created')
+    else:
+        search = ''
+        run_list = user_run_list.order_by('-created')
+    paginator = Paginator(run_list, 6)
+    page = request.GET.get('page')
+    runs = paginator.get_page(page)
+    context = {'runs': runs, 'search': search}
+    return render(request, 'runRecord.html', context)
 
 
