@@ -124,7 +124,7 @@ class runSubmit(models.Model):
     ind = models.CharField(max_length=10, choices=index, help_text='评测指标')
 
     #模型文件
-    model = models.FileField(upload_to='%Y%m%d/Models', blank=True)
+    model = models.FileField(blank=True)
 
     #模型名称
     modelname = models.CharField(max_length=20, default="default")

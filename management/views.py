@@ -12,6 +12,7 @@ import subprocess
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 import time
+import shutil
 from django.db.models import Q
 
 status_num = []
@@ -35,7 +36,31 @@ def submit(request):
             new_run.author = User.objects.get(id=request.user.id)
             new_run.modelname = request.FILES.get("model", None).name.split('.')[0][0:20]
             new_run.save()
-            return redirect("management:run_record")
+            now = int(time.time())
+            time_array = time.localtime(now)
+            time_part = time.strftime("%Y_%m_%d-%H%M%S", time_array)
+            os.mkdir(BASE_DIR + "/static/upload/uploadfile/" + time_part)
+            src_path = BASE_DIR + "/static/upload/Results/2020_02_18-164203"
+            dst_path = BASE_DIR + "/static/upload/Results/" + time_part
+            shutil.copytree(src_path, dst_path)
+            upload_file = request.FILES.get('model')
+            if upload_file != None:
+                print("file is not empty!")
+                filename = time_part + '.' + upload_file.name.split('.')[-1]
+                filepath = os.path.join(BASE_DIR + "/static/upload/uploadfile/" + time_part, filename)
+                f = open(filepath, 'wb')
+                for i in upload_file.chunks():
+                    f.write(i)
+                f.close()
+            else:
+                print("file is empty!")
+            #p = subprocess.Popen(
+            #    "python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
+            # except Exception as e:
+            # 	print(e)
+            set_status(['Accuracy', 'Decision Boundary', 'Sensitivity'])
+            return render(request, 'waiting.html')
+            #return redirect("management:run_record")
         else:
             ErrorDict = run_submit_form.errors
             Error_Str = json.dumps(ErrorDict)
@@ -62,6 +87,7 @@ def submit_check(request):
         time_part = time.strftime("%Y_%m_%d-%H%M%S", time_array)
         upload_file = request.FILES.get('submit_model')
         os.mkdir(BASE_DIR + "/static/upload/" + time_part)
+
         if upload_file != None:
             filename = time_part + '.' + upload_file.name.split('.')[-1]
             filepath = os.path.join(BASE_DIR + "/static/upload/uploadfile/", filename)
@@ -125,10 +151,10 @@ def isImage(filename):
 
 
 def show_result(request, name):
-    pic = {"DIR": "/static/upload/" + name + "/",
+    pic = {"DIR": "/static/upload/Results/" + name + "/",
            "name": []}
     dic = {}
-    path = BASE_DIR + "/static/upload/" + name + "/"
+    path = BASE_DIR + "/static/upload/Results/" + name + "/"
     for home, dirs, files in os.walk(path):
         if "result.txt" in files:
             with open(path + "result.txt", "r", encoding="utf-8") as res:
@@ -146,9 +172,7 @@ def show_result(request, name):
 def ajax_load_menu(request):
     file_list = []
     if request.method == 'GET':
-        for home, dirs, files in os.walk(BASE_DIR + "/static/upload"):
-            dirs.remove("uploadfile")
-            dirs.remove("default")
+        for home, dirs, files in os.walk(BASE_DIR + "/static/upload/Results"):
             return JsonResponse(dirs, safe=False)
     return HttpResponse("Error")
 
