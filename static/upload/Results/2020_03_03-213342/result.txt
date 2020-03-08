@@ -1,0 +1,40 @@
+{
+"currency": 
+	{
+	"labels": ["clean", "adver", "corru", "something", "else"], 
+	"datasets": [89.8, 27.6, 57.6, 45.8, 99.8]
+	},
+"judge_edge_dis": 
+	{"label": ["checkpoint1", "checkpoint2", "checkpoint3", "checkpoint4"], 
+		"data":{
+			"Vanilla":[[10.1, 12.5, 20.3, 28.9]], 
+			"PAT":[[5.3, 7.9, 12.8, 21.4]]
+			}
+	},
+"sensitivity":
+	{	"name": ["AlexNet_feat_conv1", "AlexNet_feat_conv2", "AlexNet_feat_conv3"],
+		"label": [
+			["1", "24", "48", "72", "96", "120", "144", "168", "192"],
+			["1", "48", "96", "144", "192", "240", "288", "336", "384"],
+			["1", "32", "64", "96", "128", "160", "192", "224", "256"]
+		],
+		"data":{
+			"Vanilla":[
+				[82.4, 45.1, 40.3, 32.2, 29.8, 27.4, 22.3, 17.6, 3.2],
+				[142.3, 80.2, 74.2, 67.7, 62.1, 58.9, 56.7, 50.0, 38.2],
+				[19.5, 12.4, 11.2, 10.1, 9.6, 7.6, 6.2, 5.2, 4.7]
+			], 
+			"PAT":[
+				[45.1, 28.5, 24.6, 22.3, 18.6, 16.5, 12.3, 0.3, 0.1],
+				[80.1, 47.7, 41.0, 38.4, 36.7, 32.2, 30.4, 24.9, 0.2],
+				[13.4, 7.8, 7.5, 7.0, 6.5, 5.6, 4.8, 4.2, 0.1]
+			]
+		}
+	},
+"result_in_pair":
+	{
+		"origin": ["benign_1.png", "benign_2.png", "benign_3.png", "benign_4.png", "benign_5.png", "benign_6.png", "benign_7.png", "benign_8.png", "benign_9.png", "benign_10.png", "benign_11.png", "benign_12.png", "benign_13.png", "benign_14.png", "benign_15.png", "benign_16.png", "benign_17.png", "benign_18.png", "benign_19.png", "benign_20.png"],
+		
+		"attack": ["adv_1.png", "adv_2.png", "adv_3.png", "adv_4.png", "adv_5.png", "adv_6.png", "adv_7.png", "adv_8.png", "adv_9.png", "adv_10.png", "adv_11.png", "adv_12.png", "adv_13.png", "adv_14.png", "adv_15.png", "adv_16.png", "adv_17.png", "adv_18.png", "adv_19.png", "adv_20.png"]
+	}
+}
