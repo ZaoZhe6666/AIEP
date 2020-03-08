@@ -10,6 +10,21 @@
 <!-- 定义放置文章标题的div容器 -->
 <div class="container">
 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'management:task_list' %}?join=joined">
+                    已参加比赛
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'management:task_list' %}?join=not_joined">
+                    所有比赛
+                </a>
+            </li>
+        </ol>
+    </nav>
+
     <!-- 列表循环 -->
     <div class="row mt-2">
         {% for task in tasks %}
@@ -29,7 +44,7 @@
                 <!-- 标题 -->
                 <h4>
                     <b>
-                        <a href="{% url 'management:task_detail' task.title %}"
+                        <a href="{% url 'management:task_detail' task.id %}"
                            style="color: black;"
                         >
                             {{ task.title }}
@@ -47,13 +62,26 @@
                     <!-- 附加信息 -->
 
                     <span>
-                        <i class="fas fa-clock" style="color: pink;"></i>
+                        <i style="color: pink;"></i>
                         <!--
                         {{ article.created|date:'Y-m-d' }}
                         -->
                         {{ task.created }}
                     </span>
                 </p>
+                {% if flag == 'not_join' %}
+                     <p>
+                         <a href="{% url 'management:joinTask' task.id %}"
+                              style="color: black;"
+                          >
+                          加入比赛
+                         </a>
+                     </p>
+                {% elif flag == 'join' %}
+                    <p>
+                        已加入
+                    </p>
+                {% endif %}
             </div>
             <hr style="width: 100%;"/>
         {% endfor %}

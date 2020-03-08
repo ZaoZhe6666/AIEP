@@ -22,7 +22,10 @@ urlpatterns = [
     path('task/Submit/', views.task_submit, name='task_submit'),
     path('task/List/', views.task_list, name='task_list'),
     path('task/Record/', views.run_record, name='run_record'),
-    path('task/detail/<str:name>/', views.task_detail, name='task_detail'),
+    path('task/detail/<int:id>/', views.task_detail, name='task_detail'),
+    path('join/<int:id>', views.joinTask, name='joinTask'),
+    path('Taskdelete/<int:id>', views.task_delete, name='task_delete'),
+    path('Rundelete/<int:id>', views.run_delete, name='run_delete'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

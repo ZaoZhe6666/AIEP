@@ -16,9 +16,9 @@ class TaskColumn(models.Model):
 
 # Create your models here.
 class TaskSubmit(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
 
-    img = models.ImageField(upload_to='%Y%m%d/task', blank=True)
+    img = models.ImageField(upload_to='%Y%m%d/task', default="static/img/not_login_user.jpg")
 
     #比赛标题
     title = models.CharField(max_length=20)
@@ -39,7 +39,9 @@ class TaskSubmit(models.Model):
     dataset = models.FileField(upload_to='%Y%m%d/DataSets/',
                                verbose_name=u'任务数据集',
                                null=True,
-                               blank=True)
+                               default="NO dataset")
+
+    participant = models.ManyToManyField(User)
 
     class Meta:
         ordering = ('-created',)
@@ -128,4 +130,5 @@ class runSubmit(models.Model):
 
     #模型名称
     modelname = models.CharField(max_length=20, default="default")
+
 
