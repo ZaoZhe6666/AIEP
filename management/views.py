@@ -205,15 +205,9 @@ def task_submit(request):
 		task_submit_form = TaskSubmitForm(request.POST, request.FILES)
 		# 判断提交的数据是否满足模型的要求
 		if task_submit_form.is_valid():
-			# 保存数据，但暂时不提交到数据库中
 			new_task = task_submit_form.save(commit=False)
 			# 指定登录的用户为作者
 			new_task.author = User.objects.get(id=request.user.id)
-			#if request.POST['column'] != 'none':
-				# 保存文章栏目
-				#new_task.column = TaskColumn.objects.get(id=request.POST['column'])
-
-			# 将新文章保存到数据库中
 			new_task.save()
 			return redirect("management:task_list")
 		# 如果数据不合法，返回错误信息
@@ -231,17 +225,42 @@ def task_submit(request):
 		# 返回模板
 		return render(request, 'TaskSubmit.html', context)
 
-def task_detail(request, name):
-	task = get_object_or_404(TaskSubmit, title=name)
+def task_detail(request, id):
+	task = get_object_or_404(TaskSubmit, id=id)
 	return render(request, 'taskDetail.html', {'task': task})
 
+@login_required(login_url='/privileges/login/')
+def task_delete(request, id):
+    task = TaskSubmit.objects.get(id=id)
+    if request.user != task.author:
+        return HttpResponse("抱歉，你无权修改这篇文章。")
+    task.delete()
+    return redirect("management:task_list")
+
 def task_list(request):
-    task_list = TaskSubmit.objects.all()
+    flag = ''
+    if_join = request.GET.get('join')
+    all_task_list = TaskSubmit.objects.all()
+    user = User.objects.get(id=request.user.id)
+    join_list = user.tasksubmit_set.all()
+    notjoin_list = all_task_list.exclude(pk__in=join_list)
+    if if_join == 'joined':
+        task_list = join_list
+        flag = 'join'
+    else:
+        task_list = notjoin_list
+        flag = 'not_join'
     paginator = Paginator(task_list, 6)
     page = request.GET.get('page')
     tasks = paginator.get_page(page)
-    context = {'tasks': tasks,}
+    context = {'tasks': tasks, 'flag': flag}
     return render(request, 'taskList.html', context)
+
+def joinTask(request, id):
+    user = User.objects.get(id=request.user.id)
+    task = TaskSubmit.objects.get(id=id)
+    task.participant.add(user)
+    return redirect("management:task_list")
 
 @login_required(login_url='/privileges/login/')
 def run_record(request):
@@ -258,4 +277,10 @@ def run_record(request):
     context = {'runs': runs, 'search': search}
     return render(request, 'runRecord.html', context)
 
-
+@login_required(login_url='/privileges/login/')
+def run_delete(request, id):
+    run = runSubmit.objects.get(id=id)
+    if request.user != run.author:
+        return HttpResponse("抱歉，你无权修改这篇文章。")
+    run.delete()
+    return redirect("management:run_record")
