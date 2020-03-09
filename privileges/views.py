@@ -17,10 +17,12 @@ def profile(request):
     if request.method == 'POST' and 'profile_change' in request.POST:
         user_profile.org = request.POST.get('org')
         user_profile.telephone = request.POST.get('telephone')
+        user_profile.avatar = request.POST.get('avatar')
         user_profile.save()
         return render(request, 'profile.html', {
             'telephone': user_profile.telephone,
-            'org': user_profile.org})
+            'org': user_profile.org,
+            'avatar': user_profile.avatar})
     elif request.method == 'POST' and 'password_change' in request.POST:
         old_password = request.POST.get('old_password')
         password1 = request.POST.get('password1')
@@ -31,7 +33,6 @@ def profile(request):
             if password1 == password2 and 6 < len(password1) < 18:
                 user.set_password(password1)
                 user.save()
-                print("change")
                 return HttpResponseRedirect('/privileges/login/')
             else:
                 return render(request, 'profile.html', {
@@ -112,3 +113,7 @@ def setup(request):
 
 def contactUs(request):
     return render(request, 'contactUs.html')
+
+
+def submit_avatar(request):
+    pass

@@ -10,6 +10,7 @@ class UserProfile(models.Model):
     # 模型类中设置:blank=True,表示代码中创建数据库记录时该字段可传空白(空串,空字符串)
     org = models.CharField('Organization', max_length=128, blank=True)
     telephone = models.CharField('Telephone', max_length=50, blank=True)
+    avatar = models.ImageField(upload_to='avatar/%Y%m%d/', blank=True)
     mod_data = models.DateTimeField('Last modified', auto_now=True)
 
     class Meta:

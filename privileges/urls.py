@@ -12,4 +12,5 @@ urlpatterns = [
     re_path(r'^introduction/$', views.introduction, name='introduction'),
     re_path(r'^setup/$', views.setup, name='setup'),
     re_path(r'^contactUs/$', views.contactUs, name='contactUs'),
+    re_path(r'^submit_avatar/$', views.submit_avatar, name='submit_avatar')
 ]
