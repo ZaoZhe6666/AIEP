@@ -387,6 +387,25 @@
         }
     });
 
+    $.ajax({
+        url: '/privileges/get_avatar_url/',
+        data:{
+        },
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+            if ($.isEmptyObject({data})) {
+            }
+            else {
+                $('#user-avatar-top11').attr('src', data[0].url);
+                $('#user-avatar-top12').attr('src', data[0].url);
+                $('#user-avatar-top21').attr('src', data[0].url);
+                $('#user-avatar-top22').attr('src', data[0].url);
+            }
+        }
+    });
+
+
     //$.ajax({
         //url: '/management/ajax/load_task/',
         //data:{

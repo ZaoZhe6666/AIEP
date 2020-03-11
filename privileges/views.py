@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.http import JsonResponse
 from .forms import RegistrationForm, LoginForm, PwdChangeForm
 from .models import UserProfile
 from django.contrib.auth.models import User
@@ -56,7 +57,6 @@ def register(request):
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password2']
-
             # 使用内置User自带create_user方法创建用户，不需要使用save()
             user = User.objects.create_user(username=username, password=password, email=email)
             # 如果直接使用objects.create()方法后不需要使用save()
@@ -77,8 +77,6 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user is not None and user.is_active:
                 auth.login(request, user)
-                user_profile = get_object_or_404(UserProfile, user=user)
-                request.session["imageUrl"] = user_profile.avatar.url
                 """
                 使用该方法后，会在服务器端的session中生成_auth_user_id和_auth_user_backend两个键值，
                 并发到客户端作为cookie，前端页面可通过{% if request.user.is_authenticated %}
@@ -125,6 +123,13 @@ def submit_avatar(request):
         image_name = user_profile.save_avatar(upload_image, user.username)
         user_profile.avatar = os.path.join('avatar', user.username, image_name)
         user_profile.save()
-        request.session["imageUrl"] = user_profile.avatar.url
         return HttpResponse("none")
 
+
+def get_avatar_url(request):
+    user = get_object_or_404(User, pk=request.user.id)
+    user_profile = get_object_or_404(UserProfile, user=user)
+    d = []
+    if user_profile.avatar != "":
+        d.append({'url': user_profile.avatar.url})
+    return JsonResponse(d, safe=False)
