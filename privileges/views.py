@@ -6,7 +6,8 @@ from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-
+import json
+import os
 
 # Create your views here.
 
@@ -17,12 +18,10 @@ def profile(request):
     if request.method == 'POST' and 'profile_change' in request.POST:
         user_profile.org = request.POST.get('org')
         user_profile.telephone = request.POST.get('telephone')
-        user_profile.avatar = request.POST.get('avatar')
         user_profile.save()
         return render(request, 'profile.html', {
             'telephone': user_profile.telephone,
-            'org': user_profile.org,
-            'avatar': user_profile.avatar})
+            'org': user_profile.org})
     elif request.method == 'POST' and 'password_change' in request.POST:
         old_password = request.POST.get('old_password')
         password1 = request.POST.get('password1')
@@ -45,7 +44,9 @@ def profile(request):
                 'user': user,
                 'message': 'Old password is wrong Try again'})
     else:
-        return render(request, 'profile.html', {'telephone': user_profile.telephone, 'org': user_profile.org})
+        return render(request, 'profile.html', {'telephone': user_profile.telephone,
+                                                'org': user_profile.org,
+                                                'avatar': user_profile.avatar})
 
 
 def register(request):
@@ -74,9 +75,10 @@ def login(request):
             password = form.cleaned_data['password']
 
             user = auth.authenticate(username=username, password=password)
-
             if user is not None and user.is_active:
                 auth.login(request, user)
+                user_profile = get_object_or_404(UserProfile, user=user)
+                request.session["imageUrl"] = user_profile.avatar.url
                 """
                 使用该方法后，会在服务器端的session中生成_auth_user_id和_auth_user_backend两个键值，
                 并发到客户端作为cookie，前端页面可通过{% if request.user.is_authenticated %}
@@ -116,4 +118,13 @@ def contactUs(request):
 
 
 def submit_avatar(request):
-    pass
+    user = get_object_or_404(User, pk=request.user.id)
+    user_profile = get_object_or_404(UserProfile, user=user)
+    if request.is_ajax():
+        upload_image = request.FILES.get('avatar')
+        image_name = user_profile.save_avatar(upload_image, user.username)
+        user_profile.avatar = os.path.join('avatar', user.username, image_name)
+        user_profile.save()
+        request.session["imageUrl"] = user_profile.avatar.url
+        return HttpResponse("none")
+

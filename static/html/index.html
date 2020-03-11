@@ -312,13 +312,21 @@
                   {% else %}
                     <li class="dropdown user-menu">
                       <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                        <img src="/static/img/not_login_user.jpg" class="user-image" alt="User Image" />
+                        {% if avatar %}
+                          <img src="{{ avatar.url }}" class="user-image" id="user-avatar-top11"/>
+                        {% else %}
+                          <img src="/static/img/not_login_user.jpg" class="user-image" alt="User Image" id="user-avatar-top12"/>
+                        {% endif %}
                         <span class="d-none d-lg-inline-block">{{request.user.username}}</span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-right">
                         <!-- User image -->
                         <li class="dropdown-header">
-                          <img src="/static/img/not_login_user.jpg" class="img-circle" alt="User Image" />
+                          {% if avatar %}
+                            <img src="{{ avatar.url }}" class="user-image" id="user-avatar-top21"/>
+                          {% else %}
+                            <img src="/static/img/not_login_user.jpg" class="user-image" alt="User Image" id="user-avatar-top22"/>
+                          {% endif %}
                           <div class="d-inline-block">
                             {{request.user.username}} <small class="pt-1">{{request.user.email}}</small>
                           </div>

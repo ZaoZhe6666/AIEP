@@ -54,13 +54,13 @@ def submit(request):
                 f.close()
             else:
                 print("file is empty!")
-            #p = subprocess.Popen(
+            # p = subprocess.Popen(
             #    "python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
             # except Exception as e:
             # 	print(e)
             set_status(['Accuracy', 'Decision Boundary', 'Sensitivity'])
             return render(request, 'waiting.html')
-            #return redirect("management:run_record")
+            # return redirect("management:run_record")
         else:
             ErrorDict = run_submit_form.errors
             Error_Str = json.dumps(ErrorDict)
@@ -70,7 +70,6 @@ def submit(request):
         run_submit_form = RunSubmitForm()
         context = {'run_submit_form': run_submit_form}
         return render(request, 'submit.html', context)
-
 
 
 def waiting(request):
@@ -125,6 +124,7 @@ def submit_check(request):
         # 	print(e)
         set_status(['Accuracy', 'Decision Boundary', 'Sensitivity'])
     return render(request, 'waiting.html')
+
 
 def showline(request):
     currency = {"labels": ["clean", "adver", "corru", "something", "else"],
@@ -198,36 +198,38 @@ def ajax_load_per_style(request):
 
 @login_required(login_url='/privileges/login/')
 def task_submit(request):
-	# 判断用户是否提交数据
-	print("I am in task_submit!")
-	if request.method == "POST":
-		# 将提交的数据赋值到表单实例中
-		task_submit_form = TaskSubmitForm(request.POST, request.FILES)
-		# 判断提交的数据是否满足模型的要求
-		if task_submit_form.is_valid():
-			new_task = task_submit_form.save(commit=False)
-			# 指定登录的用户为作者
-			new_task.author = User.objects.get(id=request.user.id)
-			new_task.save()
-			return redirect("management:task_list")
-		# 如果数据不合法，返回错误信息
-		else:
-			return HttpResponse("表单内容有误，请重新填写。")
-	# 如果用户请求获取数据
-	else:
-		# 创建表单类实例
-		task_submit_form = TaskSubmitForm()
-		# 文章栏目
-		#columns = TaskColumn.objects.all()
-		# 赋值上下文
-		imgs = ShowImgAfterUpload.objects.all()
-		context = {'task_submit_form': task_submit_form, "imgs" : imgs}#, 'columns': columns
-		# 返回模板
-		return render(request, 'TaskSubmit.html', context)
+    # 判断用户是否提交数据
+    print("I am in task_submit!")
+    if request.method == "POST":
+        # 将提交的数据赋值到表单实例中
+        task_submit_form = TaskSubmitForm(request.POST, request.FILES)
+        # 判断提交的数据是否满足模型的要求
+        if task_submit_form.is_valid():
+            new_task = task_submit_form.save(commit=False)
+            # 指定登录的用户为作者
+            new_task.author = User.objects.get(id=request.user.id)
+            new_task.save()
+            return redirect("management:task_list")
+        # 如果数据不合法，返回错误信息
+        else:
+            return HttpResponse("表单内容有误，请重新填写。")
+    # 如果用户请求获取数据
+    else:
+        # 创建表单类实例
+        task_submit_form = TaskSubmitForm()
+        # 文章栏目
+        # columns = TaskColumn.objects.all()
+        # 赋值上下文
+        imgs = ShowImgAfterUpload.objects.all()
+        context = {'task_submit_form': task_submit_form, "imgs": imgs}  # , 'columns': columns
+        # 返回模板
+        return render(request, 'TaskSubmit.html', context)
+
 
 def task_detail(request, id):
-	task = get_object_or_404(TaskSubmit, id=id)
-	return render(request, 'taskDetail.html', {'task': task})
+    task = get_object_or_404(TaskSubmit, id=id)
+    return render(request, 'taskDetail.html', {'task': task})
+
 
 @login_required(login_url='/privileges/login/')
 def task_delete(request, id):
@@ -236,6 +238,7 @@ def task_delete(request, id):
         return HttpResponse("抱歉，你无权修改这篇文章。")
     task.delete()
     return redirect("management:task_list")
+
 
 def task_list(request):
     flag = ''
@@ -256,18 +259,21 @@ def task_list(request):
     context = {'tasks': tasks, 'flag': flag}
     return render(request, 'taskList.html', context)
 
+
 def joinTask(request, id):
     user = User.objects.get(id=request.user.id)
     task = TaskSubmit.objects.get(id=id)
     task.participant.add(user)
     return redirect("management:task_list")
 
+
 @login_required(login_url='/privileges/login/')
 def run_record(request):
     search = request.GET.get('search')
     user_run_list = runSubmit.objects.filter(author=request.user.id)
     if search:
-        run_list = user_run_list.filter(Q(title__icontains=search) | Q(description__icontains=search)).order_by('-created')
+        run_list = user_run_list.filter(Q(title__icontains=search) | Q(description__icontains=search)).order_by(
+            '-created')
     else:
         search = ''
         run_list = user_run_list.order_by('-created')
@@ -276,6 +282,7 @@ def run_record(request):
     runs = paginator.get_page(page)
     context = {'runs': runs, 'search': search}
     return render(request, 'runRecord.html', context)
+
 
 @login_required(login_url='/privileges/login/')
 def run_delete(request, id):

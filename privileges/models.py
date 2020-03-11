@@ -3,6 +3,9 @@ from django.db import models
 # Create your models here.
 from django.contrib.auth.models import User
 
+import os
+import uuid
+from django.conf import settings
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,
@@ -19,3 +22,18 @@ class UserProfile(models.Model):
     def __str__(self):
         # return self.user.__str__()
         return "{}".format(self.user.__str__())
+
+    def save_avatar(self, upload_image, username):
+        # 创建与用户名的文件夹
+        upload_path = settings.MEDIA_ROOT+'\\avatar\\'+username
+        try:
+            os.makedirs(upload_path)
+        except:
+            pass
+        # 生成一个随机字符串
+        uuid_str_name = uuid.uuid4().hex + '.jpg'
+        # 保存
+        with open(os.path.join(upload_path, uuid_str_name), 'wb+') as file:
+            for chunk in upload_image.chunks():
+                file.write(chunk)
+        return uuid_str_name
