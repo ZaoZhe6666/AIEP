@@ -23,12 +23,14 @@ from management import views as manage_view
 from privileges import views as priv_view
 from django.conf.urls.static import static
 from django.conf import settings
+import notifications.urls
 
 urlpatterns = [
     url(r'^$', manage_view.welcome),
     url(r'^admin/', admin.site.urls),
     url(r'^management/', include('management.urls')),
     url(r'captcha', include('captcha.urls')),
+    path(r'inbox/notifications/', include(notifications.urls, namespace='notifications')),
     path('privileges/', include('privileges.urls', namespace='privileges')),
 ]
 urlpatterns += staticfiles_urlpatterns()

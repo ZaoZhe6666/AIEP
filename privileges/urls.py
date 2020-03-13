@@ -14,4 +14,6 @@ urlpatterns = [
     re_path(r'^contactUs/$', views.contactUs, name='contactUs'),
     re_path(r'^submit_avatar/$', views.submit_avatar, name='submit_avatar'),
     re_path(r'^get_avatar_url/$', views.get_avatar_url, name='get_avatar_url'),
+    re_path(r'^Data_Information1/$', views.Data_Information1, name='Data_Information1'),
+    re_path(r'^Data_Information2/$', views.Data_Information2, name='Data_Information2'),
 ]

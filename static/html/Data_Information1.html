@@ -1,0 +1,77 @@
+
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="content-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-default text-dark">
+                    <div class="card-header">
+                        <h2>Introduction</h2>
+                    </div>
+                    <div class="card-body pt-4">
+                        <p>This directory contains the data for the 3D Mask Attack Database. It consists of 76500 frames of 17 persons, recorded using Kinect.</p>
+                        <p>【数据集链接】http://www.idiap.ch/dataset/3dmad</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card card-default text-dark">
+                    <div class="card-header">
+                        <h2>Database</h2>
+                    </div>
+                    <div class="card-body pt-4">
+                        <p>The database is collected in 3 different sessions for all subjects and for each session 5 videos of 300 frames are captured. The recordings are done under controlled conditions, with frontal-view and neutral expression.</p>
+                        <p>The first two sessions are dedicated to the real access samples, in which subjects are recorded with a time delay of ~2 weeks between the acquisitions.In the third session, 3D mask attacks are captured.</p>
+                        <p>For each subject, following are available:</p>
+                        <p>    3 sessions x 5 videos x 300 frames</p>
+                        <p>    Each frame consists of : 640x480 8-bit RGB image and 640x480 11-bit depth image</p>
+                        <p>    Eye positions for each frame with respect to the RGB image</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card card-default text-dark">
+                    <div class="card-header">
+                        <h2>Files</h2>
+                    </div>
+                    <div class="card-body pt-4">
+                        <p>session1.tar.gz - Videos and annotations from the first session</p>
+                        <p>documentation.tar.gz - README file and a python script (raw_to_AVI.py) to demonstrate how to access the data and visualize it.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card card-default text-dark">
+                    <div class="card-header">
+                        <h2>Protocol</h2>
+                    </div>
+                    <div class="card-body pt-4">
+                        <p>The subjects in the database are divided into 3 randomly chosen non-overlapping sets for training, development and testing. Number of identities assigned for each set are 7, 5 and 5, respectively. While experimenting on the database, it is recommended that training (e.g. for parameter optimization, building universal models) is done with training and development sets, if needed. The test set should be SOLELY used to report performances.</p>
+                        <p>An additional protocol is defined to measure the vulnerability to spoofing for which the development and test sets are further divided into enrollment and probe partitions.</p>
+                        <p>While the first sessions are assigned as enrolled gallery samples, the second and third sessions are used for real and mask probing, respectively.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card card-default text-dark">
+                    <div class="card-header">
+                        <h2>作者信息 </h2>
+                    </div>
+                    <div class="card-body pt-4">
+                        <p>Nesli Erdogmus</p>
+                        <p>09/July/2013</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

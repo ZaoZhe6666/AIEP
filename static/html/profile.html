@@ -121,39 +121,34 @@
 
 
         var sendPhoto = function () {
+            $('#photo').cropper('getCroppedCanvas',{
+                width:300,
+                height:300
+            }).toBlob(function(blob){
+                // 转化为blob后更改src属性，隐藏模态框
+                $('#user-photo').attr('src',URL.createObjectURL(blob));
+                $('#user-photo-exist').attr('src',URL.createObjectURL(blob));
+                $('#user-avatar-top11').attr('src',URL.createObjectURL(blob));
+                $('#user-avatar-top12').attr('src',URL.createObjectURL(blob));
+                $('#user-avatar-top21').attr('src',URL.createObjectURL(blob));
+                $('#user-avatar-top22').attr('src',URL.createObjectURL(blob));
+                $('#changeModal').modal('hide');
+                var formData = new FormData();
+                formData.append('avatar', blob);
 
-
-
-
-
-        $('#photo').cropper('getCroppedCanvas',{
-            width:300,
-            height:300
-        }).toBlob(function(blob){
-            // 转化为blob后更改src属性，隐藏模态框
-            $('#user-photo').attr('src',URL.createObjectURL(blob));
-            $('#user-photo-exist').attr('src',URL.createObjectURL(blob));
-            $('#user-avatar-top11').attr('src',URL.createObjectURL(blob));
-            $('#user-avatar-top12').attr('src',URL.createObjectURL(blob));
-            $('#user-avatar-top21').attr('src',URL.createObjectURL(blob));
-            $('#user-avatar-top22').attr('src',URL.createObjectURL(blob));
-            $('#changeModal').modal('hide');
-            var formData = new FormData();
-            formData.append('avatar', blob);
-
-            $.ajax({
-                url: '/privileges/submit_avatar/',
-                type: 'POST',
-                processData: false,
-                contentType: false,
-                cache: false,
-                data: formData,
-                success(res) {
-                    var avaterurl = JSON.parse(data).url;
-                    $("#avatar").attr("src", avaterurl);
-                    console.log("上传完成!")
-                }
-            })
+                $.ajax({
+                    url: '/privileges/submit_avatar/',
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    data: formData,
+                    success(res) {
+                        var avaterurl = JSON.parse(data).url;
+                        $("#avatar").attr("src", avaterurl);
+                        console.log("上传完成!")
+                    }
+                })
 
         });
 
@@ -161,9 +156,28 @@
     }
 
 
-        $(function(){
-            initCropperInModal($('#photo'),$('#photoInput'),$('#changeModal'));
-        });
+    $(function(){
+        initCropperInModal($('#photo'),$('#photoInput'),$('#changeModal'));
+    });
+
+    //用户修改密码失败首先返回更换密码栏
+    $(function(){
+        var flag = {{pwc|safe}};
+        if (flag == "pwc") {
+
+            var _a = $("#changePassword-tab");
+            _a.addClass("active");
+            $("#profile-tab").removeClass("active");
+
+
+
+            var _content = $("#changePassword");
+            _content.addClass("active");
+            _content.removeClass("fade");
+            $("#profile").addClass("fade");
+            $("#profile").removeClass("active");
+        }
+    });
     </script>
 {% endblock %}
 
@@ -252,7 +266,7 @@
                         <div class="profile-content-right py-5">
                             <ul class="nav nav-tabs px-3 px-xl-5 nav-style-border" id="myTab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active show" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
+                                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="changePassword-tab" data-toggle="tab" href="#changePassword" role="tab" aria-controls="cpw" aria-selected="false">Change Password</a>
@@ -262,9 +276,9 @@
                                 </li>
                             </ul>
                             <div class="tab-content px-3 px-xl-5" id="myTabContent">
-                                <div class="tab-pane fade active show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="tab-pane active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                     <div class="card-body">
-                                        <form method="post" action="#!" class="site-form">
+                                        <form method="post" action="/privileges/user/profile/" class="site-form">
                                             <div class="form-group">
                                                 <label for="username">用户名</label>
                                                 <input type="text" class="form-control" name="username" id="username" value="{{request.user.username}}" disabled="disabled">
@@ -288,9 +302,17 @@
 
                                 <div class="tab-pane fade" id="changePassword" role="tabpanel" aria-labelledby="changePassword-tab">
                                     <div class="col-lg-12">
-                                        {{message}}
                                         <div class="card-body">
-                                            <form method="post" action="#!" class="site-form">
+                                            {% if message %}
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <i class="mdi mdi-alert mr-1"></i>
+                                                    <strong>{{message}}</strong>
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            {% endif %}
+                                            <form method="post" action="/privileges/user/profile/" class="site-form">
                                                 <div class="form-group">
                                                     <label for="username">旧密码</label>
                                                     <input type="password" class="form-control" name="old_password" id="old_password" required="required" placeholder="请填写旧密码">

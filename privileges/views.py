@@ -22,7 +22,9 @@ def profile(request):
         user_profile.save()
         return render(request, 'profile.html', {
             'telephone': user_profile.telephone,
-            'org': user_profile.org})
+            'org': user_profile.org,
+            'avatar': user_profile.avatar,
+            'pwc': json.dumps("")})
     elif request.method == 'POST' and 'password_change' in request.POST:
         old_password = request.POST.get('old_password')
         password1 = request.POST.get('password1')
@@ -30,24 +32,30 @@ def profile(request):
         username = user.username
         user = auth.authenticate(username=username, password=old_password)
         if user is not None and user.is_active:
-            if password1 == password2 and 6 < len(password1) < 18:
+            if password1 == password2 and 6 <= len(password1) < 18:
                 user.set_password(password1)
                 user.save()
-                return HttpResponseRedirect('/privileges/login/')
+                form = LoginForm()
+                return render(request, 'login.html', {"tips": "密码修改成功，请重新登录", "form": form})
             else:
                 return render(request, 'profile.html', {
-                    'user_profile': user_profile,
-                    'user': user,
-                    'message': '两次密码不一致或密码长度小于6'})
+                    'telephone': user_profile.telephone,
+                    'org': user_profile.org,
+                    'avatar': user_profile.avatar,
+                    'message': '两次密码不一致或密码长度小于6',
+                    'pwc': json.dumps("pwc")})
         else:
             return render(request, 'profile.html', {
-                'user_profile': user_profile,
-                'user': user,
-                'message': 'Old password is wrong Try again'})
+                'telephone': user_profile.telephone,
+                'org': user_profile.org,
+                'avatar': user_profile.avatar,
+                'message': 'Old password is wrong, Please try again',
+                'pwc': json.dumps("pwc")})
     else:
         return render(request, 'profile.html', {'telephone': user_profile.telephone,
                                                 'org': user_profile.org,
-                                                'avatar': user_profile.avatar})
+                                                'avatar': user_profile.avatar,
+                                                'pwc': json.dumps("")})
 
 
 def register(request):
@@ -133,3 +141,12 @@ def get_avatar_url(request):
     if user_profile.avatar != "":
         d.append({'url': user_profile.avatar.url})
     return JsonResponse(d, safe=False)
+
+
+def Data_Information1(request):
+    return render(request, 'Data_Information1.html')
+
+
+def Data_Information2(request):
+    return render(request, 'Data_Information2.html')
+
