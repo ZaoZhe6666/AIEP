@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="card card-default">
+                <div class="card-header card-header-border-bottom">
+                    <i class="mdi mdi-36px mdi-account-question"></i><h2>常见问题</h2>
+                </div>
+                <div class="card-body">
+
+                    <div id="accordion2" class="accordion accordion-shadow">
+                        <div class="card">
+                            <div class="card-header" id="headingFour">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                    问题1：图片出现问题
+                                </button>
+                            </div>
+
+                            <div id="collapseFour" class="collapse show" aria-labelledby="headingFour" data-parent="#accordion2" style="">
+                                <div class="card-body">
+                                    重启试试
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingFive">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    问题2：Toddler Shoes, Gucci Watch
+                                </button>
+                            </div>
+                            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion2" style="">
+                                <div class="card-body">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.enim
+                                    ad minim veniam quis nostrud exer citation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingSix">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                    问题三：Hat Black Suits
+                                </button>
+                            </div>
+                            <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion2" style="">
+                                <div class="card-body">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.enim
+                                    ad minim veniam quis nostrud exer citation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

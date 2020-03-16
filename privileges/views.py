@@ -108,7 +108,7 @@ def logout(request):
 
 
 def help(request):
-    return render(request, 'help.html', )
+    return render(request, 'helpPage.html', )
 
 
 def introduction(request):
