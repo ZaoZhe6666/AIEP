@@ -16,4 +16,6 @@ urlpatterns = [
     re_path(r'^get_avatar_url/$', views.get_avatar_url, name='get_avatar_url'),
     re_path(r'^Data_Information1/$', views.Data_Information1, name='Data_Information1'),
     re_path(r'^Data_Information2/$', views.Data_Information2, name='Data_Information2'),
+    re_path(r'^check_username/$', views.check_username, name='check_username'),
+    re_path(r'^check_email/$', views.check_email, name='check_email'),
 ]

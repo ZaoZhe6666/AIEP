@@ -4,7 +4,7 @@
     <h1 class="my-con1"><!Registration Page></h1>
 {% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="{% static '/CSS/registration.css' %}">
+
 {% endblock %}
 
 {% block content %}
@@ -25,39 +25,151 @@
                         </a>
                     </div>
                 </div>
+                <div id="name_errors"></div>
                 <div class="card-body p-5">
-                    <div class="form-group">
-                        <form method="post" action="/privileges/register/" enctype="multipart/form-data">
-                            <div class="row">
-                                {% csrf_token %}
+                    <form method="post" action="/privileges/register/" enctype="multipart/form-data">
+                        <div class="form-row">
+                            {% csrf_token %}
 
-                                {% for field in form %}
-                                    {% if field.label == 'Password' or field.label == 'Password Confirmation' %}
-                                        <div class="form-group col-md-12 ">
-                                            {{field}}
+                            {% for field in form %}
+                                {% if field.label == 'password1'%}
+
+                                    <div class="col-md-12 mb-3">
+                                        <label>Password</label>
+                                        {{field}}
+                                        <div id="password1_feedback">
+
                                         </div>
-                                    {% else %}
-                                        <div class="form-group col-md-12 mb-4">
-                                            {{field}}
-                                        </div>
-                                    {% endif %}
-                                    <div class="form-group col-md-12 ">
-                                        {{ field.errors }}
                                     </div>
-                                {% endfor %}
-                                <button type="submit" class="btn btn-lg btn-primary btn-block mb-4">Sign up</button>
-                            </div>
+                                {% elif field.label == 'password2' %}
+                                    <div class="col-md-12 mb-3">
+                                        <label>Password Confirmation</label>
+                                        {{field}}
+                                        <div id="password2_feedback">
 
-                        </form>
-                        <p>Already have an account?
-                          <a class="text-blue" href="/privileges/login">Sign in</a>
-                        </p>
-                    </div>
+                                        </div>
+                                    </div>
+                                {% elif field.label == 'username'%}
+                                    <div class="col-md-12 mb-3">
+                                        <label>username</label>
+                                        {{field}}
+                                        <div id="username_feedback">
+
+                                        </div>
+                                    </div>
+
+                                {% else %}
+                                    <label>Email</label>
+                                    <div class="col-md-12 mb-3">
+                                        {{field}}
+                                        <div id="email_feedback">
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="form-group col-md-12 ">
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-lg btn-primary btn-block mb-4">Sign up</button>
+                        </div>
+
+                    </form>
+                    <p>Already have an account?
+                      <a class="text-blue" href="/privileges/login">Sign in</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+<script>
+    $(document).ready(function() {
+        $('#username').blur(function(){
+            var username = $('#username').val();
+            if (username){
+                $.post("/privileges/check_username/", {name: username},
+                    function(result){
+                        if (result == "True"){
+                            $('#username').addClass("is-invalid");
+                            $('#username_feedback').html(username + '已被注册');
+                            $('#username_feedback').attr('class', 'invalid-feedback');
+                        }
+                        else{
+                            $('#username').removeClass("is-invalid");
+                            $('#username').addClass("is-valid");
+                            $('#username_feedback').html('');
+                            $('#username_feedback').attr('class', 'valid-feedback');
+                        }
+                    }
+                );
+            } else {
+                $('#username_feedback').html('请填入用户名');
+                $('#username_feedback').attr('class', 'invalid-feedback');
+            }
+        });
 
+        $('#email').blur(function(){
+            var email = $('#email').val();
+            if (email){
+                $.post("/privileges/check_email/", {email: email},
+                    function(result){
+                        if (result == "True"){
+                            $('#email').addClass("is-invalid");
+                            $('#email_feedback').html(email + '已被注册');
+                            $('#email_feedback').attr('class', 'invalid-feedback');
+                        }
+                        else{
+                            $('#email').removeClass("is-invalid");
+                            $('#email').addClass("is-valid");
+                            $('#email_feedback').html('');
+                            $('#email_feedback').attr('class', 'valid-feedback');
+                        }
+                    }
+                );
+            } else {
+                $('#email_feedback').html('请填入用户名');
+                $('#email_feedback').attr('class', 'invalid-feedback');
+            }
+        });
+
+        $('#password1').blur(function(){
+            var password1 = $('#password1').val();
+            if (password1.length < 6){
+                $('#password1_feedback').html('密码长度至少6位');
+                $('#password1_feedback').attr('class', 'invalid-feedback');
+                $('#password1').addClass("is-invalid");
+
+            } else if (password1.length > 20) {
+                $('#password1_feedback').html('密码长度至多20位');
+                $('#password1_feedback').attr('class', 'invalid-feedback');
+                $('#password1').addClass("is-invalid");
+
+            } else {
+                $('#password1').removeClass("is-invalid");
+                $('#password1').addClass("is-valid");
+            }
+        });
+
+        $('#password2').blur(function(){
+            var password1 = $('#password1').val();
+            var password2 = $('#password2').val();
+
+            if (password1 != password2){
+                $('#password2_feedback').html('密码不一致');
+                $('#password2_feedback').attr('class', 'invalid-feedback');
+                $('#password2').addClass("is-invalid");
+
+            } else {
+                $('#password2').removeClass("is-invalid");
+                $('#password2').addClass("is-valid");
+            }
+        });
+
+    });
+
+
+
+</script>
 {% endblock %}

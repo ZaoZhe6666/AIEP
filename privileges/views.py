@@ -75,6 +75,31 @@ def register(request):
     return render(request, 'registration.html', {'form': form})
 
 
+def check_username(request):
+    user = None
+    if request.POST['name'] != "":
+        username = request.POST['name']
+        result = {}
+        user = User.objects.filter(username__exact=username)
+    if user:
+        result = "True"
+    else:
+        result = "False"
+    return HttpResponse(result)
+
+
+def check_email(request):
+    email = None
+    if request.POST['email'] != "":
+        email = request.POST['email']
+        email = User.objects.filter(email__exact=email)
+    if email:
+        result = "True"
+    else:
+        result = "False"
+    return HttpResponse(result)
+
+
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)

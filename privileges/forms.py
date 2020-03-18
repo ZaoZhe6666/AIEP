@@ -11,13 +11,13 @@ def email_check(email):
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(label='username', max_length=50, widget=forms.TextInput(attrs={
-       'class': "form-control input-lg", 'placeholder': 'Username'}))
+       'class': "form-control input-lg", 'placeholder': 'Username', 'id': 'username'}))
     email = forms.EmailField(label='email', widget=forms.EmailInput(attrs={
-       'class': "form-control input-lg", 'placeholder': 'Email'}))
+       'class': "form-control input-lg", 'placeholder': 'Email', 'id': 'email'}))
     password1 = forms.CharField(label='password1', widget=forms.PasswordInput(attrs={
-       'class': "form-control input-lg", 'placeholder': 'Password'}))
+       'class': "form-control input-lg", 'placeholder': 'Password', 'id': 'password1'}))
     password2 = forms.CharField(label='password2', widget=forms.PasswordInput(attrs={
-       'class': "form-control input-lg", 'placeholder': 'Password Confirmation'}))
+       'class': "form-control input-lg", 'placeholder': 'Password Confirmation', 'id': 'password2'}))
     # captcha = CaptchaField(label='验证码', error_messages={"invalid": "验证码错误"})
     # user clean methods to define custom validation rules
 
@@ -46,7 +46,7 @@ class RegistrationForm(forms.Form):
 
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')
-        if len(password1) < 3:
+        if len(password1) < 6:
             raise forms.ValidationError("your password is too short")
         elif len(password1) > 20:
             raise forms.ValidationError("your password is too long")
