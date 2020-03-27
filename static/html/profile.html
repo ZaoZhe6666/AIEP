@@ -128,10 +128,8 @@
                 // 转化为blob后更改src属性，隐藏模态框
                 $('#user-photo').attr('src',URL.createObjectURL(blob));
                 $('#user-photo-exist').attr('src',URL.createObjectURL(blob));
-                $('#user-avatar-top11').attr('src',URL.createObjectURL(blob));
-                $('#user-avatar-top12').attr('src',URL.createObjectURL(blob));
-                $('#user-avatar-top21').attr('src',URL.createObjectURL(blob));
-                $('#user-avatar-top22').attr('src',URL.createObjectURL(blob));
+                $('#user-avatar-top1').attr('src',URL.createObjectURL(blob));
+                $('#user-avatar-top2').attr('src',URL.createObjectURL(blob));
                 $('#changeModal').modal('hide');
                 var formData = new FormData();
                 formData.append('avatar', blob);

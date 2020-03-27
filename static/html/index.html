@@ -312,21 +312,13 @@
                   {% else %}
                     <li class="dropdown user-menu">
                       <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                        {% if avatar %}
-                          <img src="{{ avatar.url }}" class="user-image" id="user-avatar-top11"/>
-                        {% else %}
-                          <img src="/static/img/not_login_user.jpg" class="user-image" alt="User Image" id="user-avatar-top12"/>
-                        {% endif %}
+                        <img src="#" class="user-image" id="user-avatar-top1"/>
                         <span class="d-none d-lg-inline-block">{{request.user.username}}</span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-right">
                         <!-- User image -->
                         <li class="dropdown-header">
-                          {% if avatar %}
-                            <img src="{{ avatar.url }}" class="user-image" id="user-avatar-top21"/>
-                          {% else %}
-                            <img src="/static/img/not_login_user.jpg" class="user-image" alt="User Image" id="user-avatar-top22"/>
-                          {% endif %}
+                          <img src="#" class="user-image" alt="User Image" id="user-avatar-top2"/>
                           <div class="d-inline-block">
                             {{request.user.username}} <small class="pt-1">{{request.user.email}}</small>
                           </div>
@@ -394,13 +386,15 @@
         type: 'GET',
         dataType: 'json',
         success: function(data){
-            if ($.isEmptyObject({data})) {
+
+            if (data.length == 0) {
+                $('#user-avatar-top1').attr('src', '/static/img/not_login_user.jpg/');
+                $('#user-avatar-top2').attr('src', '/static/img/not_login_user.jpg/');
+
             }
             else {
-                $('#user-avatar-top11').attr('src', data[0].url);
-                $('#user-avatar-top12').attr('src', data[0].url);
-                $('#user-avatar-top21').attr('src', data[0].url);
-                $('#user-avatar-top22').attr('src', data[0].url);
+                $('#user-avatar-top1').attr('src', data[0].url);
+                $('#user-avatar-top2').attr('src', data[0].url);
             }
         }
     });
