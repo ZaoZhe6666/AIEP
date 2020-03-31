@@ -1,0 +1,179 @@
+{% extends "index.html" %}
+{% block mainbody %}
+<h1>参加比赛DEMO</h1>
+<div class="row">
+	<div class="col">
+		<div class="card">
+			<div class="card-header card-header-border-bottom">
+			</div>
+			<div class="card-body">
+				<img class="card-img-top mb-4 rounded" src="/static/img/demo/wide_pic.png" width="500" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="card">
+				<div class="card-body">
+					<div class="card-body">
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active show" id="descri-tab" data-toggle="tab" href="#descri" role="tab" aria-controls="descri" aria-selected="true">简介</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="needtoknow-tab" data-toggle="tab" href="#needtoknow" role="tab" aria-controls="needtoknow" aria-selected="false">参赛须知</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">如何报名</a>
+							</li>
+						</ul>
+						<div class="tab-content" id="myTabContent1">
+							<div class="tab-pane pt-3 fade active show" id="descri" role="tabpanel" aria-labelledby="descri-tab">
+								这个比赛是由XXX举办的，旨在达到YYY目的……
+							</div>
+							<div class="tab-pane pt-3 fade" id="needtoknow" role="tabpanel" aria-labelledby="needtoknow-tab">
+								参赛者需要巴拉巴拉巴拉巴拉
+							</div>
+							<div class="tab-pane pt-3 fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+								无法报名
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-body">
+					<a href="#" class="btn btn-outline-primary">报名参赛</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<h1>比赛界面DEMO</h1>
+<div class="row">
+	<div class="card card-default">
+		<div class="card-header card-header-border-bottom">
+		</div>
+		<div class="card-body">
+			<p>天梯就用表格就行</p>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th scope="col">名次</th>
+						<th scope="col">用户名</th>
+						<th scope="col">评价指标1得分</th>
+						<th scope="col">评价指标2得分</th>
+						<th scope="col">提交时间</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td scope="row">1</td>
+						<td>刘艾杉</td>
+						<td>100</td>
+						<td>90</td>
+						<td>2020_03_31</td>
+					</tr>
+					<tr>
+						<td scope="row">2</td>
+						<td>刘艾衫</td>
+						<td>70</td>
+						<td>85</td>
+						<td>2020_03_30</td>
+					</tr>
+					<tr>
+						<td scope="row">3</td>
+						<td>刘艾彬</td>
+						<td>80</td>
+						<td>72</td>
+						<td>2020_03_32</td>
+					</tr>
+					<tr>
+						<td scope="row">4</td>
+						<td>刘义杉</td>
+						<td>92</td>
+						<td>70</td>
+						<td>2020_03_31</td>
+					</tr>
+					<tr>
+						<td scope="row">5</td>
+						<td>张崇智</td>
+						<td>10</td>
+						<td>9</td>
+						<td>2020_03_31</td>
+					</tr>
+					<tr>
+						<td scope="row">6</td>
+						<td>张祟智</td>
+						<td>1</td>
+						<td>0</td>
+						<td>2020_03_31</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<h1>评测结果DEMO</h1>
+<div class="row">
+	<div class="card">
+		<div class="card-body">
+			<div class="row">
+				<div class="col">
+					<img src="/static/img/demo/translate.png" />
+					<p>这里应该是那种左右划的展示条，太难做demo了算了</p>
+					<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active show" id="pic1-tab" data-toggle="pill" role="tab" href="#pic1" aria-controls="pic1" aria-selected="true">图1</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="pic2-tab" data-toggle="pill" role="tab" href="#pic2" aria-controls="pic2" aria-selected="false">图2</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="pic3-tab" data-toggle="pill" role="tab" href="#pic3" aria-controls="pic3" aria-selected="false">图3</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="pic4-tab" data-toggle="pill" role="tab" href="#pic4" aria-controls="pic4" aria-selected="false">图4</a>
+						</li>
+					</ul>
+				</div>
+				<div class="tab-content" id="pills-tabContent">
+					<div class="tab-pane fade active show" id="pic1" role="tabpanel" aria-labelledby="pic1-tab">
+						<div class="col">
+							<p>可解释报告1：……</p>
+							<p>可解释报告2：……</p>
+							<p>可解释报告3：……</p>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="pic2" role="tabpanel" aria-labelledby="pic2-tab">
+						
+						<div class="col">
+							<p>可解释报告1：……</p>
+							<p>可解释报告2：……</p>
+							<p>可解释报告3：……</p>
+							<p>可解释报告4：……</p>
+							<p>可解释报告5：……</p>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="pic3" role="tabpanel" aria-labelledby="pic3-tab">
+						<div class="col">
+							<p>可解释报告1：……</p>
+							<p>可解释报告2：……</p>
+							<p>可解释报告3：……</p>
+							<p>可解释报告4：……</p>
+							<p>可解释报告5：……</p>
+							<p>可解释报告6：……</p>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="pic4" role="tabpanel" aria-labelledby="pic4-tab">
+						<div class="col">
+							<p>可解释报告1：……</p>
+							<p>可解释报告2：……</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

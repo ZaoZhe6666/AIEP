@@ -26,6 +26,8 @@ urlpatterns = [
     path('join/<int:id>', views.joinTask, name='joinTask'),
     path('Taskdelete/<int:id>', views.task_delete, name='task_delete'),
     path('Rundelete/<int:id>', views.run_delete, name='run_delete'),
+
+    path('task_demo', views.task_demo, name='task_demo'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

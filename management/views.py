@@ -291,3 +291,6 @@ def run_delete(request, id):
         return HttpResponse("抱歉，你无权修改这篇文章。")
     run.delete()
     return redirect("management:run_record")
+
+def task_demo(request):
+    return render_to_response('task_demo.html')
