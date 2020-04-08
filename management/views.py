@@ -252,11 +252,24 @@ def task_submit(request):
 
 def task_detail(request, id):
     task = get_object_or_404(TaskSubmit, id=id)
-    task_rank = Task_User.objects.filter(task=task).order_by('best')
+    # 比赛排名
+    task_rank = Task_User.objects.filter(task=task).order_by('-best')
+    # 是否参加比赛 是否是比赛发起者
+    is_owner = False
+    if Task_User.objects.filter(task=task, user=request.user).exists():
+        is_join = True
+        if task.author == request.user:
+            is_owner = True
+    else:
+        is_join = False
+    num = task_rank.count()
     dataSet = Datasets.objects.get(id=task.dataset)
     comments = Comment.objects.filter(Task=id)
     comment_form = CommentForm()
-    context = {'task': task, 'comments': comments, 'comment_form': comment_form, 'task_rank': task_rank , 'dataSet': dataSet}
+    nowTime = timezone.now()
+    context = {'task': task, 'comments': comments, 'comment_form': comment_form,
+               'task_rank': task_rank, 'dataSet': dataSet, 'nowTime': nowTime,
+               'is_join': is_join, 'is_owner': is_owner, 'num': num}
     return render(request, 'taskDetail.html', context)
 
 
@@ -438,12 +451,4 @@ def post_comment(request, id, parent_comment_id=None):
         return render(request, 'reply.html', context)
 
 
-def getTimePercent(request):
-    task = get_object_or_404(TaskSubmit, id=id)
-    user = get_object_or_404(User, pk=request.user.id)
-    user_profile = get_object_or_404(UserProfile, user=user)
-    d = []
-    if user_profile.avatar != "":
-        d.append({'url': user_profile.avatar.url})
-    return JsonResponse(d, safe=False)
 

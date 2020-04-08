@@ -136,7 +136,7 @@ class Datasets(models.Model):
     specifications = models.CharField(max_length=10)
     dataType = models.CharField(max_length=10)
     #是否公开
-    public = models.CharField(max_length=3, choices=public, default = "私有")
+    public = models.CharField(max_length=3, choices=public, default="私有")
     created = models.DateTimeField(default=timezone.now)
     datasets = models.FileField(upload_to='DataSets/')
 
