@@ -13,12 +13,12 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="{% url 'management:task_list' %}?join=joined">
+                <a href="{% url 'management:task_list' %}?join=joined&tag={{ tag }}">
                     已参加比赛
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{% url 'management:task_list' %}?join=not_joined">
+                <a href="{% url 'management:task_list' %}?join=not_joined&tag={{ tag }}">
                     所有比赛
                 </a>
             </li>
@@ -51,6 +51,15 @@
                         </a>
                     </b>
                 </h4>
+                <span>
+                    {% for tag in task.tags.all %}
+                        <a href="{% url 'management:task_list' %}?tag={{ tag }}"
+                           class="badge badge-secondary"
+                        >
+                            {{ tag }}
+                        </a>
+                    {% endfor %}
+                </span>
                 <!-- 摘要 -->
                 <div>
                     <p style="color: gray;">

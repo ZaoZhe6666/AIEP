@@ -1,29 +1,403 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}<h1 class="my-con1">详细页面</h1>{% endblock %}
+{% block title %}{% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="{% static '/css/login.css' %}">
+<link rel="stylesheet" href="{% static '/css/taskDetail.css' %}">
 {% endblock %}
 
 
 {% block content %}
 
-<div class="container">
-    <div class="row">
-        <!-- 标题及作者 -->
-        <a href="{% url 'management:task_delete' task.id %}"
-           style="color: black;"
-        >
-            删除任务
-        </a>
-        <h1 class="col-12 mt-4 mb-4">{{ task.title }}</h1>
-        <h6 class="col-12 mt-4 mb-4"> 发起人：{{ task.author }}</h6>
-        <!-- 文章正文 -->
-        <div class="col-12">
-            <p>{{ task.description }}</p>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-2 col-xl-2 col-sm-1"></div>
+            <div class="col-md-8 col-xl-8 col-sm-10">
+                <div class="bg-white rounder" style="padding:10px;">
+                    <div class="row no-gutters">
+                        <div class="col-md-6 col-xs-8 col-sm-8"><img src="{{ task.img.url }}" class="img-card-left" style="width:260px;height:180px; "></div>
+                        <div class="clearfix visible-sm visible-md"></div>
+                        <div class="col-md-6 col-xs-4 col-sm-4" style="padding-left:30px;">
+                            <div style="color:black;
+                                        padding-top:10px;
+                                        margin: 0;
+                                        font-size: 30px;
+                                        line-height: 1.5em;
+                                        color: #333;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                        display: flex;
+                                        align-items: center;
+                                        -webkit-box-align: center;">
+                                <strong>{{ task.title }}</strong>
+                            </div>
+                            <div style="font-size:20px;">|  <strong>主办方：</strong>{{ task.author }}</div>
+                            <div class="row" style="padding-top: 10px;">
+                                <div class="col-xl-6">
+
+                                </div>
+                                <div class="col-xl-3">
+                                    <strong class="guid">队伍 / 人数</strong>
+                                    <div style="padding-top:5px;">
+                                        <b>714 / 831</b>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3">
+                                    <strong class="guid">奖励</strong>
+                                    <div style="padding-top:5px;">
+                                        <b class="reward--text">奖金/奖品</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="{% url 'management:joinTask' task.id %}">
+                                <button type="button" class="btn btn-primary">
+                                    参加比赛
+                                </button>
+                            </a>
+                            <a href="{% url 'management:task_delete' task.id %}">
+                                <button type="button" class="mb-1 btn btn-outline-danger" style="float:right; margin-top:5px;" >
+														<i class=" mdi mdi-close-circle-outline mr-1"></i> 删除比赛</button>
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="bg-white rounder" style="padding:10px;">
+                    <div class="row no-gutters">
+                        <div class="col-12">
+                            <div class="progress progress-striped active">
+                               <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                  aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                  style="width: 40%;" id="timePercent">
+                                  <span class="sr-only">40% 完成</span>
+                               </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">开始</div>
+                                <div class="col-4">
+                                    <div id="start" style="display:inline;">{{task.startTime}}</div>-<div id="end" style="display:inline;">{{task.endTime}}</div>
+                                </div>
+                                <div class="col-4" style="text-align:right;">结束</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-xl-2 col-sm-1"></div>
         </div>
+    </div>
+
+
+
+    <div class="content" style="padding-top:0px;">
+        <div class="row">
+            <div class="col-md-2 col-xl-2 col-xs-1"></div>
+            <div class="col-md-8 col-xl-8 col-xs-10">
+                <div class="bg-white border rounder" style="padding:10px;">
+                    <div class="row no-gutters">
+                        <div style="position: static; height: 64px; width: 1064px; float: none; margin: 0px; padding: 0px 44px; display: none; visibility: hidden;"></div>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" style="font-size:17px;">
+                                <a class="nav-link active show" id="introduction-tab" data-toggle="tab" href="#introduction" role="tab" aria-controls="introduction" aria-selected="true">比赛介绍</a>
+                            </li>
+                            <li class="nav-item" style="font-size:17px;">
+                                <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="false">数据说明</a>
+                            </li>
+                            <li class="nav-item" style="font-size:17px;">
+                                <a class="nav-link" id="submit-tab" data-toggle="tab" href="#submit" role="tab" aria-controls="submit" aria-selected="false">作品提交</a>
+                            </li>
+                            <li class="nav-item" style="font-size:17px;">
+                                <a class="nav-link" id="rank-tab" data-toggle="tab" href="#rank" role="tab" aria-controls="rank" aria-selected="false">排行榜</a>
+                            </li>
+                            <li class="nav-item" style="font-size:17px;">
+                                <a class="nav-link" id="discuss-tab" data-toggle="tab" href="#discuss" role="tab" aria-controls="discuss" aria-selected="false">评论区</a>
+                            </li>
+                        </ul>
+                        <div style="width:100%;"></div>
+                        <div class="tab-content" id="myTabContent1">
+                            <div class="tab-pane pt-3 fade active show" id="introduction" role="tabpanel" aria-labelledby="introduction-tab">
+                                <div class="row">
+                                    <div class="col-1">
+                                        <nav class="navbar navbar-dark">
+                                            <ul class="navbar-nav">
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#section1">Section 1</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#section2">Section 2</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#section3">Section 3</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#section4">Section 4</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-11">
+                                        <div id="section1" class="container-fluid" style="padding-top:20px;padding-bottom:20px">
+                                            <h1>描述</h1>
+                                            <p style="padding-top:5px;">{{ task.description }}</p>
+                                        </div>
+                                        <div id="section2" class="container-fluid" style="padding-top:70px;padding-bottom:70px">
+                                            <h1>Section 2</h1>
+                                            <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
+                                            <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
+                                        </div>
+                                        <div id="section3" class="container-fluid" style="padding-top:70px;padding-bottom:70px">
+                                            <h1>Section 3</h1>
+                                            <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
+                                            <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
+                                        </div>
+                                        <div id="section4" class="container-fluid" style="padding-top:70px;padding-bottom:70px">
+                                            <h1>Section 4</h1>
+                                            <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
+                                            <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane pt-3 fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card py-3 mb-4">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-primary">{{ dataSet.name }}</h5>
+                                                <h6 class="card-title text-primary">{{ dataSet.author }}</h6>
+                                                <p class="card-text pb-4 pt-1">{{ dataSet.description }}</p>
+                                                <a href="{% url 'management:dataset_list' %}" class="btn btn-outline-primary">查看数据集列表</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="tab-pane pt-3 fade" id="submit" role="tabpanel" aria-labelledby="submit-tab">
+                                <form action="{% url 'management:task_innerSubmit' task.id %}" method="post" enctype="multipart/form-data">
+			                        {% csrf_token %}
+                                    <div class="form-group">
+                                        <input type="file" name="model" id="model">
+                                    </div>
+                                    <input type="submit" value="提交数据" class="btn btn-primary">
+                                </form>
+                            </div>
+
+                            <div class="tab-pane pt-3 fade" id="rank" role="tabpanel" aria-labelledby="rank-tab">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                            <a class="nav-link active" id="v-pills-a-tab" data-toggle="pill" href="#v-pills-a" role="tab" aria-controls="v-pills-a" aria-selected="true">A榜</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="tab-content" id="v-pills-tabContent">
+                                            <div class="tab-pane fade show active" id="v-pills-a" role="tabpanel" aria-labelledby="v-pills-a-tab">
+
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">排名</th>
+                                                            <th scope="col">用户名称</th>
+                                                            <th scope="col">最高得分</th>
+                                                            <th scope="col">有效提交次数</th>
+                                                            <th scope="col">最高分提交时间</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for user in task_rank %}
+                                                            <tr>
+                                                            <td scope="row">{{forloop.counter}}</td>
+                                                                <td>{{user.user}}</td>
+                                                                <td>{{user.best}}</td>
+                                                                <td>{{user.submitNum}}</td>
+                                                                <td>{{user.bestTime}}</td>
+                                                            </tr>
+                                                        {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="tab-pane pt-3 fade" id="discuss" role="tabpanel" aria-labelledby="discuss-tab">
+                                <div class="container-fluid" style="margin:0 auto">
+                                    <div >
+                                        {% if user.is_authenticated %}
+                                            <div>
+                                                <form
+                                                    action="{% url 'management:post_comment' task.id %}"
+                                                    method="POST"
+                                                >
+                                                {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <strong>
+                                                                我也要发言：
+                                                            </strong>
+                                                        </label>
+                                                        <div>
+                                                            {{ comment_form.media }}
+                                                            {{ comment_form.body }}
+                                                        </div>
+                                                    </div>
+                                                    <!-- 提交按钮 -->
+                                                    <button type="submit" class="btn btn-primary ">发送</button>
+                                                </form>
+                                            </div>
+                                            <br>
+                                        {% else %}
+                                            <br>
+                                            <h5 class="row justify-content-center">
+                                                请<a href="{% url 'privileges:login' %}">登录</a>后回复
+                                            </h5>
+                                            <br>
+                                        {% endif %}
+
+                                        {% load mptt_tags %}
+                                        <h4>共有{{ comments.count }}条评论</h4>
+                                        <div class="row">
+                                            <!-- 遍历树形结构 -->
+                                            {% recursetree comments %}
+                                                <!-- 给 node 取个别名 comment -->
+                                                {% with comment=node %}
+                                                    <div class="{% if comment.reply_to %}
+                                                                offset-1 col-11
+                                                                {% else %}
+                                                                col-12
+                                                                {% endif %}"
+                                                    >
+                                                        <hr>
+                                                        <p>
+                                                            <strong style="color: pink">
+                                                                {{ comment.user }}
+                                                            </strong>
+
+                                                            {% if comment.reply_to %}
+                                                                <i class="far fa-arrow-alt-circle-right"
+                                                                   style="color: cornflowerblue;"
+                                                                ></i>
+                                                                <strong style="color: pink">
+                                                                    {{ comment.reply_to }}
+                                                                </strong>
+                                                            {% endif %}
+
+                                                        </p>
+                                                        <div>{{ comment.body|safe }}</div>
+
+                                                        <div>
+                                                            <span style="color: gray">
+                                                                {{ comment.created|date:"Y-m-d H:i" }}
+                                                            </span>
+
+                                                            <!-- 加载 modal 的按钮 -->
+                                                            {% if user.is_authenticated %}
+                                                            <button type="button"
+                                                                    class="btn btn-light btn-sm text-muted"
+                                                                    onclick="load_modal({{ task.id }}, {{ comment.id }})"
+                                                                    >
+                                                                回复
+                                                            </button>
+                                                            {% else %}
+                                                            <a class="btn btn-light btn-sm text-muted"
+                                                               href="{% url 'privileges:login' %}"
+                                                               >
+                                                                回复
+                                                            </a>
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade"
+                                                             id="comment_{{ comment.id }}"
+                                                             tabindex="-1"
+                                                             role="dialog"
+                                                             aria-labelledby="CommentModalCenter"
+                                                             aria-hidden="true"
+                                                        >
+                                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                                <div class="modal-content" style="height: 480px">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalCenterTitle">回复 {{ comment.user }}：</h5>
+                                                                    </div>
+                                                                    <div class="modal-body" id="modal_body_{{ comment.id }}"></div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        {% if not comment.is_leaf_node %}
+                                                            <div class="children">
+                                                                {{ children }}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+
+
+                                                {% endwith %}
+                                            {% endrecursetree %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="col-md-2 col-xl-2 col-xs-1"></div>
+        </div>
+
     </div>
 </div>
 
+
+
 {% endblock %}
 
+
+{% block script %}
+<!-- 使宽度自适应 -->
+<script>
+    $(".django-ckeditor-widget").removeAttr('style');
+</script>
+
+<!-- 新增代码，唤醒二级回复的 modal -->
+<script>
+    // 加载 modal
+    function load_modal(id, comment_id) {
+        let modal_body = '#modal_body_' + comment_id;
+        let modal_id = '#comment_' + comment_id;
+
+        // 加载编辑器
+        if ($(modal_body).children().length === 0) {
+            let content = '<iframe src="/management/comment/' +
+                id +
+                '/' +
+                comment_id +
+                '"' +
+                ' frameborder="0" style="width: 100%; height: 100%;" id="iframe_' +
+                comment_id +
+                '"></iframe>';
+            $(modal_body).append(content);
+        };
+
+        $(modal_id).modal('show');
+    }
+
+</script>
+{% endblock script %}

@@ -23,9 +23,15 @@ urlpatterns = [
     path('task/List/', views.task_list, name='task_list'),
     path('task/Record/', views.run_record, name='run_record'),
     path('task/detail/<int:id>/', views.task_detail, name='task_detail'),
+    path('task/detail/<int:id>/getTimePercent/', views.getTimePercent, name='getTimePercent'),
     path('join/<int:id>', views.joinTask, name='joinTask'),
     path('Taskdelete/<int:id>', views.task_delete, name='task_delete'),
     path('Rundelete/<int:id>', views.run_delete, name='run_delete'),
+    path('task/detail/<int:id>/submit', views.task_innerSubmit, name='task_innerSubmit'),
+    path('comment/<int:id>/', views.post_comment, name='post_comment'),
+    path('comment/<int:id>/<int:parent_comment_id>', views.post_comment, name='comment_reply'),
+    path('dataset/list/', views.dataset_list, name='dataset_list'),
+    path('dataset/submit/', views.DatasetSubmit, name='dataset_submit'),
 
     path('task_demo', views.task_demo, name='task_demo'),
 ]

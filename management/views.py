@@ -6,14 +6,21 @@ from AIEP.settings import BASE_DIR
 import os
 import random
 from django.contrib.auth.models import User
-from .forms import TaskSubmitForm, RunSubmitForm
-from .models import TaskSubmit, TaskColumn, ShowImgAfterUpload, runSubmit
+from .forms import TaskSubmitForm, RunSubmitForm, TaskInnerSubmitForm, DatasetSubmitForm, CommentForm
+from .models import TaskSubmit, TaskColumn, ShowImgAfterUpload, runSubmit, Task_User, Comment, Datasets
 import subprocess
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 import time
 import shutil
 from django.db.models import Q
+from django.utils import timezone
+from django import forms
+from django.forms import widgets
+from django.forms import fields
+from django.forms import ModelChoiceField
+import random
+
 
 status_num = []
 status_name = []
@@ -196,6 +203,18 @@ def ajax_load_per_style(request):
     return JsonResponse(status_name, safe=False)
 
 
+
+class DatasetChoose(forms.Form):
+    dataset = fields.ChoiceField(
+        choices=Datasets.objects.all().values_list('id', 'name'),
+        widget=widgets.Select(attrs={'class': "form-control custom-select"})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(DatasetChoose, self).__init__(*args, **kwargs)
+        self.fields['dataset'].choices = Datasets.objects.all().values_list('id', 'name')
+
+
 @login_required(login_url='/privileges/login/')
 def task_submit(request):
     # 判断用户是否提交数据
@@ -209,26 +228,36 @@ def task_submit(request):
             # 指定登录的用户为作者
             new_task.author = User.objects.get(id=request.user.id)
             new_task.save()
+            task_submit_form.save_m2m()
             return redirect("management:task_list")
         # 如果数据不合法，返回错误信息
         else:
-            return HttpResponse("表单内容有误，请重新填写。")
+            ErrorDict = task_submit_form.errors
+            Error_Str = json.dumps(ErrorDict)
+            Error_Dict = json.loads(Error_Str)
+            return HttpResponse(Error_Dict.values())
     # 如果用户请求获取数据
     else:
         # 创建表单类实例
         task_submit_form = TaskSubmitForm()
         # 文章栏目
         # columns = TaskColumn.objects.all()
+        datasets = DatasetChoose()
         # 赋值上下文
         imgs = ShowImgAfterUpload.objects.all()
-        context = {'task_submit_form': task_submit_form, "imgs": imgs}  # , 'columns': columns
+        context = {'task_submit_form': task_submit_form, "imgs": imgs, 'datasets': datasets}  # , 'columns': columns
         # 返回模板
         return render(request, 'TaskSubmit.html', context)
 
 
 def task_detail(request, id):
     task = get_object_or_404(TaskSubmit, id=id)
-    return render(request, 'taskDetail.html', {'task': task})
+    task_rank = Task_User.objects.filter(task=task).order_by('best')
+    dataSet = Datasets.objects.get(id=task.dataset)
+    comments = Comment.objects.filter(Task=id)
+    comment_form = CommentForm()
+    context = {'task': task, 'comments': comments, 'comment_form': comment_form, 'task_rank': task_rank , 'dataSet': dataSet}
+    return render(request, 'taskDetail.html', context)
 
 
 @login_required(login_url='/privileges/login/')
@@ -242,6 +271,7 @@ def task_delete(request, id):
 
 def task_list(request):
     flag = ''
+    tag = request.GET.get('tag')
     if_join = request.GET.get('join')
     all_task_list = TaskSubmit.objects.all()
     user = User.objects.get(id=request.user.id)
@@ -253,6 +283,8 @@ def task_list(request):
     else:
         task_list = notjoin_list
         flag = 'not_join'
+    if tag and tag != 'None':
+        task_list = task_list.filter(tags__name__in=[tag])
     paginator = Paginator(task_list, 6)
     page = request.GET.get('page')
     tasks = paginator.get_page(page)
@@ -264,7 +296,8 @@ def joinTask(request, id):
     user = User.objects.get(id=request.user.id)
     task = TaskSubmit.objects.get(id=id)
     task.participant.add(user)
-    return redirect("management:task_list")
+    Task_User.objects.create(user=user, task=task)
+    return redirect("management:task_detail", id)
 
 
 @login_required(login_url='/privileges/login/')
@@ -294,3 +327,123 @@ def run_delete(request, id):
 
 def task_demo(request):
     return render_to_response('task_demo.html')
+
+
+def task_innerSubmit(request, id):
+    if request.method == "POST":
+        run_submit_form = TaskInnerSubmitForm(request.POST)
+        task = TaskSubmit.objects.get(id=id)
+        user = request.user
+        new_run = run_submit_form.save(commit=False)
+        new_run.author = user
+        new_run.modelname = request.FILES.get("model", None).name.split('.')[0][0:20]
+        new_run.dataset = task.dataset
+        new_run.algorithm = task.algorithm
+        new_run.ind = task.ind
+        new_run.save()
+        task.submit.add(new_run)
+        now = int(time.time())
+        time_array = time.localtime(now)
+        time_part = time.strftime("%Y_%m_%d-%H%M%S", time_array)
+        os.mkdir(BASE_DIR + "/static/upload/uploadfile/" + time_part)
+        upload_file = request.FILES.get('model')
+        if upload_file != None:
+            print("file is not empty!")
+            filename = time_part + '.' + upload_file.name.split('.')[-1]
+            filepath = os.path.join(BASE_DIR + "/static/upload/uploadfile/" + time_part, filename)
+            f = open(filepath, 'wb')
+            for i in upload_file.chunks():
+                f.write(i)
+            f.close()
+        else:
+            print("file is empty!")
+        grade = random.randint(85, 99)
+        task_user = Task_User.objects.get(task=task, user=user)
+        task_user.submitNum = task_user.submitNum + 1
+        time_now = timezone.now()
+        if grade > task_user.best:
+            task_user.best = grade
+            task_user.bestTime = time_now
+        task_user.save()
+        return redirect("management:task_detail", id)
+    else:
+        run_submit_form = TaskInnerSubmitForm(request.POST)
+        context = {'run_submit_form': run_submit_form}
+        return render(request, '', context)
+
+
+def DatasetSubmit(request):
+    if request.method == "POST":
+        dataset_submit_form = DatasetSubmitForm(request.POST, request.FILES)
+        # 判断提交的数据是否满足模型的要求
+        if dataset_submit_form.is_valid():
+            dataset = dataset_submit_form.save(commit=False)
+            dataset.author = User.objects.get(id=request.user.id)
+            dataset.save()
+            return redirect("management:dataset_list")
+        else:
+            ErrorDict = dataset_submit_form.errors
+            Error_Str = json.dumps(ErrorDict)
+            Error_Dict = json.loads(Error_Str)
+            return HttpResponse(Error_Dict.values())
+    # 如果用户请求获取数据
+    else:
+        dataset_submit_form = DatasetSubmitForm(request.POST, request.FILES)
+        context = {'dataset_submit_form': dataset_submit_form}
+        return render(request, 'datasetSubmit.html', context)
+
+def dataset_list(request):
+    dataset_list = Datasets.objects.all()
+    user = User.objects.get(id=request.user.id)
+    paginator = Paginator(dataset_list, 6)
+    page = request.GET.get('page')
+    datasets = paginator.get_page(page)
+    context = {'datasets': datasets}
+    return render(request, 'datasetlist.html', context)
+
+@login_required(login_url='/privileges/login/')
+def post_comment(request, id, parent_comment_id=None):
+    task = get_object_or_404(TaskSubmit, id=id)
+    # 处理 POST 请求
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.task = task
+            new_comment.Task_id = task.id
+            new_comment.user = request.user
+
+            # 二级回复
+            if parent_comment_id:
+                parent_comment = Comment.objects.get(id=parent_comment_id)
+                # 若回复层级超过二级，则转换为二级
+                new_comment.parent_id = parent_comment.get_root().id
+                # 被回复人
+                new_comment.reply_to = parent_comment.user
+                new_comment.save()
+                return HttpResponse('200 OK')
+
+            new_comment.save()
+            return redirect(task)
+        else:
+            return HttpResponse("表单内容有误，请重新填写。")
+    # 处理 GET 请求
+    elif request.method == 'GET':
+        comment_form = CommentForm()
+        context = {
+            'comment_form': comment_form,
+            'id': id,
+            'parent_comment_id': parent_comment_id
+        }
+        return render(request, 'reply.html', context)
+
+
+def getTimePercent(request):
+    task = get_object_or_404(TaskSubmit, id=id)
+    user = get_object_or_404(User, pk=request.user.id)
+    user_profile = get_object_or_404(UserProfile, user=user)
+    d = []
+    if user_profile.avatar != "":
+        d.append({'url': user_profile.avatar.url})
+    return JsonResponse(d, safe=False)
+

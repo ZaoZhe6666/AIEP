@@ -1,87 +1,122 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}<h1 class="my-con1">发起比赛</h1>{% endblock %}
+{% block title %}{% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="{% static '/css/login.css' %}">
 {% endblock %}
 
 
 {% block content %}
 
-    {% if message %}
-    {{ message }}
-    {% endif %}
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <br>
-                <!-- 提交文章的表单 -->
-                <form method="post" action="." enctype="multipart/form-data">
-                    <!-- Django中需要POST数据的地方都必须有csrf_token -->
-                    {% csrf_token %}
+<div class="card card-default">
+	<div class="card-header card-header-border-bottom">
+		<h2>发起比赛</h2>
+	</div>
 
-                    <!-- 项目宣传图 -->
-                    <div class="form-group">
-                        <label for="img">比赛宣传图</label>
-                        <input type="file" class="form-control-file" name="img" id="img" required="required">
-                    </div>
-
-                    <div class="imgs">
-                        {% for obj in imgs %}
-                            <img src="{{ obj.file_Path }}">
-                        {% endfor %}
-                    </div>
-
-                    <!-- 比赛标题 -->
-                    <div class="form-group">
-                        <!-- 标签 -->
-                        <label for="title">比赛名称</label>
-                        <!-- 文本框 -->
-                        <input type="text"
-                               class="form-control"
-                               id="title"
-                               name="title"
-                               required="required"
-                        >
-                    </div>
-
-                    <!-- 比赛类别 -->
-                    <!--div class="form-group">
-
-                        <label for="category">比赛类别</label>
-
-                        <input type="text"
-                               class="form-control"
-                               id="category"
-                               name="category"
-                               required="required"
-                        >
-                    </div-->
-
-                    <!-- 比赛描述 -->
-                    <div class="form-group">
-                        <label for="description">比赛内容描述</label>
-                        <!-- 文本区域 -->
-                        <textarea type="text"
-                                  class="form-control"
-                                  id="description"
-                                  name="description"
-                                  rows="12"
-                                  required="required"
-                        ></textarea>
-                    </div>
-
-                    <!-- 比赛用数据集 -->
-                    <div class="form-group">
-                        <label for="dataset">比赛数据集</label>
-                        <input type="file" class="form-control-file" name="dataset" id="dataset" required="required">
-                    </div>
-
-                    <!-- 提交按钮 -->
-                    <button type="submit" class="btn btn-primary">完成</button>
-                </form>
+	<div class="card-body">
+		<form action="." method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<table>
+			{% for field in form %}
+				<tr>
+					<td>{{ field.label_tag }}</td>
+					<td>{{ field }}</td>
+					<td>{{ field.errors }}</td>
+				</tr>
+			{% endfor %}
+			</table>
+            <!-- 项目宣传图 -->
+            <div class="form-group">
+                <label for="img">比赛宣传图</label>
+                <input type="file" class="form-control-file" name="img" id="img" required="required">
             </div>
-        </div>
-    </div>
+            <!-- 比赛标题 -->
+			<div class="form-group">
+				<label>比赛名称：</label>
+				<input type="text" class="form-control" placeholder="Name for the contest,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="title" id="title" required="required">
+			</div>
+            <!-- 开始结束时间  -->
+            <div class="form-group">
+                <label>比赛开始时间（年-月-日）</label>
+                <input class="form-control" type="data" placeholder="例如：2020-04-03" name="startTime" id="startTime" required>
+            </div>
+            <div class="form-group">
+                <label>比赛结束时间（年-月-日）</label>
+                <input class="form-control" type="data" placeholder="例如：2020-07-06" name="endTime" id="endTime" required>
+            </div>
+            <!-- 比赛描述 -->
+            <div class="form-group">
+                <label for="description">比赛内容描述</label>
+                <!-- 文本区域 -->
+                <textarea type="text"
+                          class="form-control"
+                          id="description"
+                          name="description"
+                          rows="5"
+                          placeholder="请输入对比赛的简单描述"
+                          required="required"
+                ></textarea>
+            </div>
+            <!-- 宣传图 -->
+            <div class="imgs">
+                {% for obj in imgs %}
+                    <img src="{{ obj.file_Path }}">
+                {% endfor %}
+            </div>
+            <!-- 比赛标签 -->
+            <div class="form-group">
+                <label>比赛标签</label>
+                <textarea type="text"
+                          class="form-control"
+                          id="tags"
+                          name="tags"
+                          rows="1"
+                          required="required"
+                ></textarea>
+            </div>
+            <!-- 攻击算法 -->
+            <div class="form-group">
+                <label>攻击算法</label>
+                <select class="form-control custom-select" name="algorithm" id="algorithm" required="required">
+                    <option value="算法一">算法一</option>
+                    <option value="算法二">算法二</option>
+                    <option value="算法三">算法三</option>
+                </select>
+            </div>
+            <!-- 模型格式 -->
+            <div class="form-group">
+                <label>模型格式</label>
+                <select class="form-control custom-select" name="modelType" id="modelType" required="required">
+                    <option value="类型一">类型一</option>
+                    <option value="类型二">类型二</option>
+                </select>
+            </div>
+            <!-- 评价指标 -->
+            <div class="form-group">
+                <label>评价指标</label>
+                <select class="form-control custom-select" name="ind" id="ind" required="required">
+                    <option value="类型一">类型一</option>
+                    <option value="类型二">类型二</option>
+                </select>
+            </div>
+            <!-- 比赛用数据集 -->
+
+            <div class="form-group">
+                <label>比赛数据集</label>
+                {{datasets}}
+            </div>
+
+
+            <div class="form-footer pt-4 pt-5 mt-4 border-top">
+				<button type="submit" class="btn btn-primary btn-default" name="submit_btn">Submit</button>
+				<!--button type="submit" class="btn btn-primary">完成</button-->
+			</div>
+		</form>
+
+	</div>
+</div>
+
+<script>
+    console.log(datasets);
+</script>
 
 {% endblock %}

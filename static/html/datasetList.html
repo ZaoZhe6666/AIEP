@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}
+    <link rel="stylesheet" href="{% static '/css/login.css' %}">
+{% endblock %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+
+
+
+<!-- 定义放置文章标题的div容器 -->
+<div class="container">
+    <h1>数据集列表</h1>
+    <!-- 列表循环 -->
+    <div class="row mt-2">
+        {% for dataset in datasets %}
+            <!-- 文章内容 -->
+
+
+            <div class="col">
+                <!-- 标题 -->
+                <h4>
+                    <b>
+                        <a href="#"
+                           style="color: black;"
+                        >
+                            {{ dataset.name }}
+                        </a>
+                    </b>
+                </h4>
+                <!-- 摘要 -->
+                <div>
+                    <p style="color: gray;">
+                        {{ dataset.description|slice:'100' }}...
+                    </p>
+                </div>
+                <!-- 注脚 -->
+                <p>
+                    <!-- 附加信息 -->
+
+                    <span>
+                        <i style="color: pink;"></i>
+                        <!--
+                        {{ article.created|date:'Y-m-d' }}
+                        -->
+                        {{ dataset.created }}
+                    </span>
+                </p>
+
+            </div>
+            <hr style="width: 100%;"/>
+        {% endfor %}
+    </div>
+
+    <!-- 页码导航 -->
+    <div class="pagination row">
+        <div class="m-auto">
+            <span class="step-links">
+                <!-- 如果不是第一页，则显示上翻按钮 -->
+                {% if datasets.has_previous %}
+                    <a href="?page=1" class="btn btn-success">
+                        &laquo; 1
+                    </a>
+                    <span>...</span>
+                    <a href="?page={{ datasets.previous_page_number }}"
+                       class="btn btn-secondary"
+                    >
+                        {{ datasets.previous_page_number }}
+                    </a>
+                {% endif %}
+
+                <!-- 当前页面 -->
+                <span class="current btn btn-danger btn-lg">
+                    {{ datasets.number }}
+                </span>
+
+                <!-- 如果不是最末页，则显示下翻按钮 -->
+                {% if datasets.has_next %}
+                    <a href="?page={{ datasets.next_page_number }}"
+                       class="btn btn-secondary"
+                    >
+                        {{ datasets.next_page_number }}
+                    </a>
+                    <span>...</span>
+                    <a href="?page={{ datasets.paginator.num_pages }}"
+                       class="btn btn-success"
+                    >
+                        {{ datasets.paginator.num_pages }} &raquo;
+                    </a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
