@@ -321,3 +321,327 @@ function pic_in_pair(id, ori_path, attack_path, style){
 	html += "' style='width: 720px; height: 480px;'></div></div>"
 	return html;
 }
+
+function read_table_demo(att_name, param_list, origin, nat){
+  console.log(param_list)
+  console.log(origin)
+  console.log(nat)
+  var html = "<thead><tr align='center'><td rowspan='2'>RESNET</td>"
+  html += "<td rowspan='2'>CLEAN</td>"
+  block_num = origin.length - 2;
+  html += "<td colspan='" + block_num + "'>" + att_name + "</td></tr><tr align='center'>"
+  for(var param in param_list){
+    html += "<td>" + param_list[param] + "</td>"
+  }
+  html += "</tr></thead>"
+  html += "<tbody><tr align='center'>"
+  for(var param in origin){
+    html += "<td>" + origin[param] + "</td>"
+  }
+  html += "</tr>"
+  html += "<tr align='center'>"  
+  for(var param in nat){
+    html += "<td>" + nat[param] + "</td>"
+  }
+  html += "</tr>"
+  html += "</tbody>"
+  return html;
+}
+
+function read_table(table){
+  var html = "<thead>";
+  for(var row_key in table){
+    console.log("row_key = " + table[row_key])
+    html += "<tr>"
+    for(var key2 in table[row_key]){
+      console.log("tmp =" + table[row_key][key2])
+      html += "<td"
+      if(table[row][tmp].length == 1){
+        if(row == "TITLE"){
+          html += " rowspan='2'";
+        }
+        html += ">" + table[row][tmp]
+      }
+      else{
+        html += ">";
+        for(var level3 in table[row][tmp]){
+          console.log(table[row][tmp][level3])
+          html += "<td>" + table[row][tmp][level3] + "</td>";
+        }
+        html += "</tr></tbody>"
+      }
+      html += "</td>"
+    }
+    html += "</tr>"
+    if(row == "TITLE"){
+      html += "</thead><tbody>"
+    }
+  }
+  return html
+}
+
+function cam_pic_path(DIR, num){
+  var html = "";
+  var path = "/static/upload/Results/" + DIR + "/CamResult/"
+  html += "<img src='";
+  html += path + "OriginSample_orig_" + num;
+  html += ".jpg' alt='' class='img-fluid'>"
+  html += "<img src='";
+  html += path + "AttackSample_orig_" + num;
+  html += ".jpg' alt='' class='img-fluid'>"
+  html += "<img src='";
+  html += path + "OriginSample_cam_" + num;
+  html += ".jpg' alt='' class='img-fluid'>"
+  html += "<img src='";
+  html += path + "AttackSample_cam_" + num;
+  html += ".jpg' alt='' class='img-fluid'>"
+  return html;
+}
+
+function cam_rolling(num){
+  var html = "";
+  for(var i = 0; i < num; i++){
+    if(i == 0){
+      html += "<li data-target='#carouselTestimonial' data-slide-to='0' class='active'></li>"
+    }
+    else{
+      html += "<li data-target='#carouselTestimonial' data-slide-to='" + i + "' class=''></li>"
+    }
+  }
+  return html;
+}
+
+function cam_pic_show(cam_list){
+  var html = "";
+  var DIR = cam_list["DIR"];
+  for(var key in cam_list){
+    if(key == "DIR"){
+      continue;
+    }
+    if(html == ""){
+      html += "<div class='carousel-item active'><div class='card border-0 text-center'><div class='card-img-wrapper '>";
+    }
+    else{
+      html += "<div class='carousel-item'><div class='card border-0 text-center'><div class='card-img-wrapper '>";
+    }
+    html += cam_pic_path(DIR, key);
+    html += "</div><div class='card-body'><p>";
+    html += "上方第一张图为原始图像，第二张图为攻击后图像，通过肉眼我们很难分别出两张图像的不同，但是通过热力图观察模型关注度我们可以发现，经过攻击后的图像与原始图像相比，关注区域发生了变化。"
+    html += cam_list[key];
+    html += "</p></div></div></div>";
+  }
+  return html;
+}
+
+function get_data_size(){
+  var config = {
+    data: {
+      datasets: [
+        {
+          data: [80, 80, 50, 10],
+          backgroundColor: [
+            "rgba(41,204,151,0.5)",
+            "rgba(254,88,101,0.5)",
+            "rgba(254,196,0,0.5)",
+            "rgba(76,132,255,0.5)"
+          ],
+          label: "" // for legend
+        }
+      ],
+      labels: ["训练样本", "对抗攻击样本", "测试样本", "可解释性评估样本"]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        position: "right",
+        display: false
+      },
+      layout: {
+        padding: {
+          top: 10,
+          bottom: 10,
+          right: 10,
+          left: 10
+        }
+      },
+      scale: {
+        ticks: {
+          beginAtZero: true,
+          fontColor: "#1b223c",
+          fontSize: 12,
+          stepSize: 20,
+          max: 100
+        },
+        reverse: false
+      },
+      animation: {
+        animateRotate: false,
+        animateScale: true
+      },
+      tooltips: {
+        titleFontColor: "#888",
+        bodyFontColor: "#555",
+        titleFontSize: 12,
+        bodyFontSize: 14,
+        backgroundColor: "rgba(256,256,256,0.95)",
+        displayColors: true,
+        borderColor: "rgba(220, 220, 220, 0.9)",
+        borderWidth: 2
+      }
+    }
+  }
+  return config;
+}
+
+function get_CE(data){
+  var base_line = new Array(data["CE"].length);
+  for(var i = 0; i < data["CE"].length; i++){
+    base_line[i] = data["BASE_LINE"];
+  }
+  var config =  {
+    type: "radar",
+    data: {
+      labels: data["STYLE"],
+      datasets: [
+        {
+          label: "CE",
+          backgroundColor: "rgba(76,132,255,0.2)",
+          borderColor: "#4c84ff",
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointBorderColor: "rgba(76,132,255,1)",
+          pointBackgroundColor: "#ffffff",
+          data: data["CE"]
+        },
+        {
+          label: "Related CE",
+          backgroundColor: "rgba(41, 204, 151, 0.2)",
+          borderColor: "#29cc97",
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointBorderColor: "#29cc97",
+          pointBackgroundColor: "#ffffff",
+          data: data["RCE"]
+        },
+        {
+          label: "BASE LINE",
+          backgroundColor: "rgba(105, 105, 105, 0.1)",
+          borderColor: "#696969",
+          pointBorderWidth: 1,
+          pointRadius: 1,
+          pointBorderColor: "#696969",
+          pointBackgroundColor: "#ffffff",
+          data: base_line
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      legend: {
+        display: true
+      },
+      layout: {
+        padding: {
+          top: 10,
+          bottom: 10,
+          right: 10,
+          left: 10
+        }
+      },
+      scale: {
+        ticks: {
+          beginAtZero: true,
+          fontColor: "#1b223c",
+          fontSize: 12,
+          stepSize: 40,
+          max: 200
+        }
+      },
+      tooltips: {
+        titleFontColor: "#888",
+        bodyFontColor: "#555",
+        titleFontSize: 12,
+        bodyFontSize: 14,
+        backgroundColor: "rgba(256,256,256,0.95)",
+        displayColors: true,
+        borderColor: "rgba(220, 220, 220, 0.9)",
+        borderWidth: 2
+      }
+    }
+  };
+  return config;
+}
+
+function get_color(num){
+  var pre = ["rgb(82, 136, 255)", "rgb(255, 215, 0)", "rgb(255, 105, 180)",
+             "rgb(0, 128, 0)", "rgb(255, 0, 0)", "rgb(139, 0, 139)", "rgb(0, 0, 0)"]
+  if(num < pre.length) return pre[num];
+  return "rgb(" + int(random() * 256) + ", " + int(random() * 256) + ", " + int(random() * 256) + ")";
+}
+
+function get_EENI(data){
+  var datasets = []
+  for(var key in data){
+    if(key == "TITLE") continue;
+    var data_tmp = {
+      label: key,
+      backgroundColor: "transparent",
+      borderColor: get_color(datasets.length),
+      data: data[key],
+      lineTension: 0,
+      pointRadius: 5,
+      pointBackgroundColor: "rgba(255,255,255,1)",
+      pointHoverBackgroundColor: "rgba(255,255,255,1)",
+      pointBorderWidth: 2,
+      pointHoverRadius: 7,
+      pointHoverBorderWidth: 1
+    }
+    datasets.push(data_tmp);
+  }
+  console.log(datasets)
+  var config = {
+    type: "line",
+    data: {
+      labels: data["TITLE"],
+      datasets: datasets
+    },
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      legend: {
+        display: true
+      },
+      scales: {
+          xAxes: [
+            {
+              gridLines: {
+                display: true
+              },
+              ticks: {
+                display: true
+              }
+            }
+          ]
+      },
+      tooltips: {
+        mode: "index",
+        intersect: true,
+        titleFontColor: "#888",
+        bodyFontColor: "#555",
+        titleFontSize: 12,
+        bodyFontSize: 15,
+        backgroundColor: "rgba(256,256,256,0.95)",
+        displayColors: true,
+        xPadding: 5,
+        yPadding: 7,
+        borderColor: "rgba(220, 220, 220, 0.9)",
+        borderWidth: 2,          
+        caretSize: 10,
+        caretPadding: 5
+      }
+    }
+  };
+  return config;
+}

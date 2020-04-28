@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}{% endblock %}
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card card-default">
+	<div class="card-header card-header-border-bottom">
+		<h2>上传数据集</h2>
+	</div>
+
+	<div class="card-body">
+		<form action="." method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<table>
+			{% for field in form %}
+				<tr>
+					<td>{{ field.label_tag }}</td>
+					<td>{{ field }}</td>
+					<td>{{ field.errors }}</td>
+				</tr>
+			{% endfor %}
+			</table>
+            <!-- 数据集标题 -->
+			<div class="form-group">
+				<label>数据集名称：</label>
+				<input type="text" class="form-control" placeholder="Name for the dataset,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="name" id="name" required="required">
+			</div>
+            <!-- 数据集描述 -->
+            <div class="form-group">
+                <label for="description">数据集内容描述：</label>
+                <!-- 文本区域 -->
+                <textarea type="text"
+                          class="form-control"
+                          id="description"
+                          name="description"
+                          rows="5"
+                          placeholder="请输入对比赛的简单描述"
+                          required="required"
+                ></textarea>
+            </div>
+            <!-- 数据集规格描述 -->
+            <div class="form-group">
+                <label for="description">数据集规格描述：</label>
+                <!-- 文本区域 -->
+                <textarea type="text"
+                          class="form-control"
+                          id="specifications"
+                          name="specifications"
+                          rows="1"
+                          placeholder="请输入对数据集规格的简单描述"
+                          required="required"
+                ></textarea>
+            </div>
+            <!-- 数据集类型描述 -->
+            <div class="form-group">
+                <label for="description">数据集类型描述：</label>
+                <!-- 文本区域 -->
+                <textarea type="text"
+                          class="form-control"
+                          id="dataType"
+                          name="dataType"
+                          rows="1"
+                          placeholder="请输入对数据类型的简单描述"
+                          required="required"
+                ></textarea>
+            </div>
+            <!-- 是否公开数据集 -->
+            <div class="form-group">
+                <label>数据集公开情况：</label>
+                <select class="form-control custom-select" name="public" id="public" required="required">
+                    <option value="公开">公开</option>
+                    <option value="私有">私有</option>
+                </select>
+            </div>
+            <!-- 数据集文件 -->
+            <div class="form-group">
+                <label for="dataset">数据集文件：</label>
+                <input type="file" class="form-control-file" name="datasets" id="datasets" required="required">
+            </div>
+			<div class="form-footer pt-4 pt-5 mt-4 border-top">
+				<button type="submit" class="btn btn-primary btn-default" name="submit_btn">提交</button>
+				<!--button type="submit" class="btn btn-primary">完成</button-->
+			</div>
+		</form>
+
+	</div>
+</div>
+
+
+{% endblock %}

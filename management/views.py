@@ -405,6 +405,11 @@ def DatasetSubmit(request):
         context = {'dataset_submit_form': dataset_submit_form}
         return render(request, 'datasetSubmit.html', context)
 
+def XmlSubmit(request):
+    if request.method == "POST":
+        pass
+        
+
 def dataset_list(request):
     dataset_list = Datasets.objects.all()
     user = User.objects.get(id=request.user.id)
