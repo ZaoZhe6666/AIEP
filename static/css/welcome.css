@@ -1117,7 +1117,7 @@ body {
   display: none;
 }
 .banner .banner-box .banner-computer {
-  background-image: url("https://shared-https.ydstatic.com/market/ynote-website/banner-win.png");
+  background-image: url("/static/img/result.png");
   background-repeat: no-repeat;
   background-position: center top;
   background-size: cover;
