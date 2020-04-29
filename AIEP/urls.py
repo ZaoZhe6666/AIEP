@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^management/', include('management.urls')),
     url(r'captcha', include('captcha.urls')),
-    path(r'inbox/notifications/', include(notifications.urls, namespace='notifications')),
+    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
     path('privileges/', include('privileges.urls', namespace='privileges')),
 ]
 urlpatterns += staticfiles_urlpatterns()

@@ -10,83 +10,186 @@
 	<script src="/static/plugins/BeerSlider.js"></script>
 </head>
 <body>
-	<div class="row">
-		<div id="div_currency" class="col-12 col-lg-6">
-			<div class="card card-default">
-				<div class="card-header pt-5 flex-column align-items-start">
-					<h4 class="text-dark mb-4">准确率</h4>
-					<div class="mb-3">
-						<p class="my-2">柱状图描述多组数据准确率</p>
+	<div class="content">
+		<div class="row">
+			<div id="div_data_size" class="col-12 col-lg-6">
+				<div class="card card-default">
+					<div class="card-header pt-5 flex-column align-items-start">
+						<h4 class="text-dark mb-4">数据规模分析</h4>
 					</div>
-				</div>
-				<div class="card-body">
-					<canvas id="currency"></canvas>
+					<div class="card-body" id="data_size">
+						<canvas id="data_size_canvas" class="chartjs-render-monitor" width="500" height="263"></canvas>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-12 col-lg-6" id="div_edge_dis">
-			<div class="card card-default">
-		        <div class="border-right">
-		        	<div class="card-header justify-content-center">
-						<h2 class="text-center">决策边界距离</h2>
+			<div id="div_method_describe" class="col-12 col-lg-6">
+				<div class="card card-default">
+					<div class="card-header pt-5 flex-column align-items-start">
+						<h4 class="text-dark mb-4">所选方法介绍</h4>
 					</div>
-		            <ul class="nav nav-tabs nav-style-border justify-content-between justify-content-xl-start border-bottom" role="tablist" id="edge_dis_menu">
-		            </ul>
-		            <div class="card-body">
-		                <div class="tab-content" id="myTabContent">
-		                    <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="home-tab">
-		                        <canvas id="edge_dis"></canvas>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-	    </div>
-	    <div class="col-xl-8" id="div_sensitivity">
-			<div class="card card-default">
-		        <div class="border-right">
-		        	<div class="card-header justify-content-center">
-						<h2 class="text-center">Sensitivity</h2>
-					</div>
-		            <ul class="nav nav-tabs nav-style-border justify-content-between justify-content-xl-start border-bottom" role="tablist" id="sensitivity_menu">
-		            </ul>
-		            <div class="card-body">
-		                <div class="tab-content" id="myTabContent">
-		                    <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="home-tab">
-		                        <canvas id="sensitivity"></canvas>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-	    </div>
-		<div class="col-12" id="pic_scroll">
-			<div class="card card-default pb-5">
-				<div class="card-header pt-5 flex-column align-items-start">
-					<h4 class="text-dark mb-4">攻击结果对比</h4>
-					<div class="mb-3">
-						<p class="my-2">点击图片移动浮条，查看攻击结果对比</p>
-					</div>
-				</div>
-				<div id="jssor_1" style="position: relative; margin: 0 auto; top: 20px; left: 0px; width: 960px; height: 480px; overflow: hidden; visibility: hidden; background-color: #FFFFFF;">
-					<div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 240px; width: 720px; height: 480px; overflow: hidden;" id="pic_data">
-					</div>
-					<!-- Thumbnail Navigator -->
-					<div data-u="thumbnavigator" class="jssort01-99-66" style="position:absolute;left:0px;top:0px;width:240px;height:480px;" data-autocenter="2">
-						<!-- Thumbnail Item Skin Begin -->
-						<div data-u="slides" style="cursor: default;">
-							<div data-u="prototype" class="p">
-								<div class="w">
-									<div data-u="thumbnailtemplate" class="t"></div>
-								</div>
-								<div class="c"></div>
+					<div class="card-body" id="method_describe">
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active show" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">攻击算法</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">评价算法</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">加固算法</a>
+							</li>
+						</ul>
+						<div class="tab-content" id="myTabContent1">
+							<div class="tab-pane pt-3 fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+								FGSM的全称是Fast Gradient Sign Method(快速梯度下降法），在白盒环境下，通过求出模型对输入的导数，然后用符号函数得到其具体的梯度方向，接着乘以一个步长，得到的“扰动”加在原来的输入  上就得到了在FGSM攻击下的样本。
+							</div>
+							<div class="tab-pane pt-3 fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+								准确率(accuracy),其定义是: 对于给定的测试数据集，分类器正确分类的样本数与总样本数之比。也就是损失函数是0-1损失时测试数据集上的准确率
+							</div>
+							<div class="tab-pane pt-3 fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+								Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+								irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 							</div>
 						</div>
-						<!-- Thumbnail Item Skin End -->
 					</div>
-					<!-- Arrow Navigator -->
-					<span data-u="arrowleft" class="jssora05l" style="top:0px;left:248px;width:40px;height:40px;" data-autocenter="2"></span>
-					<span data-u="arrowright" class="jssora05r" style="top:0px;right:8px;width:40px;height:40px;" data-autocenter="2"></span>
+				</div>
+			</div>
+			<div id="div_table" class="col-12 col-lg-12">
+				<div class="card card-default">
+					<div class="card-header pt-5 flex-column align-items-start">
+						<h4 class="text-dark mb-4">结果分析</h4>
+						<div class="mb-3">
+							<p class="my-2">各攻击方法下，攻击成功率</p>
+						</div>
+					</div>
+					<div class="card-body" id="table_res">
+					</div>
+				</div>
+			</div>
+			<div id="div_cam" class="col-12 col-lg-12">
+				<div class="card card-default">
+					<div class="card-header pt-5 flex-column align-items-start">
+						<h4 class="text-dark mb-4">可解释性分析 - 图像热力图分析</h4>
+						<div class="mb-3">
+							<p class="my-2">使用热力图对比攻击前后，图像重点关注区域</p>
+						</div>
+					</div>
+					<div class="card-body">
+						<div id="carouselTestimonial" class="carousel carousel-testimonial slide" data-ride="carousel">
+							<ol class="carousel-indicators indicator-success" id="cam_roll">
+							</ol>
+							<div class="carousel-inner" id="cam_pic">
+							</div>
+							<a class="carousel-control-prev" href="#carouselTestimonial" role="button" data-slide="prev">
+								<span class="mdi mdi-chevron-left mdi-36px" aria-hidden="true"></span>
+								<span class="sr-only">Previous</span>
+							</a>
+							<a class="carousel-control-next" href="#carouselTestimonial" role="button" data-slide="next">
+								<span class="mdi mdi-chevron-right mdi-36px" aria-hidden="true"></span>
+								<span class="sr-only">Next</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="div_ce" class="col-12 col-lg-12">
+				<div class="card card-default">
+					<div class="card-header pt-5 flex-column align-items-start">
+						<h4 class="text-dark mb-4">可解释性分析 - mCE及Relative mCE指标分析</h4>
+					</div>
+					<div class="card-body">
+						<canvas id="mce" height="309" width="397" class="chartjs-render-monitor" style="display: block; height: 270px; width: 347px;"></canvas>
+						<p id="mce_describe"></p>
+					</div>
+				</div>
+			</div>
+			<div id="div_eeni" class="col-12 col-lg-12">
+				<div class="card card-default">
+					<div class="card-header pt-5 flex-column align-items-start">
+						<h4 class="text-dark mb-4">可解释性分析 - ε-Empirical Noise Insensitivity分析</h4>
+					</div>
+					<div class="card-body" id="eeni_card">
+					</div>
+				</div>
+			</div>
+			<div id="div_currency" class="col-12 col-lg-6">
+				<div class="card card-default">
+					<div class="card-header pt-5 flex-column align-items-start">
+						<h4 class="text-dark mb-4">准确率</h4>
+						<div class="mb-3">
+							<p class="my-2">柱状图描述多组数据准确率</p>
+						</div>
+					</div>
+					<div class="card-body">
+						<canvas id="currency"></canvas>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-lg-6" id="div_edge_dis">
+				<div class="card card-default">
+			        <div class="border-right">
+			        	<div class="card-header justify-content-center">
+							<h2 class="text-center">决策边界距离</h2>
+						</div>
+			            <ul class="nav nav-tabs nav-style-border justify-content-between justify-content-xl-start border-bottom" role="tablist" id="edge_dis_menu">
+			            </ul>
+			            <div class="card-body">
+			                <div class="tab-content" id="myTabContent">
+			                    <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="home-tab">
+			                        <canvas id="edge_dis"></canvas>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </div>
+		    <div class="col-xl-8" id="div_sensitivity">
+				<div class="card card-default">
+			        <div class="border-right">
+			        	<div class="card-header justify-content-center">
+							<h2 class="text-center">Sensitivity</h2>
+						</div>
+			            <ul class="nav nav-tabs nav-style-border justify-content-between justify-content-xl-start border-bottom" role="tablist" id="sensitivity_menu">
+			            </ul>
+			            <div class="card-body">
+			                <div class="tab-content" id="myTabContent">
+			                    <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="home-tab">
+			                        <canvas id="sensitivity"></canvas>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </div>
+			<div class="col-12" id="pic_scroll">
+				<div class="card card-default pb-5">
+					<div class="card-header pt-5 flex-column align-items-start">
+						<h4 class="text-dark mb-4">攻击结果对比</h4>
+						<div class="mb-3">
+							<p class="my-2">点击图片移动浮条，查看攻击结果对比</p>
+						</div>
+					</div>
+					<div id="jssor_1" style="position: relative; margin: 0 auto; top: 20px; left: 0px; width: 960px; height: 480px; overflow: hidden; visibility: hidden; background-color: #FFFFFF;">
+						<div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 240px; width: 720px; height: 480px; overflow: hidden;" id="pic_data">
+						</div>
+						<!-- Thumbnail Navigator -->
+						<div data-u="thumbnavigator" class="jssort01-99-66" style="position:absolute;left:0px;top:0px;width:240px;height:480px;" data-autocenter="2">
+							<!-- Thumbnail Item Skin Begin -->
+							<div data-u="slides" style="cursor: default;">
+								<div data-u="prototype" class="p">
+									<div class="w">
+										<div data-u="thumbnailtemplate" class="t"></div>
+									</div>
+									<div class="c"></div>
+								</div>
+							</div>
+							<!-- Thumbnail Item Skin End -->
+						</div>
+						<!-- Arrow Navigator -->
+						<span data-u="arrowleft" class="jssora05l" style="top:0px;left:248px;width:40px;height:40px;" data-autocenter="2"></span>
+						<span data-u="arrowright" class="jssora05r" style="top:0px;right:8px;width:40px;height:40px;" data-autocenter="2"></span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -96,6 +199,82 @@
 
 <script type="text/javascript">
 	var dataFromDjango = {{ data|safe }}
+
+    var data_size = document.getElementById("data_size_canvas");
+	Chart.PolarArea(data_size, get_data_size());
+
+	// 以表格形式给出的评测结果
+	var canvas_table = document.getElementById("table_res");
+	if (canvas_table != null && dataFromDjango["table_list"] != null) {
+		var table_infor = "";
+		for(var key in dataFromDjango["table_list"]){
+			if(table_infor != ""){
+				table_infor += "<br>"
+			}
+			console.log(key)
+			table_infor += "<table calss='table table-hover' border= '1'   width= '80%'>";
+			table_infor += read_table_demo(dataFromDjango["table_list"][key]["TITLE"][2],
+				dataFromDjango["table_list"][key]["TITLE"][3],
+				dataFromDjango["table_list"][key]["origin"],
+				dataFromDjango["table_list"][key]["nat"]);
+			table_infor += "</table>"
+		}
+
+		// var table_infor = read_table(dataFromDjango["table_list"]);
+		$("#table_res").append(table_infor);
+	}
+	else{
+		$("#div_table").hide();
+	}
+
+	// 通过热力图，给出可解释性说明
+	var canvas_cam = document.getElementById("div_cam");
+	if (canvas_cam != null && dataFromDjango["cam"] != null) {
+		var cam_infor = cam_pic_show(dataFromDjango["cam"]);
+		$("#cam_pic").append(cam_infor);
+		var cam_roll = cam_rolling(Object.keys(dataFromDjango["cam"]).length - 1);
+		$("#cam_roll").append(cam_roll);
+	}
+	else{
+		$("#div_cam").hide();
+	}
+
+	// 通过mCE分析，给出可解释性说明
+	var canvas_mce = document.getElementById("mce");
+	if(canvas_mce != null && dataFromDjango["mCE"] != null){
+		var mce_config = get_CE(dataFromDjango["mCE"]);
+		new Chart(canvas_mce, mce_config);
+		$("#mce_describe").append(dataFromDjango["mCE"]["DESCRIBE"]);
+	}
+	else{
+		$("#div_ce").hide();
+	}
+
+	//通过ε-Empirical Noise Insensitivity分析，给出可解释性说明
+	var eeni_card = document.getElementById("eeni_card");
+	if(eeni_card != null && dataFromDjango["EENI"] != null){
+		var count = 0;
+		for(var key in dataFromDjango["EENI"]){
+			var canvas_html = "";
+			if(count != 0){
+				canvas_html += "<br>";
+			}
+			canvas_html += "<canvas id='EENI" + count + "' width='600px'>";
+			console.log(dataFromDjango["EENI"][key]);
+			var eeni_config = get_EENI(dataFromDjango["EENI"][key]);
+			canvas_html += eeni_config + "</canvas>";
+			$("#eeni_card").append(canvas_html);
+			var canvas_obj = document.getElementById("EENI" + count);
+			new Chart(canvas_obj, eeni_config);
+			console.log(canvas_html);
+			count += 1;
+		}
+	}
+	else{
+		$("#div_eeni").hide();
+	}
+
+
 	var canvas_currency = document.getElementById("currency");
 	if (canvas_currency != null && dataFromDjango["currency"] != null) {
 		new Chart(canvas_currency, cube_canvas(dataFromDjango["currency"]["labels"], dataFromDjango["currency"]["datasets"]));
@@ -187,6 +366,9 @@
 		for(var i = 0; i < dataFromDjango["result_in_pair"]["origin"].length; i++){
 			new BeerSlider(document.getElementById('pair_' + i));
 		}
+	}
+	else{
+		$("#pic_scroll").hide();
 	}
 </script>
 

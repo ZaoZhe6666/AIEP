@@ -6,8 +6,8 @@ from AIEP.settings import BASE_DIR
 import os
 import random
 from django.contrib.auth.models import User
-from .forms import TaskSubmitForm, RunSubmitForm, TaskInnerSubmitForm, DatasetSubmitForm, CommentForm
-from .models import TaskSubmit, TaskColumn, ShowImgAfterUpload, runSubmit, Task_User, Comment, Datasets
+from .forms import TaskSubmitForm, RunSubmitForm, TaskInnerSubmitForm, DatasetSubmitForm, CommentForm, ForumSubmitForm
+from .models import TaskSubmit, TaskColumn, ShowImgAfterUpload, runSubmit, Task_User, Comment, Datasets, Forum
 import subprocess
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -20,6 +20,10 @@ from django.forms import widgets
 from django.forms import fields
 from django.forms import ModelChoiceField
 import random
+from notifications.signals import notify
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
 
 
 status_num = []
@@ -405,6 +409,12 @@ def DatasetSubmit(request):
         context = {'dataset_submit_form': dataset_submit_form}
         return render(request, 'datasetSubmit.html', context)
 
+
+def XmlSubmit(request):
+    if request.method == "POST":
+        pass
+
+
 def dataset_list(request):
     dataset_list = Datasets.objects.all()
     user = User.objects.get(id=request.user.id)
@@ -434,9 +444,30 @@ def post_comment(request, id, parent_comment_id=None):
                 # 被回复人
                 new_comment.reply_to = parent_comment.user
                 new_comment.save()
+
+                # 新增代码，给其他用户发送通知
+                if not parent_comment.user.is_superuser:
+                    notify.send(
+                        request.user,
+                        recipient=parent_comment.user,
+                        verb='回复了你',
+                        target=task,
+                        action_object=new_comment,
+                    )
+
                 return HttpResponse('200 OK')
 
             new_comment.save()
+            # 新增代码，给管理员发送通知
+            if not request.user.is_superuser:
+                notify.send(
+                    request.user,
+                    recipient=User.objects.filter(is_superuser=1),
+                    verb='回复了你',
+                    target=task,
+                    action_object=new_comment,
+                )
+
             return redirect(task)
         else:
             return HttpResponse("表单内容有误，请重新填写。")
@@ -450,5 +481,54 @@ def post_comment(request, id, parent_comment_id=None):
         }
         return render(request, 'reply.html', context)
 
+class CommentNoticeListView(LoginRequiredMixin, ListView):
+    """通知列表"""
+    # 上下文的名称
+    context_object_name = 'notices'
+    # 模板位置
+    template_name = 'noticelist.html'
+    # 登录重定向
+    login_url = '/privilege/login/'
 
+    # 未读通知的查询集
+    def get_queryset(self):
+        return self.request.user.notifications.unread()
+
+
+class CommentNoticeUpdateView(View):
+    """更新通知状态"""
+    # 处理 get 请求
+    def get(self, request):
+        # 获取未读消息
+        notice_id = request.GET.get('notice_id')
+        # 更新单条通知
+        if notice_id:
+            task = TaskSubmit.objects.get(id=request.GET.get('task_id'))
+            request.user.notifications.get(id=notice_id).mark_as_read()
+            return redirect(task)
+        # 更新全部通知
+        else:
+            request.user.notifications.mark_all_as_read()
+            return redirect('management:notice_list')
+
+def forum_list(request):
+    forums = Forum.objects.all()
+    context = {'forums': forums}
+    return render(request, 'forumlist.html', context)
+
+
+def forum_create(request):
+    if request.method == "POST":
+        forum_post_form = ForumSubmitForm(request.POST)
+        if forum_post_form.is_valid():
+            new_forum = forum_post_form.save(commit=False)
+            new_forum.author = request.user
+            new_forum.save()
+            return redirect("management:forum_list")
+        else:
+            return HttpResponse("表单内容有误，请重新填写。")
+    else:
+        forum_post_form = ForumSubmitForm()
+        context = { 'forum_post_form ': forum_post_form  }
+        return render(request, 'forum_create.html', context)
 

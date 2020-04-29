@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import TaskSubmit, runSubmit, Datasets, Comment
+from .models import TaskSubmit, runSubmit, Datasets, Comment, Forum
 
 class TaskSubmitForm(forms.ModelForm):
     class Meta:
@@ -26,4 +26,9 @@ class DatasetSubmitForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['body']
+        fields = ('body',)
+
+class ForumSubmitForm(forms.ModelForm):
+    class Meta:
+        model = Forum
+        fields = ('title', 'content', 'tags')

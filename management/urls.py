@@ -31,6 +31,12 @@ urlpatterns = [
     path('comment/<int:id>/<int:parent_comment_id>', views.post_comment, name='comment_reply'),
     path('dataset/list/', views.dataset_list, name='dataset_list'),
     path('dataset/submit/', views.DatasetSubmit, name='dataset_submit'),
+    # 通知列表
+    path('notice_list/', views.CommentNoticeListView.as_view(), name='notice_list'),
+    # 更新通知状态
+    path('notice_update/', views.CommentNoticeUpdateView.as_view(), name='notice_update'),
+    path('forum/list/', views.forum_list, name='forum_list'),
+    path('forum/create/', views.forum_create, name='forum_create'),
 
     path('task_demo', views.task_demo, name='task_demo'),
 ]

@@ -20,83 +20,38 @@
 			</table>
 			<div class="form-group">
 				<label for="">项目名称：</label>
-				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="title". id="'title" required="required">
-			</div>
-			<div class="row">
-				<div>
-					镜像：
-					<select class="custom-select" name="img" required="required">
-						<option value="One">One</option>
-						<option value="Two">Two</option>
-						<option value="Three">Three</option>
-					</select>
-				</div>
-				<div>
-					GPU类型：
-					<select class="custom-select" name="gpu" required="required">
-						<option value="gtx1080ti">gtx1080ti</option>
-						<option value="Two">Two</option>
-						<option value="Three">Three</option>
-					</select>
-				</div>
+				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="title" id="'title" required="required">
 			</div>
 			<div class="form-group">
 				<label>项目简介：</label>
-				<textarea class="form-control" placeholder="请输入对项目的简单描述" rows="5" name="description", id="description" required="required"></textarea>
-			</div>
-			<div class="form-group">
-				<label for="">retryCount：</label>
-				<input type="text" class="form-control" placeholder="Job retry count,job will automatically restart when it failed" name="retrycount", id="retrycount" required="required">
+				<textarea class="form-control" placeholder="请输入对项目的简单描述" rows="5" name="description" id="description" required="required"></textarea>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">选择数据集</label>
-				<select class="form-control" name="dataset" required="required">
+				<select class="form-control" name="dataset" required="required" id="dataset">
 					<option value="cifar-20">cifar-20</option>
 					<option value="cifar-100">cifar-100</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">选择攻击算法</label>
-				<select class="form-control" name="dataset" required="required">
+				<select class="form-control" name="algorithm" required="required" id="algorithm">
 					<option value="deepfool">deepfool</option>
 					<option value="jsm">jsm</option>
+					<option value="fgsm">FGSM</option>
+					<option value="PGD">PGD</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">评测指标</label>
-
-<!-- 				<select class="form-control" name="evaluate">
-					<option>准确度</option>
-					<option>决策边界距离</option>
-					<option>敏感度</option>
-					<option>attention map</option>
-				</select> -->
-				<label class="control outlined control-checkbox">准确度
-					<input type="checkbox" />
-					<div class="control-indicator"></div>
-				</label>
-				<label class="control outlined control-checkbox">决策边界距离
-					<input type="checkbox" />
-					<div class="control-indicator"></div>
-				</label>
-				<label class="control outlined control-checkbox">敏感度
-					<input type="checkbox" />
-					<div class="control-indicator"></div>
-				</label>
-				<label class="control outlined control-checkbox">图像对比结果
-					<input type="checkbox" />
-					<div class="control-indicator"></div>
-				</label>
-
-				<!-- class="form-control" name="ind">
-					<option value="套餐一">套餐1</option>
-					<option value="套餐二">套餐2</option>
-				</select-->
-
+				<select class="form-control" name="ind">
+					<option value="类型一">类型一</option>
+					<option value="类型二">类型二</option>
+				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlFile1">上传模型文件</label>
-				<input type="file" class="form-control-file" name="model", placeholder="The name of your file should have the same name of your model" required="required">
+				<input type="file" class="form-control-file" name="model" id="imodel" placeholder="The name of your file should have the same name of your model" required="required">
 			</div>
 			<div class="form-footer pt-4 pt-5 mt-4 border-top">
 				<button type="submit" class="btn btn-primary btn-default" name="submit_btn" onclick="submit_query()">Submit</button>

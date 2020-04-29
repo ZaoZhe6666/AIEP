@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load notifications_tags %}
+    {% notifications_unread as unread_count %}
 
     <title>AI检测平台</title>
 
@@ -191,7 +193,12 @@
                   </li>
 
 
-
+                  <li >
+                    <a class="sidenav-item-link" href="/management/forum/list/">
+                      <i class="mdi mdi-forum"></i>
+                      <span class="nav-text">论坛</span>
+                    </a>
+                  </li>
 
 
                   <li  class="has-sub" >
@@ -261,7 +268,7 @@
 
               <div class="navbar-right ">
                 <ul class="nav navbar-nav">
-                  <li class="dropdown notifications-menu">
+                  <!--li class="dropdown notifications-menu">
                     <button class="dropdown-toggle" data-toggle="dropdown">
                       <i class="mdi mdi-bell-outline"></i>
                     </button>
@@ -301,7 +308,7 @@
                         <a class="text-center" href="#"> View All </a>
                       </li>
                     </ul>
-                  </li>
+                  </li-->
                   <!-- User Account -->
                   {% if not request.user.is_authenticated %}
                     <div class="d-inline-block">
@@ -313,6 +320,19 @@
                     <li class="dropdown user-menu">
                       <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                         <img src="#" class="user-image" id="user-avatar-top1"/>
+
+                        {% if unread_count %}
+                            <svg viewBox="0 0 8 8"
+                                 width="8px"
+                                 height="8px">
+                                <circle cx="4"
+                                        cy="4"
+                                        r="4"
+                                        fill="#ff6b6b"
+                                        ></circle>
+                            </svg>
+                        {% endif %}
+
                         <span class="d-none d-lg-inline-block">{{request.user.username}}</span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-right">
@@ -330,8 +350,11 @@
                           </a>
                         </li>
                         <li>
-                          <a href="email-inbox.html">
-                            <i class="mdi mdi-email"></i> Message
+                          <a class="dropdown-item" href="{% url "management:notice_list" %}">
+                              <i class="mdi mdi-email"></i> Message
+                              {% if unread_count %}
+                              <span class="badge badge-danger">{{ unread_count }}</span>
+                              {% endif %}
                           </a>
                         </li>
                         <li>

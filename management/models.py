@@ -97,9 +97,10 @@ class runSubmit(models.Model):
         ('类型二', '类型二'),
     )
     methods = (
-        ('算法一', '算法一'),
-        ('算法二', '算法二'),
-        ('算法三', '算法三'),
+        ('deepfool', 'deepfool'),
+        ('jsm', 'jsm'),
+        ('fgsm', 'fgsm'),
+        ('PGD', 'PGD'),
     )
     state = (
         ('评测中', '评测中'),
@@ -113,7 +114,7 @@ class runSubmit(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     dataset = models.CharField(max_length=20, default="default")
     created = models.DateTimeField(default=timezone.now)
-    algorithm = models.CharField(max_length=10, choices=methods, help_text='攻击算法', default="算法一")
+    algorithm = models.CharField(max_length=10, choices=methods, help_text='攻击算法', default="deepfool")
     #评测指标
     ind = models.CharField(max_length=10, choices=index, help_text='评测指标', default="类型一")
     #模型文件
@@ -190,3 +191,26 @@ class Comment(MPTTModel):
 
     def __str__(self):
         return self.body[:20]
+
+class Forum(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='creator')
+    title = models.CharField(max_length=20)
+    content = models.TextField()
+    created = models.DateTimeField(default=timezone.now)
+    tags = TaggableManager(blank=True)
+    participant = models.ManyToManyField(User)
+    total_views = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return self.title
+
+    def created_recently(self):
+        diff = timezone.now() - self.created
+
+        if diff.days == 0 and diff.seconds >= 0 and diff.seconds < 60:
+            return True
+        else:
+            return False
