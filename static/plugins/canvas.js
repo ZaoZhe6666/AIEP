@@ -322,28 +322,25 @@ function pic_in_pair(id, ori_path, attack_path, style){
 	return html;
 }
 
-function read_table_demo(att_name, param_list, origin, nat){
-  console.log(param_list)
-  console.log(origin)
-  console.log(nat)
-  var html = "<thead><tr align='center'><td rowspan='2'>RESNET</td>"
+function read_table_list(data){
+  console.log(data)
+  var html = "<thead><tr align='center'><td rowspan='2'>" + data["TITLE"][0] + "</td>"
   html += "<td rowspan='2'>CLEAN</td>"
-  block_num = origin.length - 2;
-  html += "<td colspan='" + block_num + "'>" + att_name + "</td></tr><tr align='center'>"
-  for(var param in param_list){
-    html += "<td>" + param_list[param] + "</td>"
+  block_num = data["TITLE"][3].length;
+  html += "<td colspan='" + block_num + "'>" + data["TITLE"][2] + "</td></tr><tr align='center'>"
+  for(var param in data["TITLE"][3]){
+    html += "<td>" + data["TITLE"][3][param] + "</td>"
   }
-  html += "</tr></thead>"
-  html += "<tbody><tr align='center'>"
-  for(var param in origin){
-    html += "<td>" + origin[param] + "</td>"
+  html += "</tr></thead><tbody>";
+  // 添加具体表格内容，一个内容一行
+  for(var key in data){
+    if(key == "TITLE") continue;
+    html += "<tr align='center'>";
+    for(var param in data[key]){
+      html += "<td>" + data[key][param] + "</td>";
+    }
+    html += "</tr>";
   }
-  html += "</tr>"
-  html += "<tr align='center'>"
-  for(var param in nat){
-    html += "<td>" + nat[param] + "</td>"
-  }
-  html += "</tr>"
   html += "</tbody>"
   return html;
 }

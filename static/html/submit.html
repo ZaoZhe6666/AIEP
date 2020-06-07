@@ -9,7 +9,7 @@
 
 	<div class="card-body">
 		<form action="." method="post" enctype="multipart/form-data">
-			{% csrf_token %}
+			<!-- {% csrf_token %}
 			<table>
 			{% for field in form %}
 				<tr>
@@ -18,7 +18,7 @@
 					<td>{{ field.errors }}</td>
 				</tr>
 			{% endfor %}
-			</table>
+			</table> -->
 			<div class="form-group">
 				<label for="">项目名称：</label>
 				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="title" id="'title" required="required">
@@ -30,29 +30,35 @@
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">选择数据集</label>
 				<select class="form-control" name="dataset" required="required" id="dataset">
-					<option value="cifar-20">cifar-20</option>
-					<option value="cifar-100">cifar-100</option>
+					<option value="cifar-10">cifar-10</option>
+					<option value="ImageNet">ImageNet</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">选择攻击算法</label>
-				<select class="form-control" name="algorithm" required="required" id="algorithm">
-					<option value="deepfool">deepfool</option>
-					<option value="jsm">jsm</option>
-					<option value="fgsm">FGSM</option>
+				<input type="checkbox" value="deepfool" name="attack_method">DEEPFOOL
+				<input type="checkbox" value="FGSM" name="attack_method">FGSM
+				<input type="checkbox" value="PGD" name="attack_method">PGD
+				<input type="checkbox" value="ILLC" name="attack_method">ILLC
+				<!-- <select class="form-control" name="attack_method">
+					<option value="FGSM">FGSM</option>
 					<option value="PGD">PGD</option>
-				</select>
+				</select> -->
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect12">评测指标</label>
-				<select class="form-control" name="ind">
-					<option value="类型一">类型一</option>
-					<option value="类型二">类型二</option>
+				<select class="form-control" name="evaluate_method">
+					<option value="ACC">ACC</option>
+					<option value="ACTC">ACTC</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlFile1">上传模型文件</label>
-				<input type="file" class="form-control-file" name="model" id="imodel" placeholder="The name of your file should have the same name of your model" required="required">
+				<input type="file" class="form-control-file" name="model" id="model" placeholder="The name of your file should have the same name of your model" required="required">
+			</div>
+			<div class="form-group">
+				<label for="exampleFormControlFile1">上传数据文件</label>
+				<input type="file" class="form-control-file" name="model_data" id="model_data" placeholder="The name of your file should have the same name of your model" required="required">
 			</div>
 			<div class="form-footer pt-4 pt-5 mt-4 border-top">
 				<button type="submit" class="btn btn-primary btn-default" name="submit_btn" onclick="submit_query()">Submit</button>

@@ -1,0 +1,1 @@
+{"table_list": {"FGSM": {"TITLE": ["ResNet2", "CLEAN", "FGSM", ["ε = 0.1"]], "Vanilla": ["Vanilla", 0, 0.1]}}}

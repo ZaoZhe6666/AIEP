@@ -26,10 +26,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 
 
-status_num = []
-status_name = []
-
-
 def welcome(request):
     return render_to_response('welcome.html')
 
@@ -41,12 +37,17 @@ def page_not_found(request, exception):
 @login_required(login_url='/privileges/login')
 def submit(request):
     if request.method == 'POST':
+        return submit_check(request)
+        # 表单适配
         run_submit_form = RunSubmitForm(request.POST)
         if run_submit_form.is_valid():
+            # 表单存储
             new_run = run_submit_form.save(commit=False)
             new_run.author = User.objects.get(id=request.user.id)
             new_run.modelname = request.FILES.get("model", None).name.split('.')[0][0:20]
             new_run.save()
+
+            
             now = int(time.time())
             time_array = time.localtime(now)
             time_part = time.strftime("%Y_%m_%d-%H%M%S", time_array)
@@ -68,8 +69,7 @@ def submit(request):
             # p = subprocess.Popen(
             #    "python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
             # except Exception as e:
-            # 	print(e)
-            set_status(['Accuracy', 'Decision Boundary', 'Sensitivity'])
+            #     print(e)
             return render(request, 'waiting.html')
             # return redirect("management:run_record")
         else:
@@ -91,50 +91,64 @@ def submit_check(request):
     if request.method == 'GET':
         return render(request, 'index.html')
     elif request.method == 'POST':
-        print("后端收到如下信息：", request.POST)
+        # print("后端收到如下信息：", request.body)
         now = int(time.time())
         time_array = time.localtime(now)
         time_part = time.strftime("%Y_%m_%d-%H%M%S", time_array)
-        upload_file = request.FILES.get('submit_model')
-        os.mkdir(BASE_DIR + "/static/upload/" + time_part)
+        save_path = BASE_DIR + "/static/upload/Results/" + time_part + "/"
+        os.mkdir(save_path)
 
-        if upload_file != None:
-            filename = time_part + '.' + upload_file.name.split('.')[-1]
-            filepath = os.path.join(BASE_DIR + "/static/upload/uploadfile/", filename)
+        # 添加进度分析文件
+        with open(save_path + "temp.txt", "w") as file:
+            percent_dic = {}
+            attack_method_list = request.POST.getlist("attack_method")
+            for key in attack_method_list:
+                percent_dic[key] = 0
+            file.write(json.dumps(percent_dic))
+
+        # 存储用户上传模型
+        upload_model = request.FILES.get('model')
+        model_name = ""
+        if upload_model != None:
+            filename = upload_model.name
+            filepath = os.path.join(save_path, filename)
+            model_name = filename.split('.')[0]
             f = open(filepath, 'wb')
-            for i in upload_file.chunks():
+            for i in upload_model.chunks():
                 f.write(i)
             f.close()
-        # print(request.POST.get("submit_proname"))
-        # print(request.POST.get("jingxiang"))
-        # print(request.POST.get("gpu_type"))
-        # print(request.POST.get("describe"))
-        # print(request.POST.get("retryCount"))
-        # print(request.POST.get("evaluate"))
-        # receive_data = json.loads(request.body.decode())
-        # print("I receive: ", receive_data)
-        # try:
-        # 	pro_name = receive_data["name"]
-        # 	pro_jingxiang = receive_data["jingxiang"]
-        # 	pro_gpu_type = receive_data["gpu_type"]
-        # 	pro_describe = receive_data["describe"]
-        # 	pro_retry = receive_data["retryCount"]
-        # 	pro_evalu = receive_data["evaluate"]
-        # 	# pro_model = receive_data["model"]
-        # 	print("name: ", pro_name)
-        # 	print("jingxiang: ", pro_jingxiang)
-        # 	print("gpu_type: ", pro_gpu_type)
-        # 	print("describe: ", pro_describe)
-        # 	print("retry: ", pro_retry)
-        # 	print("evalu: ", pro_evalu)
-        # 	# print("model: ", pro_model)
-        # output = subprocess.Popen("python D:/LABOR/temp/testimport.py --defense_model zhaoze_model")
-        p = subprocess.Popen(
-            "python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
-        # except Exception as e:
-        # 	print(e)
-        set_status(['Accuracy', 'Decision Boundary', 'Sensitivity'])
-    return render(request, 'waiting.html')
+        upload_model_data = request.FILES.get('model_data')
+        data_path = ""
+        if upload_model_data != None:
+            filename = time_part + '.' + upload_model_data.name.split('.')[-1]
+            data_path = save_path + filename
+            filepath = os.path.join(save_path, filename)
+            f = open(filepath, 'wb')
+            for i in upload_model_data.chunks():
+                f.write(i)
+            f.close()
+
+        # 执行算法
+        try:
+            Algorithm_DIR = "D:/LABOR/SUIBUAA_AIEP/test/"
+            attack_method_list = request.POST.getlist("attack_method")
+            evaluate_method = request.POST.get("evaluate_method")
+            for attack_method in attack_method_list:
+                command = "python " + Algorithm_DIR + "testimport.py"
+                command += " --attack_method " + attack_method
+                command += " --evaluation_method " + evaluate_method
+                command += " --save_path " + save_path
+                command += " --defense_model " + "static.upload.Results." + time_part + "." + model_name
+                command += " --model_defence_dir " + data_path
+                output = subprocess.Popen(command, cwd = Algorithm_DIR)
+        # p = subprocess.Popen(
+        #     "python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
+        except Exception as e:
+            print(e)
+        
+    return render(request, 'waiting.html', {
+        'data': json.dumps({'time_part' : time_part}),
+    })
 
 
 def showline(request):
@@ -171,6 +185,8 @@ def show_result(request, name):
             with open(path + "result.txt", "r", encoding="utf-8") as res:
                 js = res.read()
                 dic = json.loads(js)
+        if "temp.txt" in files:
+            dic["time_part"] = name
         for filename in files:
             if isImage(filename):
                 pic["name"].append(filename)
@@ -187,24 +203,11 @@ def ajax_load_menu(request):
             return JsonResponse(dirs, safe=False)
     return HttpResponse("Error")
 
-
-def show_status(request):
-    global status_num
-    for i in range(len(status_num)):
-        status_num[i] += random.randint(1, 20)
-    return JsonResponse(status_num, safe=False)
-
-
-def set_status(status):
-    global status_num
-    global status_name
-    status_name = status
-    status_num = [0] * len(status)
-
-
-def ajax_load_per_style(request):
-    global status_name
-    return JsonResponse(status_name, safe=False)
+def ajax_load_status(request):
+    time_part = request.GET.get("data")
+    with open(BASE_DIR + "/static/upload/Results/" + time_part + "/temp.txt", "r") as load_f:
+        status = json.load(load_f)
+    return JsonResponse(status, safe=False)
 
 
 

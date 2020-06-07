@@ -114,6 +114,7 @@ class runSubmit(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     dataset = models.CharField(max_length=20, default="default")
     created = models.DateTimeField(default=timezone.now)
+    # 攻击方法
     algorithm = models.CharField(max_length=10, choices=methods, help_text='攻击算法', default="deepfool")
     #评测指标
     ind = models.CharField(max_length=10, choices=index, help_text='评测指标', default="类型一")

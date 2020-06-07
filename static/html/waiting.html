@@ -5,47 +5,60 @@
 </div>
 <div class="card-body" id="percent_table">
 </div>
-<script>
+<script type="text/javascript">
+	var dataFromDjango = {{ data|safe }}
+	time_part = dataFromDjango["time_part"]
+
     $.ajax({
-        url: '/management/ajax/load_percent_style/',
+        url: '/management/ajax/load_status/',
         data:{
+        	'data': time_part
         },
         type: 'GET',
         dataType: 'json',
         success: function(data){
+            // console.log("init the table: " , data)
             var content = "";
-            $.each(data, function(i, item){
-                content += "<div class='progress mb-3'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: 0%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100' id='percent_"
-                content += i;
-                content += "'>";
-                content += item;
-                content += "</div></div>";
-            });
+            for(var key in data) {
+            	content += "<div class='progress mb-3'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: 0%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100' id='percent_"
+            	content += key;
+            	content += "'>";
+            	content += key;
+            	content += "</div></div>";
+            }
             document.getElementById("percent_table").innerHTML = content;
         }
     });
-</script>
-<script>
+
 	var get_percent = setInterval(function(){
-		var status_url = "/management/waiting/show_status";
-		$.getJSON(status_url, function(res){
-			var finish = true;
-			for(var i = 0; i < res.length; i++){
-				console.log(res);
-				if(res[i] > 100){
-					res[i] = 100;
+		var status_url = "/management/ajax/load_status/";
+		// console.log("will update " , time_part)
+		$.ajax({
+	        url: '/management/ajax/load_status/',
+	        data:{
+	        	'data': time_part
+	        },
+	        type: 'GET',
+	        dataType: 'json',
+	        success: function(data){
+	            // console.log("update the table: " , data)
+	            var finish = true;
+	            for(var key in data) {
+	            	if(data[key] >= 100){
+	            		data[key] = 100;
+	            	}
+	            	else{
+	            		finish = false;
+	            	}
+	            	$("#percent_" + key).width(data[key] + '%');
+	            }
+	            if(finish){
+					document.getElementById("working_status").innerHTML = "评估已完成";
+					clearInterval(get_percent);
+					return;
 				}
-				else{
-					finish = false;
-				}
-				$("#percent_" + i).width(res[i] + '%');
-			}
-			if(finish){
-				document.getElementById("working_status").innerHTML = "评估已完成";
-				clearInterval(get_percent);
-				return;
-			}
-		})
+	        }
+	    });
 	}, 1000);
 </script>
 {% endblock %}

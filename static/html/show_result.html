@@ -63,6 +63,8 @@
 							<p class="my-2">各攻击方法下，攻击成功率</p>
 						</div>
 					</div>
+					<div class="card-body" id="percent_of_res">
+					</div>
 					<div class="card-body" id="table_res">
 					</div>
 				</div>
@@ -199,11 +201,71 @@
 
 <script type="text/javascript">
 	var dataFromDjango = {{ data|safe }}
+	console.log(dataFromDjango)
 
     var data_size = document.getElementById("data_size_canvas");
 	Chart.PolarArea(data_size, get_data_size());
 
 	// 以表格形式给出的评测结果
+	// Part.1 未执行完的运算显示进度
+	var canvas_temp_percent = document.getElementById("percent_of_res");
+	if(canvas_temp_percent != null && dataFromDjango["time_part"] != null){
+		var time_part = dataFromDjango["time_part"]
+		$.ajax({
+	        url: '/management/ajax/load_status/',
+	        data:{
+	        	'data': time_part
+	        },
+	        type: 'GET',
+	        dataType: 'json',
+	        success: function(data){
+	            console.log("init the table: " , data)
+	            var content = "";
+	            for(var key in data) {
+	            	content += "<div class='progress mb-3'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: 0%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100' id='percent_"
+	            	content += key;
+	            	content += "'>";
+	            	content += key;
+	            	content += "</div></div>";
+	            }
+	            document.getElementById("percent_of_res").innerHTML = content;
+	        }
+	    });
+		var get_percent = setInterval(function(){
+			var status_url = "/management/ajax/load_status/";
+			console.log("will update " , time_part)
+			$.ajax({
+		        url: '/management/ajax/load_status/',
+		        data:{
+		        	'data': time_part
+		        },
+		        type: 'GET',
+		        dataType: 'json',
+		        success: function(data){
+		            // console.log("update the table: " , data)
+		            var finish = true;
+		            for(var key in data) {
+		            	if(data[key] >= 100){
+		            		data[key] = 100;
+		            	}
+		            	else{
+		            		finish = false;
+		            	}
+		            	$("#percent_" + key).width(data[key] + '%');
+		            }
+		            if(finish){
+						$("#percent_of_res").hide();
+						clearInterval(get_percent);
+						return;
+					}
+		        }
+		    });
+		}, 1000);
+	}
+	else{
+		$("#percent_of_res").hide();
+	}
+	// Part.2 执行完结果以表格展示
 	var canvas_table = document.getElementById("table_res");
 	if (canvas_table != null && dataFromDjango["table_list"] != null) {
 		var table_infor = "";
@@ -213,10 +275,7 @@
 			}
 			console.log(key)
 			table_infor += "<table calss='table table-hover' border= '1'   width= '80%'>";
-			table_infor += read_table_demo(dataFromDjango["table_list"][key]["TITLE"][2],
-				dataFromDjango["table_list"][key]["TITLE"][3],
-				dataFromDjango["table_list"][key]["origin"],
-				dataFromDjango["table_list"][key]["nat"]);
+			table_infor += read_table_list(dataFromDjango["table_list"][key]);
 			table_infor += "</table>"
 		}
 
