@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>AI检测平台</title>
+
+    <!-- GOOGLE FONTS -->
+    <link href="https://cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css" rel="stylesheet" />
+
+    <!-- INDEX CSS -->
+    <link id="index-css" rel="stylesheet" href="/static/css/index.css"/>
+    <script src="/static/plugins/nprogress.js"></script>
+  </head>
+
+
+  <body class="sidebar-fixed sidebar-dark header-light header-fixed" id="body">
+    <div class="wrapper">
+        <aside class="left-sidebar bg-sidebar">
+          <div id="sidebar" class="sidebar sidebar-with-footer">
+            <!-- Aplication Brand -->
+            <div class="app-brand">
+              <a>
+                <svg
+                  class="brand-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  preserveAspectRatio="xMidYMid"
+                  width="30"
+                  height="33"
+                  viewBox="0 0 30 33"
+                >
+                <g fill="none" fill-rule="evenodd">
+                  <path
+                    fill="#7DBCFF"
+                    d="M0 4v25l8 4V0zM22 4v25l8 4V0z"
+                  />
+                  <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
+                </g>
+                </svg>
+                <span class="brand-name">AI检测平台</span>
+              </a>
+            </div>
+            <!-- begin sidebar scrollbar -->
+            <div class="sidebar-scrollbar">
+              <ul class="nav sidebar-inner" id="sidebar-menu">
+                  <li  class="has-sub active expand" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#dashboard"
+                      aria-expanded="false" aria-controls="dashboard">
+                      <i class="mdi mdi-view-dashboard-outline"></i>
+                      <span class="nav-text">提交任务</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse show"  id="dashboard"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                            <li  class="active" >
+                              <a class="sidenav-item-link" href="/management/submit/">
+                                <span class="nav-text">提交任务</span>
+                              </a>
+                            </li>
+                      </div>
+                    </ul>
+                  </li>
+                
+
+                
+
+                
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#ui-elements"
+                      aria-expanded="false" aria-controls="ui-elements">
+                      <i class="mdi mdi-folder-multiple-outline"></i>
+                      <span class="nav-text">任务列表</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="ui-elements"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                        
+                        
+                        <li  class="has-sub" >
+                          <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#components"
+                            aria-expanded="false" aria-controls="components">
+                            <span class="nav-text">XXX任务</span> <b class="caret"></b>
+                          </a>
+                          <ul  class="collapse"  id="components">
+                            <div class="sub-menu">
+                              
+                              <li >
+                                <a href="XXX_1.html">XXX-1</a>
+                              </li>
+                              
+                              <li >
+                                <a href="XXX_2.html">XXX-2</a>
+                              </li>
+                              
+                              <li >
+                                <a href="XXX_3.html">XXX-3</a>
+                              </li>                              
+                            </div>
+                          </ul>
+                        </li>
+                        
+
+                        
+                        
+                        <li  class="has-sub" >
+                          <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#icons"
+                            aria-expanded="false" aria-controls="icons">
+                            <span class="nav-text">YYY任务</span> <b class="caret"></b>
+                          </a>
+                          <ul  class="collapse"  id="icons">
+                            <div class="sub-menu">
+                              
+                              <li >
+                                <a href="YYY_1.html">YYY-1</a>
+                              </li>
+                              
+                              <li >
+                                <a href="YYY_2.html">YYY-2</a>
+                              </li>
+                              
+                            </div>
+                          </ul>
+                        </li>
+                        
+
+                        
+                        
+                        <li  class="has-sub" >
+                          <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#forms"
+                            aria-expanded="false" aria-controls="forms">
+                            <span class="nav-text">ZZZ任务</span> <b class="caret"></b>
+                          </a>
+                          <ul  class="collapse"  id="forms">
+                            <div class="sub-menu">
+                              
+                              <li >
+                                <a href="ZZZ_1.html">ZZZ-1</a>
+                              </li>
+                              
+                              <li >
+                                <a href="ZZZ_2.html">ZZZ-2</a>
+                              </li>
+                              
+                              <li >
+                                <a href="ZZZ_3.html">ZZZ-3</a>
+                              </li>
+                              
+                              <li >
+                                <a href="ZZZ_4.html">ZZZ-4</a>
+                              </li>
+                              
+                              <li >
+                                <a href="ZZZ_5.html">ZZZ-5</a>
+                              </li>
+                              
+                            </div>
+                          </ul>
+                        </li>
+                        
+                      </div>
+                    </ul>
+                  </li>
+                
+
+                
+
+                
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#charts"
+                      aria-expanded="false" aria-controls="charts">
+                      <i class="mdi mdi-chart-pie"></i>
+                      <span class="nav-text">文件中心</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="charts"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu" id="result_menu">
+                            
+                      </div>
+                    </ul>
+                  </li>
+                
+
+                
+
+                
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#pages"
+                      aria-expanded="false" aria-controls="pages">
+                      <i class="mdi mdi-image-filter-none"></i>
+                      <span class="nav-text">数据集列表</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="pages"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile.html">
+                                <span class="nav-text">CIFAR-10</span>
+                              </a>
+                            </li>
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile.html">
+                                <span class="nav-text">CIFAR-100</span>
+                              </a>
+                            </li>
+                      </div>
+                    </ul>
+                  </li>
+                
+
+                
+
+                
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#documentation"
+                      aria-expanded="false" aria-controls="documentation">
+                      <i class="mdi mdi-book-open-page-variant"></i>
+                      <span class="nav-text">帮助中心</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="documentation"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                            <li class="section-title">
+                              帮助文档
+                            </li>
+                            <li >
+                              <a class="sidenav-item-link" href="introduction.html">
+                                <span class="nav-text">平台简介</span>
+                                
+                              </a>
+                            </li>
+                            <li >
+                              <a class="sidenav-item-link" href="setup.html">
+                                <span class="nav-text">平台配置</span>
+                              </a>
+                            </li>
+                            <li >
+                              <a class="sidenav-item-link" href="customization.html">
+                                <span class="nav-text">常见问题</span>
+                              </a>
+                            </li>
+                            <li >
+                              <a class="sidenav-item-link" href="rtl.html">
+                                <span class="nav-text">联系我们</span>
+                              </a>
+                            </li>
+                      </div>
+                    </ul>
+                  </li>
+              </ul>
+            </div>
+          </div>
+        </aside>
+
+      
+
+      <div class="page-wrapper">
+                  <!-- Header -->
+          <header class="main-header " id="header">
+            <nav class="navbar navbar-static-top navbar-expand-lg">
+              <!-- Sidebar toggle button -->
+              <button id="sidebar-toggler" class="sidebar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+              </button>
+              <!-- search form -->
+              <div class="search-form d-none d-lg-inline-block">
+                <div class="input-group">
+                  <button type="button" name="search" id="search-btn" class="btn btn-flat">
+                    <i class="mdi mdi-magnify"></i>
+                  </button>
+                  <input type="text" name="query" id="search-input" class="form-control" placeholder="搜索"
+                    autofocus autocomplete="off" />
+                </div>
+                <div id="search-results-container">
+                  <ul id="search-results"></ul>
+                </div>
+              </div>
+
+              <div class="navbar-right ">
+                <ul class="nav navbar-nav">
+                  <li class="dropdown notifications-menu">
+                    <button class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="mdi mdi-bell-outline"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <li class="dropdown-header">You have 5 notifications</li>
+                      <li>
+                        <a href="#">
+                          <i class="mdi mdi-account-plus"></i> New user registered
+                          <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 10 AM</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <i class="mdi mdi-account-remove"></i> User deleted
+                          <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 07 AM</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <i class="mdi mdi-chart-areaspline"></i> Sales report is ready
+                          <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 12 PM</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <i class="mdi mdi-account-supervisor"></i> New client
+                          <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 10 AM</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <i class="mdi mdi-server-network-off"></i> Server overloaded
+                          <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 05 AM</span>
+                        </a>
+                      </li>
+                      <li class="dropdown-footer">
+                        <a class="text-center" href="#"> View All </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- User Account -->
+                  <li class="dropdown user-menu">
+                    <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                      <img src="/static/img/not_login_user.jpg" class="user-image" alt="User Image" />
+                      <span class="d-none d-lg-inline-block">未登录</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <!-- User image -->
+                      <li class="dropdown-header">
+                        <img src="/static/img/not_login_user.jpg" class="img-circle" alt="User Image" />
+                        <div class="d-inline-block">
+                          点击登录 <small class="pt-1">未登录</small>
+                        </div>
+                      </li>
+
+                      <li>
+                        <a href="profile.html">
+                          <i class="mdi mdi-account"></i> My Profile
+                        </a>
+                      </li>
+                      <li>
+                        <a href="email-inbox.html">
+                          <i class="mdi mdi-email"></i> Message
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#"> <i class="mdi mdi-diamond-stone"></i> Projects </a>
+                      </li>
+                      <li>
+                        <a href="#"> <i class="mdi mdi-settings"></i> Account Setting </a>
+                      </li>
+
+                      <li class="dropdown-footer">
+                        <a href="signin.html"> <i class="mdi mdi-logout"></i> Log Out </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+
+
+          </header>
+          {% block mainbody %}
+             <h1>主体项为空</h1>
+          {% endblock %}
+
+      </div>
+    </div>
+
+    
+<script src="/static/plugins/jquery.min.js"></script>
+<script src="/static/plugins/jquery.slimscroll.min.js"></script>
+<script src="/static/plugins/jquery-jvectormap-2.0.3.min.js"></script>
+<script src="/static/plugins/index.js"></script>
+<script src="/static/plugins/bootstrap.bundle.min.js"></script>
+
+<script>
+    $.ajax({
+        url: '/management/ajax/load_menu/',
+        data:{
+        },
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+            var content = "";
+            $.each(data, function(i, item){
+                content += "<li ><a class='sidenav-item-link' href='/management/queryAllResult/";
+                content += item;
+                content += "'><span class='nav-text'>";
+                content += item;
+                content += "</span></a></li>";
+            });
+            document.getElementById("result_menu").innerHTML = content;
+        }
+    });
+</script>
+
+
+  </body>
+</html>

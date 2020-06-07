@@ -1,0 +1,14 @@
+{
+"currency": 
+	{
+	"labels": ["clean", "adver", "corru", "something", "else"], 
+	"datasets": [89.8, 27.6, 57.6, 45.8, 99.8]
+	},
+"judge_edge_dis": 
+	{"label": ["checkpoint1", "checkpoint2", "checkpoint3", "checkpoint4"], 
+		"data":{
+			"2a":[[10.1, 12.5, 20.3, 28.9]], 
+			"2b":[[5.3, 7.9, 12.8, 21.4]]
+			}
+	}
+}
