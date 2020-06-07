@@ -7,7 +7,7 @@ import os
 import random
 from django.contrib.auth.models import User
 from .forms import TaskSubmitForm, RunSubmitForm, TaskInnerSubmitForm, DatasetSubmitForm, CommentForm, ForumSubmitForm
-from .models import TaskSubmit, TaskColumn, ShowImgAfterUpload, runSubmit, Task_User, Comment, Datasets, Forum
+from .models import TaskSubmit, TaskColumn, ShowImgAfterUpload, runSubmit, Task_User, Comment, Datasets, Forum, Attack_method
 import subprocess
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -37,35 +37,52 @@ def page_not_found(request, exception):
 @login_required(login_url='/privileges/login')
 def submit(request):
     if request.method == 'POST':
-        return submit_check(request)
+        #return submit_check(request)
         # 表单适配
         run_submit_form = RunSubmitForm(request.POST)
         if run_submit_form.is_valid():
             # 表单存储
+            print("lzm 6-7 is_valid")
             new_run = run_submit_form.save(commit=False)
-            new_run.author = User.objects.get(id=request.user.id)
-            new_run.modelname = request.FILES.get("model", None).name.split('.')[0][0:20]
-            new_run.save()
-
-            
             now = int(time.time())
             time_array = time.localtime(now)
             time_part = time.strftime("%Y_%m_%d-%H%M%S", time_array)
+            new_run.time_part = time_part
+            new_run.author = request.user
+            new_run.modelname = request.FILES.get('model').name.split('.')[0][:20]
+            new_run.save()
+            attack_methods = request.POST.getlist('attack_method')
+            for attack_method in attack_methods:
+                new_run.attack_method.add(attack_method)
+
+
+
             os.mkdir(BASE_DIR + "/static/upload/uploadfile/" + time_part)
             src_path = BASE_DIR + "/static/upload/Results/2020_02_18-164203"
             dst_path = BASE_DIR + "/static/upload/Results/" + time_part
             shutil.copytree(src_path, dst_path)
             upload_file = request.FILES.get('model')
+            data_file = request.FILES.get('model_data')
             if upload_file != None:
                 print("file is not empty!")
-                filename = time_part + '.' + upload_file.name.split('.')[-1]
+                filename = "model_" + time_part + '.' + upload_file.name.split('.')[-1]
                 filepath = os.path.join(BASE_DIR + "/static/upload/uploadfile/" + time_part, filename)
                 f = open(filepath, 'wb')
                 for i in upload_file.chunks():
                     f.write(i)
                 f.close()
             else:
-                print("file is empty!")
+                print("model file is empty!")
+            if data_file != None:
+                print("file is not empty!")
+                filename = "modelData_" + time_part + '.' + data_file.name.split('.')[-1]
+                filepath = os.path.join(BASE_DIR + "/static/upload/uploadfile/" + time_part, filename)
+                f = open(filepath, 'wb')
+                for i in upload_file.chunks():
+                    f.write(i)
+                f.close()
+            else:
+                print("model_data file is empty!")
             # p = subprocess.Popen(
             #    "python /home/aiep/soft/aiepalg_code/SUIBUAA_Sample/test/testimport.py --save_path " + time_part)
             # except Exception as e:
@@ -79,7 +96,8 @@ def submit(request):
             return HttpResponse(Error_Dict.values())
     else:
         run_submit_form = RunSubmitForm()
-        context = {'run_submit_form': run_submit_form}
+        attacks = Attack_method.objects.all()
+        context = {'run_submit_form': run_submit_form, "attack_methods": attacks}
         return render(request, 'submit.html', context)
 
 

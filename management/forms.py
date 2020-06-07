@@ -11,7 +11,7 @@ class TaskSubmitForm(forms.ModelForm):
 class RunSubmitForm(forms.ModelForm):
     class Meta:
         model = runSubmit
-        fields = ('dataset', 'model', 'algorithm', 'ind')
+        fields = ('title', 'description', 'dataset', 'evaluate_method', 'model', 'model_data')
 
 class TaskInnerSubmitForm(forms.ModelForm):
     class Meta:

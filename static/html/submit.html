@@ -20,7 +20,7 @@
 			{% endfor %}
 			</table> -->
 			<div class="form-group">
-				<label for="">项目名称：</label>
+				<label for="title">项目名称：</label>
 				<input type="text" class="form-control" placeholder="Name for the job,need to be unique.Value must match the pattern ^[A-Za-z0-9-._]+$" name="title" id="'title" required="required">
 			</div>
 			<div class="form-group">
@@ -28,18 +28,18 @@
 				<textarea class="form-control" placeholder="请输入对项目的简单描述" rows="5" name="description" id="description" required="required"></textarea>
 			</div>
 			<div class="form-group">
-				<label for="exampleFormControlSelect12">选择数据集</label>
+				<label for="dataset">选择数据集</label>
 				<select class="form-control" name="dataset" required="required" id="dataset">
 					<option value="cifar-10">cifar-10</option>
 					<option value="ImageNet">ImageNet</option>
 				</select>
 			</div>
 			<div class="form-group">
-				<label for="exampleFormControlSelect12">选择攻击算法</label>
-				<input type="checkbox" value="deepfool" name="attack_method">DEEPFOOL
-				<input type="checkbox" value="FGSM" name="attack_method">FGSM
-				<input type="checkbox" value="PGD" name="attack_method">PGD
-				<input type="checkbox" value="ILLC" name="attack_method">ILLC
+				<label>选择攻击方法</label>
+				{% for attack_method in attack_methods %}
+        			<input value="{{ attack_method.id }}" type="checkbox" name="attack_method"/>{{ attack_method.name }}
+      				</label>
+    			{% endfor %}
 				<!-- <select class="form-control" name="attack_method">
 					<option value="FGSM">FGSM</option>
 					<option value="PGD">PGD</option>
@@ -57,7 +57,7 @@
 				<input type="file" class="form-control-file" name="model" id="model" placeholder="The name of your file should have the same name of your model" required="required">
 			</div>
 			<div class="form-group">
-				<label for="exampleFormControlFile1">上传数据文件</label>
+				<label for="exampleFormControlFile2">上传数据文件</label>
 				<input type="file" class="form-control-file" name="model_data" id="model_data" placeholder="The name of your file should have the same name of your model" required="required">
 			</div>
 			<div class="form-footer pt-4 pt-5 mt-4 border-top">

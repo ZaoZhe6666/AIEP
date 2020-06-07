@@ -91,17 +91,45 @@ class TaskSubmit(models.Model):
 class ShowImgAfterUpload(models.Model):
     file_Path=models.CharField(max_length=32)
 
+# class runSubmit(models.Model):
+#     index = (
+#         ('类型一', '类型一'),
+#         ('类型二', '类型二'),
+#     )
+#     methods = (
+#         ('deepfool', 'deepfool'),
+#         ('jsm', 'jsm'),
+#         ('fgsm', 'fgsm'),
+#         ('PGD', 'PGD'),
+#     )
+#     state = (
+#         ('评测中', '评测中'),
+#         ('暂停', '暂停'),
+#         ('完成', '完成'),
+#     )
+#     public = (
+#         ('公开', '公开'),
+#         ('私有', '私有'),
+#     )
+#     author = models.ForeignKey(User, on_delete=models.CASCADE)
+#     dataset = models.CharField(max_length=20, default="default")
+#     created = models.DateTimeField(default=timezone.now)
+#     # 攻击方法
+#     algorithm = models.CharField(max_length=10, choices=methods, help_text='攻击算法', default="deepfool")
+#     #评测指标
+#     ind = models.CharField(max_length=10, choices=index, help_text='评测指标', default="类型一")
+#     #模型文件
+#     model = models.FileField(blank=True)
+#     #模型名称
+#     modelname = models.CharField(max_length=20, default="default")
+#     #评测状态
+#     state = models.CharField(max_length=10, choices=state, default="评测中")
+#     public = models.CharField(max_length=10, choices=public, default="私有")
+
+class Attack_method(models.Model):
+    name = models.CharField(max_length=20, default="default")
+
 class runSubmit(models.Model):
-    index = (
-        ('类型一', '类型一'),
-        ('类型二', '类型二'),
-    )
-    methods = (
-        ('deepfool', 'deepfool'),
-        ('jsm', 'jsm'),
-        ('fgsm', 'fgsm'),
-        ('PGD', 'PGD'),
-    )
     state = (
         ('评测中', '评测中'),
         ('暂停', '暂停'),
@@ -111,18 +139,18 @@ class runSubmit(models.Model):
         ('公开', '公开'),
         ('私有', '私有'),
     )
+    title = models.CharField(max_length=20, default="default")
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.CharField(max_length=300, default="default")
     dataset = models.CharField(max_length=20, default="default")
+    attack_method = models.ManyToManyField(Attack_method)
     created = models.DateTimeField(default=timezone.now)
-    # 攻击方法
-    algorithm = models.CharField(max_length=10, choices=methods, help_text='攻击算法', default="deepfool")
-    #评测指标
-    ind = models.CharField(max_length=10, choices=index, help_text='评测指标', default="类型一")
-    #模型文件
+    evaluate_method = models.CharField(max_length=20, default="default")
     model = models.FileField(blank=True)
-    #模型名称
     modelname = models.CharField(max_length=20, default="default")
-    #评测状态
+    model_data = models.FileField(blank=True)
+    time_part = models.CharField(max_length=30, default="default")
+    # 评测状态
     state = models.CharField(max_length=10, choices=state, default="评测中")
     public = models.CharField(max_length=10, choices=public, default="私有")
 
